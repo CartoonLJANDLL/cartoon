@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.SignMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.Sign" id="resultSign">
+		<id column="id" property="id" /><!-- 主键的映射 -->
+		<result column="signdate" property="signdate" /><!-- 非主键的映射 -->
+		<result column="userid" property="userid" /><!-- 非主键的映射 -->
+	</resultMap>
+	
+	<insert id="Sign" parameterType="guomanwang.domain.Sign" >
+		insert into sign(userid,signdate) 
+		values(#{userid},#{signdate});
+	</insert>
+	<update id="updateById" parameterType="guomanwang.domain.Sign">
+		update sign 
+		<set>
+			<if test="signdate!=null">signdate = #{signdate},</if>
+			<if test="userid!=null ">userid = #{userid},</if>
+		</set>
+		where id=#{id}
+	</update>
+	<select id="isSign" parameterType="int" resultType="guomanwang.domain.Sign">
+	    select *
+		from sign
+		where signdate>DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+		and userid=#{userid}
+	</select>
+	<!-- 查询用户的连续签到次数 -->
+	<select id="getSignDays" parameterType="int" resultType="java.lang.Integer" >
+	    SELECT IFNULL(max(days),0)
+		FROM (
+		 SELECT userid,login_dt
+		 ,@cont_day := (CASE WHEN (@last_uid=userid AND DATEDIFF(login_dt,@last_dt)=1) 
+		 THEN (@cont_day+1)
+		    ELSE 1 END) AS days
+		 ,(@cont_ix := (@cont_ix+IF(@cont_day=1,1,0))) AS cont_ix
+		 ,@last_uid:=userid, @last_dt:=login_dt
+		  FROM (SELECT userid ,DATE(signdate) AS login_dt FROM sign ORDER BY userid,login_dt) AS t
+		  ,(SELECT @last_uid:='',@last_dt:='',@cont_ix:=0,@cont_day:=0) AS t1
+		) AS t2
+		where userid=#{userid} and login_dt>=DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+	</select>
+</mapper>

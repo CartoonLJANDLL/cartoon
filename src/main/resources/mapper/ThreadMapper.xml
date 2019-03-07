@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.ThreadMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.Thread" id="resultThread">
+		<id column="id" property="id" /><!-- 主键的映射 -->
+		<result column="userid" property="userId" /><!-- 非主键的映射 -->
+		<result column="blockid" property="blockId" /><!-- 非主键的映射 -->
+		<result column="commitnumber" property="commitNumber" />
+		<result column="status" property="status" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="time" property="time" />
+		<result column="greatnum" property="greatNum" />
+		<!-- 联系关系对象的映射。type_name的字段是在types表，保证在查询的结果中有这个字段 
+		<result column="type_name" property="goodsType.typeName" />-->
+	</resultMap>
+	
+	<update id="updateThread" parameterType="guomanwang.domain.Thread">
+		update thread 
+		<set>
+			<if test="userId!=null">userid = #{userId},</if>
+			<if test="blockId!=null">blockid = #{blockId},</if>
+			<if test="status!=null">status = #{status},</if>
+			<if test="title!=null ">title = #{title},</if>
+			<if test="content!=null ">content = #{content},</if>
+			<if test="time!=null ">time = time,</if>
+			<if test="greatNum!=null">greatnum = #{greatNum},</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<insert id="addthread" parameterType="guomanwang.domain.Thread" 
+	 useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into thread(userid,blockid,status,title,content,time) 
+		values(#{userId},#{blockId},#{status},#{title},#{content},#{time});
+	</insert>
+	<select id="getthreadbyuserid" resultMap="resultThread">
+		SELECT *
+		from thread
+		where userid = #{userId}
+	</select>
+	<select id="selectThreadById" resultMap="resultThread">
+	     select * from thread where id=#{id}
+	</select>
+	<select id="getnewThread" resultMap="resultThread">
+	    select * from thread 
+	    order by time desc
+	    limit 10
+	</select>
+	<select id="selectAllThread" parameterType="int" resultMap="resultThread">
+	    select  *
+		from thread 
+		where blockid=#{blockId}
+	</select>
+	<select id="getThreadNumber" parameterType="int" resultType="java.lang.Integer">
+	    select  count(*)
+		from thread 
+	</select>
+	<select id="selectThreadByName" parameterType="String" resultMap="resultThread">
+	    select * from thread where title=#{title}
+	</select>
+	<select id="selectToutalCountThreadByBlockId" parameterType="int" resultType="int">
+	    select count(id) from thread where blockid =#{blockId}
+	</select>
+	<select id="selectUnfinishThread" parameterType="int" resultMap="resultThread">
+	    select * from thread where status=1 and blockid=#{blockId}
+	</select>
+	<select id="selectFinishedThread" parameterType="int" resultMap="resultThread">
+	    select * from thread where status=2 and blockid=#{blockId}
+	</select>
+	<select id="selectHotThread" parameterType="int" resultMap="resultThread">
+	    select * from thread where status=3 and blockid=#{blockId}
+	</select>
+	<select id="selectAnimaThread" parameterType="int" resultMap="resultThread">
+	    select * from thread where status=4 and blockid=#{blockId}
+	</select>
+	<select id="selectHotRankingThread" parameterType="int" resultMap="resultThread">
+	    select  thread.id,thread.userid,blockid,count(*) commitnumber,status,title,thread.content,thread.time
+		from thread,commit 
+		where thread.id = COMMIT.threadid and blockid=#{blockId}
+		GROUP BY thread.id 
+		order by commitnumber desc
+	</select>
+	<select id="selectNewRankingThread" parameterType="int" resultMap="resultThread">
+	    select  thread.id,thread.userid,blockid,count(*) commitnumber,status,title,thread.content,thread.time
+		from thread,commit 
+		where thread.id = COMMIT.threadid and blockid=#{blockId}
+		GROUP BY thread.id 
+		order by time desc
+	</select>
+	<delete id="deleteThreadById" parameterType="int">
+         delete from thread where id=#{id}
+    </delete>
+</mapper>

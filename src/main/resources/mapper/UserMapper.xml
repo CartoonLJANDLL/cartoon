@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.UserMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.User" id="resultUser">
+		<id column="userid" property="userId" /><!-- 主键的映射 -->
+		<result column="username" property="userName" /><!-- 非主键的映射 -->
+		<result column="password" property="passWord" />
+		<result column="phone" property="telPhone" />
+		<result column="grade" property="Grade" />
+		<result column="gradevalue" property="gradeValue" />
+		<result column="sex" property="Sex" />
+		<result column="headurl" property="headUrl" />
+		<result column="honor" property="Honor" />
+		<result column="introduce" property="Introduce" />
+		<result column="signdays" property="signdays" />
+	</resultMap>
+	
+	<update id="update" parameterType="guomanwang.domain.User">
+		update user 
+		<set>
+			<if test="userName!=null">username = #{userName},</if>
+			<if test="passWord!=null ">password = #{passWord},</if>
+			<if test="telPhone!=null ">phone = #{telPhone},</if>
+			<if test="gradeValue!=null">gradevalue = #{gradeValue},</if>
+			<if test="Sex!=null">sex = #{Sex},</if>
+			<if test="Honor!=null">honor = #{Honor},</if>
+			<if test="headUrl!=null ">headurl = #{headUrl},</if>	
+			<if test="Introduce!=null">introduce = #{Introduce},</if>
+		</set>
+		where userid = #{userId}
+	</update>
+	<update id="findpassbyphone" parameterType="guomanwang.domain.User">
+		update user 
+		<set>
+			<if test="passWord!=null ">password = #{passWord},</if>
+		</set>
+		where phone = #{telPhone}
+	</update>
+	
+	<insert id="save" parameterType="guomanwang.domain.User" 
+	 useGeneratedKeys="true" keyColumn="userid" keyProperty="userId">
+		insert into user(gradevalue,honor,username,password,phone,headurl) 
+		values(#{gradeValue},#{Honor},#{userName},#{passWord},#{telPhone},#{headUrl});
+	</insert>
+	<select id="selectuserinfo" resultMap="resultUser">
+		select a.*,ifnull(b.id-1,0) grade
+		from user a
+		LEFT OUTER JOIN grade b on a.gradevalue>=b.gradeValue and b.gradeStatus=1
+		where phone=#{telPhone}
+		ORDER BY grade DESC
+		LIMIT 1
+	</select>
+	<select id="getuserlist" parameterType="guomanwang.domain.Page" resultMap="resultUser">
+		SELECT *
+		from user
+		where user.honor!="2" and user.honor!="4"
+		limit #{start},#{rows}
+	</select>
+	<select id="getusernumber" resultType="java.lang.Integer" >
+		SELECT count(*)
+		from user
+		where user.honor!="2" and user.honor!="4"
+	</select>
+	<select id="getuserbyid" resultMap="resultUser">
+		select a.*,ifnull(b.id-1,0) grade
+		from user a
+		LEFT OUTER JOIN grade b on a.gradevalue>=b.gradeValue and b.gradeStatus=1
+		where userid=#{userId}
+		ORDER BY grade DESC
+		LIMIT 1
+	</select>
+	<select id="getusergradebyuserid" resultType="java.lang.Integer">
+		select ifnull(b.id-1,0) grade
+		from user a
+		LEFT OUTER JOIN grade b on a.gradevalue>=b.gradeValue and b.gradeStatus=1
+		where userid=#{userId}
+		ORDER BY grade DESC
+		LIMIT 1
+	</select>
+	<delete id="deleteUserById" parameterType="int">
+         delete from user where userid=#{userId}
+    </delete>
+	<!-- 根据用户名或者联系方式实现模糊查询 -->
+	<select id="searchuserbyname" resultMap="resultUser">
+		SELECT *
+		from user
+		where user.honor!="2" and user.honor!="2" and (username like "%"#{userName}"%" or phone like "%"#{telPhone}"%")
+		order by userid
+	</select>
+	<select id="getSignTop20Users" resultMap="resultUser">
+		SELECT a.userid,username,headurl,max(days) signdays
+		FROM user a,(
+		 SELECT userid,login_dt
+		 ,@cont_day := (CASE WHEN (@last_uid=userid AND DATEDIFF(login_dt,@last_dt)=1) 
+		 THEN (@cont_day+1)
+		    ELSE 1 END) AS days
+		 ,(@cont_ix := (@cont_ix+IF(@cont_day=1,1,0))) AS cont_ix
+		 ,@last_uid:=userid, @last_dt:=login_dt
+		  FROM (SELECT userid ,DATE(signdate) AS login_dt FROM sign ORDER BY userid,login_dt) AS t
+		  ,(SELECT @last_uid:='',@last_dt:='',@cont_ix:=0,@cont_day:=0) AS t1
+		) AS b
+		where login_dt>=DATE_SUB(CURDATE(), INTERVAL 1 DAY) and a.userid=b.userid
+		GROUP BY b.userid
+		ORDER BY signdays desc
+		limit 20
+	</select>
+	<!-- 根据管理员用户名或者联系方式实现模糊查询 -->
+	<select id="searchadminbyname" resultMap="resultUser">
+		SELECT *
+		from user
+		where (user.honor=2 or user.honor=4) and (username like "%"#{userName}"%" or phone like "%"#{telPhone}"%")
+		order by userid
+	</select>
+	<!-- 分页查询管理员和超级管理员 -->
+	<select id="getadminlist" parameterType="guomanwang.domain.Page" resultMap="resultUser">
+		SELECT *
+		from user
+		where user.honor=2 or user.honor=4
+		limit #{start},#{rows}
+	</select>
+</mapper>

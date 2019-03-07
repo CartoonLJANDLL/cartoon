@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.UserThreadMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+    <!-- //查询该板块下所有的帖子，包含用户信息 -->
+    <sql id="selectall">
+     select b.*,a.headurl,a.honor,a.username,a.sex, count(c.id) commitnumber
+	from user a,thread b,commit c
+	</sql>
+	<!-- 查询该板块下的所有帖子(不包括公告) -->
+    <select id="selectUserThreadsByUserIdBlockId" parameterType="int" resultType="guomanwang.domain.UserThread">
+	        select b.*,a.userid,a.headurl,a.honor,a.username,a.sex, count(c.id) commitnumber
+			from thread b
+			INNER JOIN user a ON a.userid=b.userid
+			left OUTER JOIN commit c ON c.threadid=b.id
+			where b.blockid=#{blockId} and b.status!=3
+			GROUP BY b.id
+	</select>
+	<!-- 查询该板块下的所有公告 -->
+    <select id="selectAllNoticesByBlockId" parameterType="int" resultType="guomanwang.domain.UserThread">
+	        select b.*,a.headurl,a.honor,a.username,a.sex, count(c.id) commitnumber
+			from thread b
+			INNER JOIN user a ON a.userid=b.userid
+			left OUTER JOIN commit c ON c.threadid=b.id
+			where b.blockid=#{blockId} and b.status=3
+			GROUP BY b.id
+	</select>
+	<!-- 通过关键字查询该板块下的帖子 -->
+    <select id="selectUserThreadsBykey" resultType="guomanwang.domain.UserThread">
+	        select b.*,a.headurl,a.honor,a.username,a.sex, count(c.id) commitnumber
+			from thread b
+			INNER JOIN user a ON a.userid=b.userid
+			left OUTER JOIN commit c ON c.threadid=b.id
+			where b.blockid=#{blockId} and b.title like "%"#{title}"%"
+			GROUP BY b.id
+	</select>
+	<!-- //查询一个帖子 -->
+    <select id="selectUserThreadByThreadId" resultType="guomanwang.domain.UserThread">
+	        <include refid="selectall" />
+			where a.userid=b.userid and b.id=c.threadid
+			and b.id=#{id}
+	</select>
+	<!-- //通过帖子名查找帖子 -->
+	<select id="selectThreadByName" parameterType="String" resultType="guomanwang.domain.UserThread">
+	    <include refid="selectall" />
+		where a.userid=b.userid and b.title=#{title}
+	</select>
+	<!-- 查找该板块下未结帖子 -->
+	<select id="selectUnfinishThread" parameterType="int" resultType="guomanwang.domain.UserThread">
+	    <include refid="selectall" /> 
+		where a.userid=b.userid and b.status=1 and b.blockid=#{blockId}
+	</select>
+	<!-- 查找该板块下已结帖子 -->
+	<select id="selectFinishedThread" parameterType="int" resultType="guomanwang.domain.UserThread">
+	    <include refid="selectall" /> 
+		where a.userid=b.userid and b.status=2 and b.blockid=#{blockId}
+	</select>
+	<!-- 查找该板块下热帖 -->
+	<select id="selectHotThread" parameterType="int" resultType="guomanwang.domain.UserThread">
+	    select b.*,a.headurl,a.honor,a.username,a.sex, count(c.id) commitnumber
+			from thread b
+			INNER JOIN user a ON a.userid=b.userid
+			left OUTER JOIN commit c ON c.threadid=b.id
+			where b.time>DATE_SUB(CURDATE(), INTERVAL 1 WEEK)
+			and b.blockid=#{blockId} and b.status=2
+			GROUP BY b.id
+			order by commitnumber desc
+	</select>
+	<!-- 查找该板块下精贴 -->
+	<select id="selectAnimaThread" parameterType="int" resultType="guomanwang.domain.UserThread">
+	    select b.*,a.headurl,a.honor,a.username,a.sex, count(c.id) commitnumber
+			from thread b
+			INNER JOIN user a ON a.userid=b.userid
+			left OUTER JOIN commit c ON c.threadid=b.id
+			where b.blockid=#{blockId} and b.status=1
+			GROUP BY b.id
+	</select>
+	<!-- 按热度（帖子回复数）排行 -->
+	<select id="selectHotRankingThread" parameterType="int" resultType="guomanwang.domain.UserThread">
+	    select b.*,a.headurl,a.honor,a.username,a.sex, count(c.id) commitnumber
+		from thread b
+		INNER JOIN user a ON a.userid=b.userid
+		left OUTER JOIN commit c ON c.threadid=b.id
+		where b.blockid=#{blockId} and b.status!=3
+		GROUP BY b.id
+		order by commitnumber desc
+	</select>
+	<!-- 按时间排行 -->
+	<select id="selectNewRankingThread" parameterType="int" resultType="guomanwang.domain.UserThread">
+	    select b.*,a.headurl,a.honor,a.username,a.sex, count(c.id) commitnumber
+			from thread b
+			INNER JOIN user a ON a.userid=b.userid
+			left OUTER JOIN commit c ON c.threadid=b.id
+			where b.blockid=#{blockId} and b.status!=3
+			GROUP BY b.id
+		order by b.time desc
+	</select>
+	<!-- 我发表的帖子 -->
+	<select id="selectMyPushedThread" parameterType="int" resultType="guomanwang.domain.UserThread">
+	    select b.*, count(c.id) commitnumber
+			from thread b
+			INNER JOIN user a ON a.userid=b.userid
+			left OUTER JOIN commit c ON c.threadid=b.id
+			where b.userid=#{userId}
+			GROUP BY b.id
+	</select>
+	<!-- 我回复的帖子 -->
+	<select id="selectMyCommitThread" parameterType="int" resultType="guomanwang.domain.UserThread">
+	    select a.username,b.id,b.title,c.content,c.time
+			from thread b
+			INNER JOIN user a ON a.userid=b.userid
+			left OUTER JOIN commit c ON c.threadid=b.id
+			where c.userid=#{userId}
+	</select>
+</mapper>

@@ -1,0 +1,14 @@
+{
+	"cmsName": "纵横国漫网后台管理系统",
+	"version": "v2.0",
+	"author": "刘江&李林",
+	"homePage": "admin_index",
+	"server": "windows",
+	"dataBase": "8.00.2039",
+	"maxUpload": "2M",
+	"userRights": "超级管理员",
+	"description": "纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台",
+	"powerby": "copyright @2018 纵横国漫网",
+	"record": "京ICP备14040xxx号-1",
+	"keywords": "基于layui的后台管理系统"
+}

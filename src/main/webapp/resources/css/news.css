@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+		body {
+		  padding: 0;
+		  margin: 0;
+		  font-size: 20px;
+		}
+		
+		#pirture{position:absolute;cursor:pointer;}
+		#myCarousel{margin:0;padding:0;}
+		
+		/* 左边导航 */
+		#left_navigation{ 
+		   width: 250px; 
+		   height: auto; 
+		   float: left;
+		   font-size: 25px; 
+		   background-color: #f5f5f5;
+		   leter-spacing: 2px;
+		   padding: 0px;
+		   text-align: center;
+		   border: 1px solid red;
+		   font-family: 宋体;
+		}
+		#left_navigation table{
+		   border: 1px solid green;
+		   width: 100%;
+		   margin: 0px;
+		   padding: 20px;
+		}
+		#left_navigation table th{
+		   align: center;
+		   text-align: center;
+		   font-size: 30px;
+		   background-color: blue;
+		}
+		
+		/* 搜索框 */
+		#search{
+		   width: 75%; 
+		   height: 55px;
+		   border: 1px solid gray;
+		   float: left;
+		} 
+		#search_bar{
+		   width: 100%;
+		   height: 80px;
+		   
+		}
+		/* 文字 */
+		#news_main{
+		   margin: 60px 0px 0px 0px;
+		   padding: 0px 0px 20px 0px;
+		   font-size: 22px;
+		   text-align: left;
+		   color: #000000;
+		   align: right;
+		   border: 1px solid black;
+		   
+		}
+		like{ font-size:66px;  color:#ccc; cursor:pointer;}
+        .cs{color:#f00;}
+		/* 			li:focus{background-color: #00CCFF;} */

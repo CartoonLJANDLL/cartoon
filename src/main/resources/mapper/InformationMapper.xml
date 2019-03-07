@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.InformationMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.Information" id="resultInformation">
+		<id column="id" property="id" /><!-- 主键的映射 -->
+		<result column="title" property="title" /><!-- 非主键的映射 -->
+		<result column="content" property="content" /><!-- 非主键的映射 -->
+		<result column="url" property="url" />
+		<result column="status" property="status" />
+		<result column="time" property="time" />
+		<result column="collectnum" property="collectnum" />
+		<result column="company" property="companyid" />
+		<result column="name" property="companyname" />
+	</resultMap>
+	
+	<update id="update" parameterType="guomanwang.domain.Information">
+		update infomation 
+		<set>
+			<if test="userid!=null">title = #{title},</if>
+			<if test="blockid!=null ">content = #{content},</if>
+			<if test="blockid!=null ">url = #{url},</if>
+			<if test="number!=null ">time = #{time},</if>
+			<if test="status!=null">collectnum = #{collectnum},</if>
+			<if test="title!=null ">company = #{companyid},</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<insert id="addinformation" parameterType="guomanwang.domain.Information" 
+	 useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into infomation(title,content,url,time,collectnum,company) 
+		values(#{title},#{content},#{url},#{time},#{collectnum},#{companyid});
+	</insert>
+	<select id="getinformationbyid" resultMap="resultInformation">
+		SELECT *
+		from infomation
+		where id = #{id}
+	</select>
+	<select id="searchinformationbytitle" resultMap="resultInformation">
+		select a.*,b.name
+		from infomation a,company b
+		where a.company=b.id and title like "%"#{title}"%"
+	</select>
+	<select id="selectinformationbycompanyid" parameterType="guomanwang.domain.Page" resultMap="resultInformation">
+		select a.*,b.name
+		from infomation a,company b
+		where a.company=b.id and b.id=#{otherid}
+		limit #{start},#{rows}
+	</select>
+	<!-- 获得资讯总数目 -->
+	<select id="getinformationnum" resultType="java.lang.Integer">
+		SELECT count(*)
+		from infomation
+	</select>
+	<!-- 获得指定来源的资讯数目 -->
+	<select id="getnumberbycompany" resultType="java.lang.Integer">
+		SELECT count(*)
+		from infomation
+		where company=#{companyid}
+	</select>
+	<select id="getnewinformation" resultMap="resultInformation">
+		select a.*,b.name
+		from infomation a,company b
+		where a.company=b.id
+        ORDER BY time DESC
+        limit 20
+	</select>
+	<select id="getinformation" parameterType="guomanwang.domain.Page" resultMap="resultInformation">
+		select a.*,b.name
+		from infomation a,company b
+		where a.company=b.id
+		limit #{start},#{rows}
+	</select>
+	<delete id="deleteInformationById" parameterType="int">
+         delete from infomation 
+         where id=#{id}
+    </delete>
+    <delete id="deletemanynewsById" parameterType="java.lang.String">
+         delete from infomation 
+         where id in
+         <foreach item="ids" collection="array" index="no" open="(" separator="," close=")">
+          #{ids}
+         </foreach>
+    </delete>
+</mapper>

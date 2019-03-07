@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.CompanyMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.Company" id="resultCompany">
+		<id column="id" property="id" /><!-- 主键的映射 -->
+		<result column="name" property="name" /><!-- 非主键的映射 -->
+	</resultMap>
+	
+	<insert id="insertCompany" parameterType="guomanwang.domain.Company" >
+		insert into company(id,name) 
+		values(#{id},#{name});
+	</insert>
+	<delete id="deletecompanyById" parameterType="int">
+	    delete from company 
+	    where id = #{id}
+	</delete>
+	<select id="getallcompany" resultMap="resultCompany">
+		SELECT * from company
+	</select>
+	<select id="getcompanybyid" resultMap="resultCompany">
+		SELECT * 
+		from company
+		where id = #{id}
+	</select>
+</mapper>

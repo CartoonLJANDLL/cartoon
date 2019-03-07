@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.UserCommitMapper">
+    
+    <sql id="selectallcommit">
+        select b.id,b.userid,username,honor,sex,headurl,threadid,parentid,content,b.time,count(c.commitid) zannumber,count(d.commitid) isliked
+		from commit b
+		INNER JOIN user a ON b.userid=a.userid
+		left OUTER JOIN commitzan c ON c.commitid=b.id
+	</sql>
+	<!-- //获得所有回复 -->
+    <select id="selectallCommits" resultType="guomanwang.domain.UserCommit">
+	        select honor,username,sex,phone,headurl,b.*
+			from user a,commit b,thread c
+			where a.userid=b.userid and c.id=b.threadid
+			order by threadid
+	</select>
+	<!-- 回帖周榜-->
+	<select id="selectTopUserByWeek" resultType="guomanwang.domain.UserCommit">
+	    select a.*,count(b.userid) zannumber
+		from user a,commit b
+		WHERE b.time>DATE_SUB(CURDATE(), INTERVAL 1 WEEK) and a.userid=b.userid
+		GROUP BY b.userid
+		ORDER BY zannumber desc
+	</select>
+	<!-- 查询该帖子下的所有评论 -->
+	<select id="selectAllCommitsByThreadId" parameterType="guomanwang.domain.Commit" resultType="guomanwang.domain.UserCommit">
+	       <include refid="selectallcommit" />
+	      left OUTER JOIN commitzan d ON d.commitid=b.id and d.id=c.id and d.userid=#{userId} 
+	      where threadid=#{threadId}
+	       GROUP BY b.id
+		   order by b.time
+	</select>
+	<!-- 根据parentID和replyID还有threadid查询 -->
+	<select id="selectCommitByReplyParentId" parameterType="guomanwang.domain.UserCommit" resultType="guomanwang.domain.UserCommit">
+	        <include refid="selectallcommit" />
+			threadid=#{threadId} and replyid=#{replyId} and parentid=#{replyId}
+	</select>
+	<!-- 根据用户userid查询我的回帖 -->
+	<select id="selectmyCommitsByuserid" parameterType="int" resultType="guomanwang.domain.UserCommit">
+	    select honor,username,sex,phone,headurl,b.*
+		from user a,commit b
+		where a.userid=b.userid and
+	    b.userid=#{userId}
+	</select>
+</mapper>

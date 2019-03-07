@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.Commit_UserMapper">
+	<insert id="insertCommit_User" parameterType="guomanwang.domain.Commit_User" >
+		insert into commit_user(userid,commitid,status,time) 
+		values(#{userid},#{commitid},#{status},now());
+	</insert>
+	
+	<delete id="deleteCommit_UserById" parameterType="int">
+	    delete from commit_user where id = #{id}
+	</delete>
+	
+	<update id="updateCommit_User" parameterType="guomanwang.domain.Commit_User">
+		update commit_user 
+		<set>
+			<if test="userid!=null">userid = #{userid},</if>
+			<if test="commitid!=null">commitid=#{commitid},</if>
+			<if test="status!=null">status = #{status},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateCommit_UserByUseridCommitid" parameterType="guomanwang.domain.Commit_User">
+		update commit_user 
+		<set>
+			<if test="status!=null">status = #{status},</if>
+		</set>
+		where userid=#{userid} and commitid=#{commitid}
+	</update>
+	
+	<select id="selectCommit_UserById" parameterType="int" resultType="guomanwang.domain.Commit_User">
+	    select * from commit_user where id = #{id}
+	</select>
+	<select id="selectCommit_UserByUseridCommitid" parameterType="guomanwang.domain.Commit_User" resultType="guomanwang.domain.Commit_User">
+		SELECT *
+		from commit_user
+		where userid=#{userid} and commitid=#{commitid}
+	</select>
+	<select id="selectStatusByUseridCommitid" parameterType="guomanwang.domain.Commit_User" resultType="Integer">
+		SELECT status
+		from commit_user
+		where userid=#{userid} and commitid=#{commitid}
+	</select>
+	<select id="selectCommitUserAllCommitStatus" parameterType="int" resultType="guomanwang.domain.Commit_User">
+	   select *
+	   from blcok_user
+	   where commitid=#{commitid}
+	</select>
+	<select id="selectCommitUserAllUserStatus" parameterType="int" resultType="guomanwang.domain.Commit_User">
+	   select *
+	   from blcok_user
+	   where userid=#{userid}
+	</select>
+</mapper>

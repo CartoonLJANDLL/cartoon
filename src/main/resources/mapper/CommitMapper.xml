@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.CommitMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.Commit" id="resultCommit">
+		<id column="id" property="id" /><!-- 主键的映射 -->
+		<result column="threadid" property="threadId" /><!-- 非主键的映射 -->
+		<result column="userid" property="userId" /><!-- 非主键的映射 -->
+		<result column="parentid" property="parentId" />
+		<result column="zannumber" property="zanNumber" />
+		<result column="content" property="content" />
+		<result column="time" property="time"/>
+		<result column="isliked" property="isliked"/>
+	</resultMap>
+	
+	<insert id="insertCommit" parameterType="guomanwang.domain.Commit" >
+		insert into commit(threadid,userid,parentid,content,time) 
+		values(#{threadId},#{userId},#{parentId},#{content},#{time});
+	</insert>
+	<delete id="deleteCommitById" parameterType="int">
+	    delete from commit where id = #{id}
+	</delete>
+	<delete id="deleteCommitByContent" parameterType="String">
+	    delete from commit where content = #{content}
+	</delete>
+	<update id="updateById" parameterType="guomanwang.domain.Commit">
+		update commit 
+		<set>
+			<if test="threadId!=null">threadid = #{threadId},</if>
+			<if test="userId!=null ">userid = #{userId},</if>
+			<if test="parentId!=null ">parentid = #{parentId},</if>
+			<if test="content!=null">content = #{content}</if>
+			
+		</set>
+		where id=#{id}
+	</update>
+	<select id="selectCommitByContent" parameterType="String" resultMap="resultCommit">
+		SELECT * from commit where content = #{content}
+	</select>
+	<select id="selectCommitById" parameterType="int" resultMap="resultCommit">
+	    select * from commit where id = #{id}
+	</select>
+	<select id="selectCommitByThreadIdAndParentId" parameterType="guomanwang.domain.Commit" resultMap="resultCommit">
+	    select * from commit where threadid=#{threadId} and parentid=#{parentId}
+	</select>
+	<select id="selectApplyCommitByThread" parameterType="int" resultMap="resultCommit">
+	    select * from commit where threadid=#{threadId} and parentid=0
+	</select>
+	<select id="selectCountToutalByThreadId" parameterType="int" resultType="int">
+	    select count(id) from commit where threadid=#{threadId} 
+	</select>
+	<select id="selectCommitByuserId" parameterType="int" resultMap="resultCommit">
+	    select * from commit where userid=#{userId} 
+	</select>
+</mapper>

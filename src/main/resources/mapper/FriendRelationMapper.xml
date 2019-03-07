@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.FriendRelationMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.FriendRelation" id="resultFriendRelation">
+		<id column="id" property="id" /><!-- 主键的映射 -->
+		<result column="userid" property="userid" /><!-- 非主键的映射 -->
+		<result column="friendid" property="friendid" />
+		<result column="receiver_status" property="receiver_status" />
+	</resultMap>
+	<!-- 添加一条好友申请信息 -->
+	<insert id="requests" parameterType="guomanwang.domain.FriendRelation" >
+		insert into friendrelation(userid,friendid,receiver_status) 
+		values(#{userid},#{friendid},#{receiver_status});
+	</insert>
+	<!-- 更新好友关系状态 -->
+	<update id="update" parameterType="guomanwang.domain.FriendRelation">
+		update friendrelation 
+		<set>
+			<if test="receiver_status!=null">receiver_status = #{receiver_status},</if>
+		</set>
+		where (userid=#{userid} and friendid=#{friendid})
+		or (userid=#{friendid} and friendid=#{userid})
+	</update>
+	<!-- 通过用户userid找到好友 -->
+	<select id="getfriendsbyuserid" parameterType="int" resultType="guomanwang.domain.User">
+	    SELECT t.*
+		from(
+		select a.*
+		from user a,friendrelation b
+		where b.receiver_status=1
+		and (b.userid=a.userid or b.friendid=a.userid)
+		and (b.userid=#{userid} or b.friendid=#{userid})
+		)as t
+		where t.userid!=#{userid}
+	</select>
+	<!-- 通过用户userid找到发出添加好友申请但对方还未处理的人 -->
+	<select id="getrequestsbyuserid" parameterType="int" resultType="guomanwang.domain.User">
+		select a.*
+		from user a,friendrelation b
+		where b.receiver_status=0
+		and b.friendid=a.userid
+		and b.userid=#{userid}
+	</select>
+	<!-- 通过当前用户userid获得别人发来的好友申请 -->
+	<select id="getasksbyuserid" parameterType="int" resultType="guomanwang.domain.User">
+		select a.*
+		from user a,friendrelation b
+		where b.receiver_status=0
+		and a.userid=b.userid
+		and b.friendid=#{userid}
+	</select>
+	<!-- 通过两位用户id查询是不是好友 -->
+	<select id="isfriend" resultType="java.lang.Integer">
+		select ifnull(receiver_status,2)
+		from (
+		select count(a.receiver_status) number,receiver_status
+		from friendrelation a
+		where (a.userid=#{userid} and a.friendid=#{friendid})
+		or (a.friendid=#{userid} and a.userid=#{friendid})
+		)as t
+	</select>
+	<delete id="deleteFriend" parameterType="guomanwang.domain.FriendRelation">
+         delete from friendrelation 
+         where (userid=#{userid} and friendid=#{friendid})
+         or (userid=#{friendid} and friendid=#{userid})
+    </delete>
+</mapper>

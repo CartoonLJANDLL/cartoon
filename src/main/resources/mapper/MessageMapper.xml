@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.MessageMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.Message" id="resultMessage">
+		<id column="id" property="id" /><!-- 主键的映射 -->
+		<result column="type" property="type" /><!-- 非主键的映射 -->
+		<result column="senderid" property="senderid" />
+		<result column="username" property="username" />
+		<result column="receiverid" property="receiverid" />
+		<result column="content" property="content" />
+		<result column="sender_status" property="sender_status" />
+		<result column="receiver_status" property="receiver_status" />
+		<result column="time" property="time" />
+	</resultMap>
+	<update id="update" parameterType="guomanwang.domain.Message">
+		update message  
+		<set>
+			<if test="sender_status!=null">sender_status = #{sender_status},</if>
+			<if test="receiver_status!=null ">receiver_status = #{receiver_status},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<insert id="insertMessage" parameterType="guomanwang.domain.Message" >
+		insert into message(type,senderid,receiverid,content,sender_status,receiver_status,time) 
+		values(#{type},#{senderid},#{receiverid},#{content},#{sender_status},#{receiver_status},#{time});
+	</insert>
+	<delete id="deleteMessageById" parameterType="int">
+	    delete from message 
+	    where id = #{id}
+	</delete>
+	<!-- 删除当前用户下的所有消息（接收的消息） -->
+	<delete id="deleteAllMessageByreceiverid" parameterType="int">
+	    delete from message 
+	    where receiverid=#{receiverid}
+	</delete>
+	<select id="getmessagebyid" resultMap="resultMessage">
+		SELECT * 
+		from message
+		where id = #{id}
+	</select>
+	<!-- 查找指定发送方且发送方未删除的消息 ,即我发出去的消息-->
+	<select id="getmessagesbysenderid" resultMap="resultMessage">
+		select a.*,b.username
+		from message a,user b
+		where senderid=#{senderid} and sender_status=1
+		and a.receiverid=b.userid
+	</select>
+	<!-- 查找指定接收方且接收方未删除的消息 ，即我接收到的消息-->
+	<select id="getmessagesbyreceiverid" resultMap="resultMessage">
+		select a.*,b.username
+		from message a,user b
+		where receiverid=#{receiverid} and receiver_status=1
+		and a.senderid=b.userid
+	</select>
+</mapper>

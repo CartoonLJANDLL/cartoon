@@ -1,0 +1,13 @@
+@charset "UTF-8";
+body{ position:relative;}
+.navbar-header img{width: 240px;height: 80px;}
+#menu li{padding:14px 0px;}
+#menu li a{font-family:"微软雅黑";font-size:24px;}
+li:hover{background-color: #31B0D5;}
+#menu btn-default{background-color:#cccccc;border: none;width: 6%;}
+#menu btn-primary{background-color:#3399ff;border: none;width: 6%;}
+#menu btn-primary:hover{background-color:#33ccff;}
+#userid_image{display: none;}
+#userid_image img{width: 45px;height: 45px;box-shadow:10 10 8 blue;}
+.alert-warning{display: none;margin: 0;padding: 5px 2px;font-size: 10px;}
+.row{height: 45px;}

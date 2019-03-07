@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.CommitZanMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.CommitZan" id="resultCommitZan">
+		<id column="id" property="id" /><!-- 主键的映射 -->
+		<result column="commitid" property="commitid" /><!-- 非主键的映射 -->
+		<result column="userid" property="userid" />
+		<result column="time" property="time" />
+	</resultMap>
+	
+	<insert id="dianzan" parameterType="guomanwang.domain.CommitZan" 
+	 useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into commitzan(commitid,userid,time) 
+		values(#{commitid},#{userid},#{time});
+	</insert>
+	<delete id="cancelzan" parameterType="guomanwang.domain.CommitZan">
+	    delete from commitzan where commitid = #{commitid} and userid=#{userid}
+	</delete>
+</mapper>

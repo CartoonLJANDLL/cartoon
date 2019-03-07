@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.BlockMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.Block" id="resultBlock">
+		<id column="id" property="id" /><!-- 主键的映射 -->
+		<result column="threadnum" property="threadnum" /><!-- 非主键的映射 -->
+		<result column="name" property="name" />
+		<result column="master_id" property="master_id" />
+		<result column="last_time" property="last_time" />
+		<result column="photo" property="photo"/>
+		<result column="abstracts" property="abstracts"/>
+	</resultMap>
+	
+	<update id="updateBlock" parameterType="guomanwang.domain.Block">
+		update block 
+		<set>
+			<if test="threadnum!=null">threadnum = #{threadnum},</if>
+			<if test="name!=null">name=#{name},</if>
+			<if test="master_id!=null">master_id=#{master_id},</if>
+			<if test="last_time!=null">last_time =#{last_time},</if>
+			<if test="last_time!=null">abstracts =#{abstracts},</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<insert id="addblock" parameterType="guomanwang.domain.Block" 
+	 useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into block(threadnum,name,last_time,abstracts,photo) 
+		values(#{threadnum},#{name},#{last_time},#{abstracts},#{photo});
+	</insert>
+	<delete id="deleteBlockById" parameterType="int">
+	    delete from block where id = #{id}
+	</delete>
+	
+	<select id="selectBlockById" parameterType="int" resultType="guomanwang.domain.Block">
+	    select * from block where id = #{id}
+	</select>
+	<select id="findblockbyname" resultMap="resultBlock">
+		SELECT *
+		from block
+		where name = #{name}
+	</select>
+	<select id="findblockbyid" resultMap="resultBlock">
+		SELECT *
+		from block
+		where id = #{id}
+	</select>
+	<select id="selectAllBlock" resultMap="resultBlock">
+	    select block.id,name,master_id,abstracts,photo,COUNT(blockid) threadnum,MAX(time) last_time
+		from block 
+		left outer join thread 
+		on block.id=thread.blockid
+		GROUP BY block.id
+	</select>
+	<select id="selectHotRanking" resultMap="resultBlock">
+	     select block.id,name,master_id,abstracts,photo,COUNT(blockid) threadnum,MAX(time) last_time
+		from block 
+		left outer join thread 
+		on block.id=thread.blockid
+		GROUP BY block.id
+		order by threadnum desc
+	</select>
+	<select id="selectNewRanking" resultMap="resultBlock">
+	     SELECT  block.id,name,last_time,count(*)threadnum from block,thread where block.id = thread.blockid
+         GROUP BY block.id  
+         order by last_time DESC
+	</select>
+</mapper>

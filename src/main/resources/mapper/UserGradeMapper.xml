@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guomanwang.mapper.UserGradeMapper">
+	<!-- 创建一个映射，将查询结果与实体类之间进行映射 -->
+	<resultMap type="guomanwang.domain.UserGrade" id="resultUserGrade">
+		<id column="id" property="id" /><!-- 主键的映射 -->
+		<result column="gradeIcon" property="gradeIcon" /><!-- 非主键的映射 -->
+		<result column="gradeName" property="gradeName" />
+		<result column="gradeValue" property="gradeValue" />
+		<result column="gradeStatus" property="gradeStatus" />
+	</resultMap>
+	
+	<update id="updateUserGrade" parameterType="guomanwang.domain.UserGrade">
+		update grade 
+		<set>
+			<if test="gradeIcon!=null and gradeIcon!=''">gradeIcon = #{gradeIcon},</if>
+			<if test="gradeName!=null and gradeName!=''">gradeName = #{gradeName},</if>
+			<if test="gradeValue!=null and gradeValue!=''">gradeValue = #{gradeValue},</if>
+			<if test="gradeStatus!=null and gradeStatus!=''">gradeStatus = #{gradeStatus},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<insert id="addUserGrade" parameterType="guomanwang.domain.UserGrade" >
+		insert into grade(id,gradeIcon,gradeName,gradeValue,gradeStatus) 
+		values(#{id},#{gradeIcon},#{gradeName},#{gradeValue},#{gradeStatus});
+	</insert>
+	<select id="getUserGrade" resultMap="resultUserGrade">
+		SELECT *
+		from grade
+	</select>
+	<delete id="deleteUserGradeById" parameterType="int">
+         delete from grade where id=#{id}
+    </delete>
+</mapper>
