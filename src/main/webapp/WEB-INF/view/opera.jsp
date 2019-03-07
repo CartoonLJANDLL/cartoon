@@ -326,9 +326,10 @@
 		</div>
 <script type="text/javascript" src="<c:url value='/resources/layui/layui.js'></c:url>"></script>
 	<script>
-	layui.use(['carousel','layer','element'], function(){
+	layui.use(['carousel','layer','element','form'], function(){
 	  var carousel = layui.carousel,
       $ = layui.jquery,
+      form = layui.form,
       element = layui.element,
       layer=layui.layer;
 	  
