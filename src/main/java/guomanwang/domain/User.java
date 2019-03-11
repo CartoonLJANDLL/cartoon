@@ -1,9 +1,13 @@
 package guomanwang.domain;
 
+import java.util.Date;
+
 public class User {
 	private int userId;
 	private int Grade;
+	//表示等级经验值
 	private int gradeValue;
+	//表示用户身份，1为注册用户，2为版主，3为管理员，4为超级用户
 	private int Honor;
 	private String Sex;
 	private String userName;
@@ -11,6 +15,10 @@ public class User {
 	private String telPhone;
 	private String headUrl;
 	private String Introduce;
+	//表示注册时间
+	private Date registerday;
+	//表示账号状态，1为启用，0为禁用
+	private int status;
 	//连续签到天数
 	private int signdays;
 	public int getSignDays() {
@@ -78,5 +86,20 @@ public class User {
 	}
 	public void setGradeValue(int gradeValue) {
 		this.gradeValue = gradeValue;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public String getRegisterday() {
+		if(registerday!=null) {
+			return TimeTransformUtil.timetransform(registerday);
+		}
+	    return null; 
+	}
+	public void setRegisterday(Date registerday) {
+		this.registerday = registerday;
 	}
 }

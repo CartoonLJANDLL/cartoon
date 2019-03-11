@@ -22,7 +22,7 @@
 		.layui-row .layui-btn{box-shadow:0px 3px 0px #888888;}
 		.layui-carousel img{width:100%;height:100%;}
 		h3{margin-top: 5px;}
-		.shoucang:hover{color: #FF5722;}
+		.shoucang:hover,.fenxiang:hover{color: #FF5722;}
 		ul li{float:left;line-height:25px;overflow:clear;}
 		ul .first{width:72%;}
 		ul .second{width:10%;}
@@ -73,9 +73,8 @@
 				</blockquote>
 		</div>
 		<div class="layui-bg-green">
-			<h1>最近更新&nbsp;&nbsp;<i class="layui-icon">&#xe669;</i></h1>
 		</div>
-		<div class="layui-row layui-col-space20 ">
+		<div class="layui-row layui-col-space20 " id="result">
 		  <div class="layui-col-md2 layui-col-md-offset1">
 			  	<div style="position:relative;" class="list_item" data-id="1">
 					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
@@ -87,7 +86,7 @@
 			  		<li class="layui-nav-item first"><h3>秦时明月之君临天下</h3></li>
 			  		<li class="layui-nav-item second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>
 			  		<li class="layui-nav-item thred">
-						<i class="layui-icon" style="font-size: 30px;">&#xe641;</i>
+						<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>
 			  		</li>	
 			  		<li class="layui-nav-item layui-word-aux">一句话介绍占位</li>
 			  	</ul>
@@ -145,8 +144,6 @@
 						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
 			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
 		  </div>
-		</div>
-		<div class="layui-row layui-col-space20 ">
 		<div class="layui-col-md2 layui-col-md-offset1">
 			  	<div style="position:relative;" class="list_item">
 					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
@@ -198,12 +195,27 @@
 			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
 		  </div>
 		</div>
+		<div class="searchresult" style="display:none;">
+			<div class="layui-row">
+				<div class="layui-col-md2">
+			  		<div style="position:relative;" class="list_item">
+						<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
+						<div class="jishu">
+						更新至多少集
+						</div>
+			  		</div>
+					<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
+					<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
+		  		</div>	
+			</div>
+		</div>
 		<div class="layui-row">
 			<div class="layui-col-lg6 layui-col-lg-offset6">
 				<a href="#" style="font-size:10px;">>>查看更多<<</a>
 			</div>
 		</div>
-		<br />
+		
+		<!--<br />
 		<div class="layui-bg-red">
 			<h1>正在热播&nbsp;&nbsp;<i class="layui-icon">&#xe669;</i></h1>
 			
@@ -316,7 +328,7 @@
 			<div class="layui-col-lg6 layui-col-lg-offset6">
 				<a href="#" style="font-size:10px;">>>查看更多<<</a>
 			</div>
-		</div>
+		</div>-->
 		<div class="fly-footer" style="text-align:center;width:100%;height:70px;margin-top:20px;">
 			<p style="margin:10px auto; "><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a></p> 
 			<a href="javascript:;" target="_blank">2018 &copy;刘江 and 李林</a>
@@ -352,7 +364,8 @@
 	    	            top.layer.close(index);
 	    	            //刷新当前页面
 	    	            if(res.code==1){
-	    	            	location.href="/guomanwang/common/opera?searchstatus=1";
+	    	            	$("#reult").fadeOut();
+	    	            	$(".searchresult").fadeIn();
 	    	            }
 	    	            
 	    	        },1000);
@@ -378,7 +391,7 @@
              
       });
       //分享
-      $("ul .thred").mouseover(function(){
+      $("ul .thred").click(function(){
 		$(this).parent().parent().find(".share").slideDown("slow");      
       });
       $(".share .hideshare").click(function(){

@@ -35,6 +35,7 @@ import guomanwang.domain.UserThread;
 import guomanwang.domain.Commit;
 import guomanwang.domain.Defaulthead;
 import guomanwang.domain.FriendRelation;
+import guomanwang.domain.MD5Cripy;
 import guomanwang.domain.Message;
 import guomanwang.domain.Sign;
 import guomanwang.domain.Thread;
@@ -89,7 +90,8 @@ public class UserController {
 		List<User> userlist=this.userService.isLogin(telnumber);
 		HttpSession session = request.getSession();
 		for(User user:userlist) {
-			if(user.getPassword().equals(password)) {
+			String passwordByMd5 = MD5Cripy.MD5(password);
+			if(user.getPassword().equals(passwordByMd5)&&user.getStatus()==1) {
 				json.put("code",1);
 				json.put("msg","登录成功！");
 				session.setAttribute("user", user);
@@ -99,9 +101,14 @@ public class UserController {
 					System.out.println(sign);
 				}
 			}
-			else {session.setAttribute("msg", "账号或密码输入错误！");
+			else if(user.getStatus()==0)
+			{
 					json.put("code",0);
-					json.put("msg","账号或密码输入错误！请重试！");
+					json.put("msg","该账号已禁用！请换一个账号！");
+			}
+			else {
+				json.put("code",0);
+				json.put("msg","账号或密码输入错误，请重试！");
 			}
 		}			
 			return json;
@@ -255,9 +262,10 @@ public class UserController {
 			user.setPhone(cellphone);
 			user.setGradeValue(0);
 			user.setHonor(1);
+			user.setStatus(1);
 			user.setName(username);
 			user.setHeadurl(defaultheadlist.get(defaultheadid).getUrl());
-			user.setPassword(password);
+			user.setPassword(MD5Cripy.MD5(password));
 			int change_row=this.userService.register(user);
 			if(change_row>0) {
 				json.put("code",1);
@@ -285,7 +293,7 @@ public class UserController {
 		User user=new User();
 		if(vali.equals(request.getSession().getAttribute("code"))) {
 			user.setPhone(cellphone);
-			user.setPassword(password);
+			user.setPassword(MD5Cripy.MD5(password));
 			int change_row=this.userService.resetpassbyphone(user);
 			if(change_row>0) {
 				json.put("code",1);
@@ -312,14 +320,17 @@ public class UserController {
 		System.out.println("经过密码更改方法");
 		User userinfo=(User)session.getAttribute("user");
 		User user=new User();
-		if(password.equals(userinfo.getPassword())) {
-			user.setPassword(newpassword);
+		String pass=MD5Cripy.MD5(password);
+		String newpass=MD5Cripy.MD5(newpassword);
+		if(pass.equals(newpass)) {
+			user.setPassword(newpass);
 			user.setPhone(userinfo.getPhone());
 			user.setGradeValue(userinfo.getGradeValue());
 			user.setHonor(userinfo.getHonor());
 			user.setIntroduce(userinfo.getIntroduce());
 			user.setSex(userinfo.getSex());
 			user.setUserid(userinfo.getUserid());
+			user.setStatus(1);
 			int change_row=this.userService.updateuserinfo(user);
 			if(change_row>0) {
 				session.removeAttribute("user");
@@ -348,6 +359,7 @@ public class UserController {
 			user.setName(username);
 			user.setIntroduce(introduce);
 			user.setSex(sex);
+			user.setStatus(1);
 			user.setUserid(userinfo.getUserid());
 			user.setGradeValue(userinfo.getGradeValue());
 			user.setHonor(userinfo.getHonor());
@@ -376,6 +388,7 @@ public class UserController {
 			User user=new User();
 			user.setUserid(userinfo.getUserid());
 			user.setHonor(userinfo.getHonor());
+			user.setStatus(1);
 			user.setGradeValue(userinfo.getGradeValue());
 			user.setHeadurl(imageurl);
 			int change_row=this.userService.updateuserinfo(user);
@@ -403,6 +416,7 @@ public class UserController {
 		user.setHonor(userinfo.getHonor());
 		user.setGradeValue(userinfo.getGradeValue());
 		user.setHeadurl(headimage);
+		user.setStatus(1);
 		int change_row=this.userService.updateuserinfo(user);
 		if(change_row>0) {
 			List<User> userlist=this.userService.isLogin(userinfo.getPhone());
@@ -414,7 +428,7 @@ public class UserController {
 		else {json.put("msg","头像修改失败！");}
 		return json;
 	}
-	//上传头像图片
+	//上传图片
 	@RequestMapping("/uploadHeadImage")
 	@ResponseBody
 	public JSONObject uploadHeadImage(@RequestParam("file") MultipartFile file, @ModelAttribute User user, HttpServletRequest request, InputStream stream)
@@ -452,6 +466,7 @@ public class UserController {
 		user.setUserid(userinfo.getUserid());
 		user.setHonor(userinfo.getHonor());
 		user.setHeadurl(userinfo.getHeadurl());
+		user.setStatus(1);
 		user.setGradeValue(userinfo.getGradeValue()+signvalue);
 		Date date=new Date();
 		Sign sign=new Sign();
