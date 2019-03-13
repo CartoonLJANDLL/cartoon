@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.github.pagehelper.Page;
+import guomanwang.domain.Page;
 
 import guomanwang.domain.Block;
 import guomanwang.mapper.BlockMapper;
@@ -50,5 +50,17 @@ public class BlockServiceimpl implements BlockService{
 	@Override
 	public Block findblockbyid(int id) {
 		return blockMapper.findblockbyid(id);
+	}
+	@Override
+	public List<Block> getblocklist(Page page) {
+		return blockMapper.getblocklist(page);
+	}
+	@Override
+	public int addblock(Block block) {
+		return blockMapper.addblock(block);
+	}
+	@Override
+	public int deleteBlockById(int id) {
+		return blockMapper.deleteBlockById(id);
 	}
 }

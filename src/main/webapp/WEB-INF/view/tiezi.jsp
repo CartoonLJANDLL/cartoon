@@ -12,6 +12,9 @@
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
 <link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
 <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
+<style type="text/css">
+	.photos img{width:50%;}
+</style>
 </head>
 <body>
 <jsp:include page="menu_header.jsp"/>
@@ -64,11 +67,11 @@
           <!-- <span class="layui-badge" style="background-color: #5FB878;">已结</span> -->
           
           <div class="fly-admin-box" data-id="123">
-          	<c:if test="${user.getHonor()==2 || userThread.getUserId()==user.getUserid()}" >
+          	<c:if test="${user.getHonor()>2 || userThread.getUserId()==user.getUserid()}" >
             	<span class="layui-btn layui-btn-xs jie-admin" id="delthread">删除</span>
             <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="0" style="background-color:#ccc;">取消置顶</span> -->
 			</c:if>
-			<c:if test="${user.getHonor()==2&&userThread.getStatus()!=1&&userThread.getStatus()!=3}">
+			<c:if test="${user.getHonor()>2&&userThread.getStatus()!=1&&userThread.getStatus()!=3}">
             	<span class="layui-btn layui-btn-xs jie-admin" id="setstatus" field="status" rank="1">加精</span> 
             <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> -->
 			</c:if>         
@@ -98,14 +101,12 @@
           </div>
         </div>
         <div class="detail-body photos">
-          <p>
-            ${ userThread.getContent()}
-          </p>
-      	 	 图片区域
-      	  <hr>
-          <p>
-            <img src="../../res/images/fly.jpg" alt="Fly社区">
-          </p>
+        	<div class="layui-card">
+			  <div class="layui-card-body">
+			   <pre>${ userThread.getContent()}</pre>
+			  </div>
+			</div>
+            
         </div>
       </div>
       <div class="fly-panel detail-box" id="flyReply">
@@ -129,10 +130,10 @@
                 <c:if test="${ item.getUserId()==userThread.getUserId()}">
                 	<span>(楼主)</span>
                 </c:if>
-                <c:if test="${ item.getHonor()==2}">
+                <c:if test="${ item.getHonor()>2}">
                 	<span style="color:#5FB878">(管理员)</span>
                 </c:if>
-                <c:if test="${ item.getHonor()==0}">
+                <c:if test="${ item.getStatus()== 0}">
                 	<span style="color:#999">（该号已被禁用）</span>
                 </c:if>
                 <!--
@@ -149,7 +150,7 @@
               <!-- <i class="iconfont icon-caina" title="最佳答案"></i> -->
             </div>
             <div class="detail-body jieda-body photos">
-               <p>${item.getContent()}</p>
+               <pre>${item.getContent()}</pre>
             </div>
                <div class="jieda-reply">
                	   <span <c:if test="${item.getIsliked()==1}">class="jieda-zan zanok"</c:if>
@@ -165,7 +166,7 @@
 	                       <a class="replyid" style="display:none">${ item.getId()}</a>
 	                    </span>
                     </c:if>
-                    <c:if test="${user.getHonor()==2 || item.getUserId()==user.getUserid()}" >
+                    <c:if test="${user.getHonor()>2 || item.getUserId()==user.getUserid()}" >
 			            <div class="jieda-admin">            
 			                <!--  <span type="edit">编辑</span>-->
 			                <span id="delcommit" >
@@ -244,6 +245,22 @@
 </div>
 
 <script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
+<script>
+layui.cache.page="user";
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '<c:url value="/resources/res/images/avatar/00.jpg"></c:url>'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "3.0.0"
+  ,base: '<c:url value="/resources/res/mods/"></c:url>'
+}).extend({
+  fly: '<c:url value="index"></c:url>'
+}).use('<c:url value="fly"></c:url>');
+</script>
 <script>
 layui.use(['upload','layer','form'], function(){
 	  var $ = layui.jquery

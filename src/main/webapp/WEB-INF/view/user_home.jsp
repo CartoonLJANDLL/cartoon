@@ -158,7 +158,7 @@ layui.use(['element','form','layer'], function(){
 	
 	$(document).on('click', '#addfriend', function(data) {
         var friendid = $(this).attr('data-id');
-            $.get('<c:url value="/user/addfriend"></c:url>',{
+            $.get('../user/addfriend',{
             	friendid:friendid
             },function(data){
            layer.msg(data.msg);
@@ -179,22 +179,18 @@ layui.use(['element','form','layer'], function(){
         	message='确认拒绝该好友请求吗？'
         }
 		layer.confirm(message, {icon: 3, title: '提示信息'}, function (index) {
-            $.get('<c:url value="/user/deletefriend"></c:url>',{
+            $.get('../user/deletefriend',{
             	friendid:friendid
             },function(data){
            layer.msg(data.msg);
-           setTimeout(function(){
-               top.layer.close(index);
-               if(data.code==1){
-            	   location.reload();
-               }
-           },1500);
+           top.layer.close(index);
+           location.reload();
             })
-           
             return false;
     	});
 
-});	
+});
+})
 </script>	
 </body>
 </html>

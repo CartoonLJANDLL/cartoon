@@ -80,4 +80,8 @@ public class UserServiceimpl implements UserService {
 	public List<User> searchadminbyname(String key) {
 		return this.userMapper.searchadminbyname(key);
 	}
+	@Override
+	public List<User> getallusers() {
+		return this.userMapper.getallusers();
+	}
 }

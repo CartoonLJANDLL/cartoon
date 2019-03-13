@@ -49,7 +49,7 @@
 	<script type="text/html" id="newsListBar">
 		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
-		<a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="look" href='{{d.url}}'>查看</a>
+		<a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="look" href='{{d.url}}' target="_blank">查看</a>
 	</script>
 	
 </form>

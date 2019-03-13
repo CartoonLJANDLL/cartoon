@@ -22,13 +22,13 @@
 		.layui-row .layui-btn{box-shadow:0px 3px 0px #888888;}
 		.layui-carousel img{width:100%;height:100%;}
 		h3{margin-top: 5px;}
-		.shoucang:hover,.fenxiang:hover{color: #FF5722;}
+		.layui-row .shoucang:hover,.layui-row .fenxiang:hover{color: #FF5722;}
 		ul li{float:left;line-height:25px;overflow:clear;}
 		ul .first{width:72%;}
 		ul .second{width:10%;}
 		ul .thred{width:15%;}
-		.layui-col-md2 .share{position:absolute;z-indent:3;right:0px;bottom:0px;background-color:#009688;height:60px;padding:3px 6px;display:none;color:white;}
-		.layui-col-md2 .share table tr{line-height:25px;}
+		.layui-row .layui-col-md2 .share{position:absolute;z-indent:3;right:0px;bottom:0px;background-color:#009688;height:60px;padding:3px 6px;display:none;color:white;}
+		.layui-row .layui-col-md2 .share table tr{line-height:25px;}
 	</style>
 	<body>
 	<jsp:include page="menu_header.jsp"/>
@@ -41,294 +41,45 @@
 		  </div>
 		</div>
 <!-- 条目中可以是任意内容，如：<img src=""> -->
-		<div class="container">
+		<div>
 				<blockquote class="layui-elem-quote main_btn">
-					<div class="layui-row">
-					<div class="layui-col-lg2">
-						<button class="layui-btn layui-btn-sm layui-btn-danger">排序</button>
-						<a href="">最新</a>
-						<a href="">最热</a>
-					</div>
-					<div class="layui-col-lg2">
-						<button class="layui-btn layui-btn-sm layui-btn-danger">类型</button>
-						<a href="">玄幻</a>
-						<a href="">武侠</a>
-						<a href="">竞技</a>
-						<a href="">冒险</a>
-					</div>
-					<div class="layui-col-lg2">
-						<button class="layui-btn layui-btn-sm layui-btn-danger">状态</button>
-						<a href="">已完结</a>
-						<a href="">未完结</a>
-					</div>
-					<div class="layui-col-lg6">
-						<div class="layui-inline">
-							<input placeholder="请输入番剧名称关键字搜索" required lay-verify="required" name="keywords" autocomplete="off" id="searchinput" class="layui-input">
+					<div class="layui-row layui-form" >
+						<div class="layui-col-lg3 sort">
+							<button class="layui-btn layui-btn-sm layui-btn-danger">排序</button>
+							<input type="radio" name="sort" value="" title="默认" checked>
+							<input type="radio" name="sort" value="最新" title="最新">
+							<input type="radio" name="sort" value="最热" title="最热">
 						</div>
-						<button class="layui-btn" lay-submit lay-filter="search">
-							<i class="layui-icon layui-icon-search"></i>
-						</button>
-					</div>
+						<div class="layui-col-lg4 type">
+							<button class="layui-btn layui-btn-sm layui-btn-danger">类型</button>
+							<input type="radio" name="type" value="" title="默认" checked>
+							<input type="radio" name="type" value="1" title="玄幻">
+							<input type="radio" name="type" value="2" title="武侠">
+							<input type="radio" name="type" value="3" title="竞技">
+							<input type="radio" name="type" value="4" title="冒险">
+						</div>
+						<div class="layui-col-lg3 status">
+							<button class="layui-btn layui-btn-sm layui-btn-danger">状态</button>
+							<input type="radio" name="status" value="" title="默认" checked>
+							<input type="radio" name="status" value="已完结" title="已完结">
+							<input type="radio" name="status" value="未完结" title="未完结">
+						</div>
+						<div class="layui-col-lg2 layui-form">
+							<div class="layui-inline">
+								<input placeholder="请输入番剧名称关键字搜索" required lay-verify="required" name="keywords" autocomplete="off" id="searchinput" class="layui-input">
+							</div>
+							<button class="layui-btn" lay-submit lay-filter="search">
+								<i class="layui-icon layui-icon-search"></i>
+							</button>
+						</div>
 					</div>
 				</blockquote>
 		</div>
-		<div class="layui-bg-green">
+		<div class="layui-bg-green"></div>
+		<div class="layui-container" style="width:90%;height:100%;">
+			<div class="layui-row layui-col-space20 " id="result"></div>
+			<div id="pager"></div>
 		</div>
-		<div class="layui-row layui-col-space20 " id="result">
-		  <div class="layui-col-md2 layui-col-md-offset1">
-			  	<div style="position:relative;" class="list_item" data-id="1">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-			  	<ul class="layuui-nav">
-			  		<li class="layui-nav-item first"><h3>秦时明月之君临天下</h3></li>
-			  		<li class="layui-nav-item second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>
-			  		<li class="layui-nav-item thred">
-						<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>
-			  		</li>	
-			  		<li class="layui-nav-item layui-word-aux">一句话介绍占位</li>
-			  	</ul>
-			  	<div class="share" >
-				  <table >
-				  	<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>
-				  	<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>
-				  </table>
-				  <div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>
-		  		</div>  	
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-			  	<ul class="layuui-nav">
-			  		<li class="layui-nav-item first"><h3>秦时明月之君临天下</h3></li>
-			  		<li class="layui-nav-item second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>
-			  		<li class="layui-nav-item thred">
-			  			<i class="layui-icon" style="font-size: 30px;">&#xe641;</i>	
-			  		</li>	
-			  		<li class="layui-nav-item layui-word-aux">一句话介绍占位</li>
-			  	</ul>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		<div class="layui-col-md2 layui-col-md-offset1">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		</div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		</div>
-		<div class="searchresult" style="display:none;">
-			<div class="layui-row">
-				<div class="layui-col-md2">
-			  		<div style="position:relative;" class="list_item">
-						<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-						<div class="jishu">
-						更新至多少集
-						</div>
-			  		</div>
-					<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-					<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  		</div>	
-			</div>
-		</div>
-		<div class="layui-row">
-			<div class="layui-col-lg6 layui-col-lg-offset6">
-				<a href="#" style="font-size:10px;">>>查看更多<<</a>
-			</div>
-		</div>
-		
-		<!--<br />
-		<div class="layui-bg-red">
-			<h1>正在热播&nbsp;&nbsp;<i class="layui-icon">&#xe669;</i></h1>
-			
-		</div>
-		<div class="layui-row layui-col-space20 ">
-		  <div class="layui-col-md2 layui-col-md-offset1">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  <div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  </div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		</div>
-		<div class="layui-row layui-col-space20 ">
-		<div class="layui-col-md2 layui-col-md-offset1">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		</div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少1集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少2集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;"  class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少3集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		  <div class="layui-col-md2">
-			  	<div style="position:relative;" class="list_item">
-					<img src="<c:url value='/resources/img/qsmy.jpg'></c:url>">	
-					<div class="jishu">
-					更新至多少集
-					</div>
-			  	</div>
-						<h3>秦时明月之君临天下&nbsp;&nbsp;&nbsp;&nbsp;<i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;  </i>|<i class="layui-icon" style="font-size: 30px;">&#xe641;</i></h3>
-			<div class="layui-form-mid layui-word-aux">一句话介绍占位</div>
-		  </div>
-		</div>
-		<div class="layui-row">
-			<div class="layui-col-lg6 layui-col-lg-offset6">
-				<a href="#" style="font-size:10px;">>>查看更多<<</a>
-			</div>
-		</div>-->
 		<div class="fly-footer" style="text-align:center;width:100%;height:70px;margin-top:20px;">
 			<p style="margin:10px auto; "><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a></p> 
 			<a href="javascript:;" target="_blank">2018 &copy;刘江 and 李林</a>
@@ -338,11 +89,13 @@
 		</div>
 <script type="text/javascript" src="<c:url value='/resources/layui/layui.js'></c:url>"></script>
 	<script>
-	layui.use(['carousel','layer','element','form'], function(){
+	layui.use(['carousel','layer','element','form','flow','laypage'], function(){
 	  var carousel = layui.carousel,
       $ = layui.jquery,
       form = layui.form,
+      flow = layui.flow,
       element = layui.element,
+      laypage = layui.laypage,
       layer=layui.layer;
 	  
 	  //建造轮播图实例
@@ -352,6 +105,109 @@
 		,arrow: 'always' //始终显示箭头
 		//,anim: 'fade' //切换动画方式
 	  });
+	  var type= $('input[name="type"]:checked').val(),
+	  	  sort = $('input[name="sort"]:checked').val(),
+	  	  status= $('input[name="type"]:checked').val();
+	  //初始化即获得默认番剧数据
+	  $.post('/guomanwang/common/samecompanynews?companyid=8&page=1', function(res){
+		//从后端获得的列表返回在data集合中
+		layui.each(res.data, function(index, item){
+			 $("#result").append(['<div class="layui-col-md2">'
+			 			,'<div style="position:relative;" class="list_item">'
+						,'<img src="../resources/img/qsmy.jpg">'
+						,'<div class="jishu">更新至多少集</div>'
+				  		,'</div>'
+						,'<ul>'
+				  			,'<li class="first"><h3>秦时明月之君临天下</h3></li>'
+				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+				  			,'<li class="thred">'
+								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+				  			,'</li>'	
+				  			,'<li class="layui-word-aux">一句话介绍占位</li>'
+				  		,'</ul>'
+				  	,'<div class="share" >'
+					  ,'<table >'
+					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
+					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
+					  ,'</table>'
+					  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
+			  		,'</div>'
+			  ,'</div>'].join(''));
+		})
+		//分页器相关设置
+		laypage.render({
+			  elem: 'pager'
+			  ,count: res.pages
+			  ,limit:1
+			  ,jump: function(obj, first){
+			    
+			    //首次不执行
+			    if(!first){
+			    	$("#result").empty();
+			  	  	$.post('/guomanwang/common/samecompanynews?companyid=8&page='+obj.curr, function(res){
+			  		//从后端获得的列表返回在data集合中
+			  		layui.each(res.data, function(index, item){
+			  			 $("#result").append(['<div class="layui-col-md2">'
+			  			 			,'<div style="position:relative;" class="list_item">'
+			  						,'<img src="../resources/img/qsmy.jpg">'
+			  						,'<div class="jishu">更新至多少集</div>'
+			  				  		,'</div>'
+			  						,'<ul>'
+			  				  			,'<li class="first"><h3>秦时明月之君临天下</h3></li>'
+			  				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+			  				  			,'<li class="thred">'
+			  								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+			  				  			,'</li>'	
+			  				  			,'<li class="layui-word-aux">一句话介绍占位</li>'
+			  				  		,'</ul>'
+			  				  	,'<div class="share" >'
+			  					  ,'<table >'
+			  					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
+			  					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
+			  					  ,'</table>'
+			  					  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
+			  			  		,'</div>'
+			  			  ,'</div>'].join(''));
+			  		});
+			  	  })
+			  	}
+			  }
+		});
+
+	  });
+
+	  form.on('radio', function(data){
+		  var sort=$("input[name='sort']:checked").val(),
+		  	type=$("input[name='type']:checked").val(),
+		  	status=$("input[name='status']:checked").val();
+		  	$("#result").empty();
+		  	$.get('/guomanwang/common/samecompanynews?companyid='+type+'&page=1', function(res){
+			//假设你的列表返回在data集合中
+			layui.each(res.data, function(index, item){
+				 $("#result").append(['<div class="layui-col-md2">'
+			 			,'<div style="position:relative;" class="list_item">'
+						,'<img src="../resources/img/qsmy.jpg">'
+						,'<div class="jishu">更新至多少集</div>'
+				  		,'</div>'
+						,'<ul>'
+				  			,'<li class="first"><h3>秦时明月之君临天下</h3></li>'
+				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+				  			,'<li class="thred">'
+								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+				  			,'</li>'	
+				  			,'<li class="layui-word-aux">一句话介绍占位</li>'
+				  		,'</ul>'
+				  		,'<div class="share" >'
+					  	,'<table >'
+					  		,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
+					  		,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
+					  ,'</table>'
+					  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
+			  			,'</div>'
+			  		,'</div>'].join(''));
+						}); 
+					  });
+			});
 	 //番剧搜索
     form.on('submit(search)', function(data){
 		//弹出loading
@@ -373,7 +229,7 @@
 	        
 	        return false;
 	    });
-	  $(".list_item").click(function(){
+	  $(".layui-row").on('click','.list_item',function(){
 		  var test=$(this).find(".jishu").text();
 		    layer.open({
 		        type: 2
@@ -386,15 +242,15 @@
 		      });
 	  });
       //收藏
-      $(".shoucang").click(function(){
-		layer.msg("您点击了收藏按钮")
+       $(".layui-row").on('click','.shoucang',function(){
+		layer.msg("您点击了收藏按钮");
              
       });
       //分享
-      $("ul .thred").click(function(){
+      $(".layui-row").on('click','.thred',function(){
 		$(this).parent().parent().find(".share").slideDown("slow");      
       });
-      $(".share .hideshare").click(function(){
+      $(".layui-row").on('click','.hideshare',function(){
   		$(this).parent().slideUp("slow");      
         });
 

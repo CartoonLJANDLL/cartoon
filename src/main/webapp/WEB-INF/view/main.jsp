@@ -220,7 +220,7 @@
 	        var hotNewsHtml = '';
 	        for(var i=0;i<5;i++){
 	            hotNewsHtml += '<tr>'
-	                +'<td align="left"><a href="javascript:;"> '+data.data[i].title+'</a></td>'
+	                +'<td align="left"><a href="javascript:;">'+data.data[i].title+'</a></td>'
 	                +'<td>'+data.data[i].time.substring(0,10)+'</td>'
 	                +'</tr>';
 	        }

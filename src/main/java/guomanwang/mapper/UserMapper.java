@@ -34,4 +34,6 @@ public interface UserMapper {
 	public List<User> searchadminbyname(String key);
 	//获得连续签到前20名用户
 	public List<User> getSignTop20Users();
+	//获得所有用户，包括管理员
+	public List<User> getallusers();
 }

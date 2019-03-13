@@ -66,7 +66,7 @@
                   <div class="layui-form-mid layui-word-aux">发表后无法更改经验</div>
                 </div>
               </div> -->
-              <c:if test="${user.getHonor()==2}">
+              <c:if test="${user.getHonor()>2}">
                <div class="layui-form-item">
 			    <label class="layui-form-label">发布类型</label>
 			    <div class="layui-input-block">
@@ -74,7 +74,7 @@
 			      <input type="radio" name="status" value="3" title="公告" >
 			    </div>
 			    </div>
-			    </c:if>
+			  </c:if>
               <!-- <div class="layui-form-item">
                 <label for="L_vercode" class="layui-form-label">人类验证</label>
                 <div class="layui-input-inline">

@@ -26,7 +26,8 @@ public interface UserService {
 	public List<User> getadminlist(Page page);
 	//根据用户名或者手机号实现管理员的模糊查询
 	public List<User> searchadminbyname(String key);
-
     //通过usereid获得用户等级信息
     public int getusergradebyuserid(int userid);
+	//获得所有用户，包括管理员
+	public List<User> getallusers();
 }

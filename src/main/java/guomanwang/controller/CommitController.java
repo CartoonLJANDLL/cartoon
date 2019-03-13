@@ -133,6 +133,7 @@ public class CommitController {
 		userinfo.setHonor(user.getHonor());
 		userinfo.setHeadurl(user.getHeadurl());
 		userinfo.setGradeValue(user.getGradeValue()+5);
+		userinfo.setStatus(1);
 		int rs = commitServiceimpl.insertCommit(commit);
 		if(rs>0) {
 			userService.updateuserinfo(userinfo);

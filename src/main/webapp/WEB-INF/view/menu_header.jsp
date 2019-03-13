@@ -75,7 +75,7 @@
           <dd><a href="/guomanwang/user/user_setting"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
           <dd><a href="/guomanwang/user/user_message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="/guomanwang/user/user_home?userId=${user.getUserid() }"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
-          <% if(user.getHonor()==2){ %>
+          <% if(user.getHonor()>=3){ %>
 		  <dd><a href="/guomanwang/common/admin"><i class="layui-icon" style=" font-size: 22px;">&#xe857;</i>后台管理</a></dd>
           <%} %>
           <hr style="margin: 5px 0;">
@@ -86,13 +86,13 @@
     </ul>
   </div>
   <script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
-<script>
-	$(".fly-nav-avatar").hover(function(){
-		$(".layui-nav-child").fadeIn();	
-	});
-	$(".fly-nav-user").mouseleave(function(){
-		$(".layui-nav-child").fadeOut();	
-	});
-</script>
+	<script>
+		$(".fly-nav-avatar").hover(function(){
+			$(".layui-nav-child").fadeIn();	
+		});
+		$(".fly-nav-user").mouseleave(function(){
+			$(".layui-nav-child").fadeOut();	
+		});
+	</script>
 </body>
 </html>

@@ -134,8 +134,8 @@ public class CommonController {
 	@Scheduled(cron = "0 30 22 ? * *")//每天22点30启动自动抓取动漫资讯任务
 	@RequestMapping("/reflash")
 	public String reflash() throws IOException, InterruptedException{
-		String stringArray[] = {"python /usr/local/scary_wawayu.py","python /usr/local/scary_xi1.py","python /usr/local/scary_rocen.py","python /usr/local/scary_chaoshen.py", 
-		"python /usr/local/scary_cgyear.py","python /usr/local/scary_haoliners.py","python /usr/local/scary_gamersky.py","python /usr/local/scary_qsmy.py"};
+		String stringArray[] = {"python3 /usr/local/scary_wawayu.py","python3 /usr/local/scary_xi1.py","python3 /usr/local/scary_rocen.py","python3 /usr/local/scary_chaoshen.py", 
+		"python3 /usr/local/scary_cgyear.py","python3 /usr/local/scary_haoliners.py","python3 /usr/local/scary_gamersky.py","python3 /usr/local/scary_qsmy.py"};
 		for(int i=0;i<stringArray.length;i++) {
 			System.out.println("开始执行"+stringArray[i]);
 			TimerTask.autoscarynews(stringArray[i]);
@@ -200,11 +200,11 @@ public class CommonController {
 		User userinfo=(User)session.getAttribute("user");
 		//用户未登录跳转到登录页面
 		if(userinfo==null) {
-			return "login";
+			return "redirect:login";
 		}
 		//用户不是管理员则跳转到首页
-		else if(userinfo.getHonor()!=2) {
-			return "index";
+		else if(userinfo.getHonor()<=2) {
+			return "redirect:index";
 		}
 		return "admin_index";
 	}

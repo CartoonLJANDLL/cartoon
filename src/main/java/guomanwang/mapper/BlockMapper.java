@@ -3,7 +3,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.github.pagehelper.Page;
+import guomanwang.domain.Page;
 
 import guomanwang.domain.Block;
 
@@ -12,7 +12,6 @@ public interface BlockMapper {
 	
 	public int deleteBlockById(int id);
 	
-	public int insertBlock(Block block);
 	public int addblock(Block block);
 	
 	public int updateBlock(Block block);
@@ -20,6 +19,8 @@ public interface BlockMapper {
 	public Block selectBlockById(int id);
 	
 	public List<Block> selectAllBlock();
+	
+	public List<Block> getblocklist(Page page);
 	
 	public List<Block> selectHotRanking();
 	

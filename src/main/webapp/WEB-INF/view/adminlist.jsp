@@ -29,16 +29,19 @@
 				<a class="layui-btn layui-btn-normal addNews_btn">添加管理员</a>
 			</div>
 			<div class="layui-inline">
-				<a class="layui-btn layui-btn-danger layui-btn-normal layui-btn-disabled delAll_btn" disabled="disabled">批量删除</a>
+				<a class="layui-btn layui-btn-danger layui-btn-normal layui-btn-disabled delAll_btn">批量删除</a>
 			</div>
 		</form>
 	</blockquote>
 	<table id="adminList" lay-filter="adminList"></table>
-
 	<!--操作-->
 	<script type="text/html" id="adminListBar">
+		{{#  if(d.status == "1"){ }}
+		<a class="layui-btn layui-btn-xs layui-btn-warm" data-id='{{d.status}}' lay-event="usable">正常</a>
+		{{# } else if(d.status == "0"){ }}
+		<a class="layui-btn layui-btn-xs layui-btn-danger" data-id='{{d.status}}' lay-event="usable">禁用</a>
+		{{#  }}}
 		<a class="layui-btn layui-btn-xs" lay-event="edit">设置</a>
-		<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">已启用</a>
 		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" >删除</a>
 	</script>
 </form>
@@ -66,15 +69,15 @@ layui.use(['form','layer','table','laytpl'],function(){
         height : "full-125",
         limits : [10,15,20,25],
         limit : 15,
-        id : "userListTable",
+        id : "adminListTable",
         cols : [[
             {type: "checkbox", fixed:"left", width:50},
-            {field: 'Id',sort: 'true', title: '编号', minWidth:100, align:"center"},
+            {field: 'Id',sort: 'true', title: '编号', minWidth:50, align:"center"},
             {field: 'userName',sort: 'true', title: '用户名', minWidth:100, align:"center"},
             {field: 'userPhone', title: '联系方式', minWidth:200, align:'center'},
             {field: 'userSex', title: '用户性别', align:'center'},
             {field: 'userStatus', title: '管理级别',  align:'center',templet:function(d){
-                return d.userStatus ==2 ? "管理员" : "超级管理员";
+                return d.userStatus ==3 ? "管理员" : "超级管理员";
             }},
             {field: 'gradeValue', title: '等级经验值', align:'center'},
             {title: '操作', minWidth:175, templet:'#adminListBar',fixed:"right",align:"center"}
@@ -91,7 +94,7 @@ layui.use(['form','layer','table','laytpl'],function(){
                 where: {
                     key: $(".searchVal").val()  //搜索的关键字
                 },
-            url:'<c:url value="/admin/searchuser"></c:url>',
+            url:'../admin/searchadmin',
         	method:'post',
             })
             setTimeout(function(){
@@ -110,15 +113,13 @@ layui.use(['form','layer','table','laytpl'],function(){
             success : function(layero, index){
                 var body = layui.layer.getChildFrame('body', index);
                 if(edit){
+                	body.find(".userid").val(edit.Id);
                     body.find(".userName").val(edit.userName);  //登录名
                     body.find(".userPhone").val(edit.userPhone);  //手机号
                     body.find(".userSex input[value="+edit.userSex+"]").prop("checked","checked");  //性别
                     body.find(".gradeValue").val(edit.gradeValue);  //用户等级
-                    if(edit.userStatus==3){
-                    	body.find(".userStatus").prop("checked","checked");
-                    }
-                    body.find("#blockmaster").css("display","none");
-                        //用户状态
+                    body.find("#userStatus select option[value="+edit.userStatus+"]").prop("selected","selected");//用户身份
+                    
                     form.render();
                 }
                 setTimeout(function(){
@@ -147,7 +148,7 @@ layui.use(['form','layer','table','laytpl'],function(){
             for (var i in data) {
                 usersId.push(data[i].newsId);
             }
-            layer.confirm('确定删除选中的用户？', {icon: 3, title: '提示信息'}, function (index) {
+            layer.confirm('确定删除选中的管理员？该操作无法撤销！', {icon: 3, title: '提示信息'}, function (index) {
                  $.get("删除用户接口",{
                      newsId : newsId  //将需要删除的newsId作为参数传入
                  },function(data){
@@ -156,7 +157,7 @@ layui.use(['form','layer','table','laytpl'],function(){
                  })
             })
         }else{
-            layer.msg("请选择需要删除的用户");
+            layer.msg("请选择需要删除的管理员");
         }
     })
 	
@@ -169,30 +170,38 @@ layui.use(['form','layer','table','laytpl'],function(){
             addUser(data);
         }else if(layEvent === 'usable'){ //启用禁用
             var _this = $(this),
-                usableText = "是否确定禁用此用户？",
-                btnText = "已禁用";
-            if(_this.text()=="已禁用"){
-                usableText = "是否确定启用此用户？",
-                btnText = "已启用";
+            status = _this.attr("data-id"),
+                usableText = "是否确定禁用此管理员？",
+                btnText = "禁用";
+            if(_this.text()=="禁用"){
+                usableText = "是否确定启用此管理员？",
+                btnText = "正常";
             }
-            layer.confirm(usableText,{
-                icon: 3,
-                title:'系统提示',
-                cancel : function(index){
-                    layer.close(index);
-                }
-            },function(index){
-                _this.text(btnText);
-                layer.close(index);
-            },function(index){
-                layer.close(index);
-            });
+            if(status==1){
+            	status=0;
+            }
+            else if(status==0){
+            	status=1;
+            }
+            layer.confirm(usableText,{icon:3, title:'提示信息'},function(index){
+                $.post("../admin/updateuser",{
+                    userid : data.Id,
+                    status : status
+                },function(data){
+               	 layer.msg(data.msg);
+               	 if(data.code==1){
+               		 tableIns.reload();
+               	 }
+                   layer.close(index);
+                })
+           });
         }else if(layEvent === 'del'){ //删除
-            layer.confirm('确定删除此管理员？'+data.Id,{icon:3, title:'提示信息'},function(index){
-                 $.post("/admin/deleteadmin",{
-                     newsId : data.newsId  //将需要删除的用户Id作为参数传入
+            layer.confirm('确定删除管理员'+data.userName+'?',{icon:3, title:'提示信息'},function(index){
+                 $.post("../admin/deleteuser",{
+                     userid : data.Id  //将需要删除的用户Id作为参数传入
                  },function(data){
                     tableIns.reload();
+                    layer.msg(data.msg);
                     layer.close(index);
                  })
             });

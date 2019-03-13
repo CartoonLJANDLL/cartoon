@@ -3,7 +3,6 @@ package guomanwang.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -15,9 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,7 +26,6 @@ import guomanwang.domain.Defaulthead;
 import guomanwang.domain.Information;
 import guomanwang.domain.Page;
 import guomanwang.domain.Thread;
-import guomanwang.domain.TimeTransformUtil;
 import guomanwang.domain.User;
 import guomanwang.domain.UserGrade;
 import guomanwang.service.BlockService;
@@ -99,6 +94,12 @@ public class AdminController {
 		System.out.println("经过addnews");
 		return "addnews";
 	}
+	//添加资讯
+	@RequestMapping("/blockList")
+	public String blockset(Model model) {
+		System.out.println("经过addnews");
+		return "blockList";
+	}
 	//用户权限和版主设置
 	@RequestMapping("/setUser")
 	public String setUser(Model model) {
@@ -106,6 +107,14 @@ public class AdminController {
 		model.addAttribute("blocks",blocks);
 		System.out.println("经过setUser");
 		return "setUser";
+	}
+	//用户权限和版主设置
+	@RequestMapping("/setBlock")
+	public String setBlock(Model model) {
+		List<User> users=this.userService.getallusers();
+		model.addAttribute("users",users);
+		System.out.println("经过setBlock");
+		return "setBlock";
 	}
 	//等级相关信息设置
 	@RequestMapping("/userGrade")
@@ -121,40 +130,58 @@ public class AdminController {
 			model.addAttribute("defaultheadlist",defaultheadlist);
 			return "images";
 		}
-	//更新设置用户权限
+	//更新设置用户权限或者增加一个新用户
 	@ResponseBody
 	@RequestMapping("/resetUser")
-	public JSONObject resetUser(Model model,String userPhone,int gradeValue,int userStatus,int blockId) {
+	public JSONObject resetUser(Model model,int userid,String username,@RequestParam(value="sex",defaultValue="保密")String sex,String userPhone,int gradeValue,int userStatus,@RequestParam(value="blockId",defaultValue="0") int blockId) {
 		System.out.println("经过resetUser");
-		System.out.println("电话："+userPhone+"等级值："+gradeValue+"状态、身份："+userStatus+"板块编号："+blockId);
-		List<User> userlist=this.userService.selectuserinfo(userPhone);
-		Block block=this.blockService.findblockbyid(blockId);
-		JSONObject jsonobject=new JSONObject();
-		int userid=0;
-		int threadnum=0;
-		for(User user:userlist) {
-			 userid=user.getUserid();
+		JSONObject json=new JSONObject();
+		User user=new User();
+		user.setGradeValue(gradeValue);
+		user.setHonor(userStatus);
+		user.setName(username);
+		user.setPhone(userPhone);
+		user.setSex(sex);
+		user.setStatus(1);
+		if(userid!=0) {
+			user.setUserid(userid);
+			int change=this.userService.updateuserinfo(user);
+			if(change>0&&blockId!=0) {
+				Block block=new Block();
+				block.setMaster_id(userid);
+				block.setId(blockId);
+				this.blockService.updateBlock(block);
+			}
+			else if(change>0&&blockId==0) {
+				json.put("code", 1);
+				json.put("msg","用户信息更新成功");
+			}
+			else if(change==0) {
+				json.put("code", 0);
+				json.put("msg","用户信息更新失败");
+			}
 		}
-			threadnum=block.getThreadnum();
-			User userinfo=new User();
-			Block block1=new Block();
-			userinfo.setGradeValue(gradeValue);
-			userinfo.setHonor(userStatus);
-			userinfo.setUserid(userid);
-			int change_row1=this.userService.updateuserinfo(userinfo);
-			if(userStatus==1) {userid=0;}
-			block1.setId(blockId);
-		    block1.setMaster_id(userid);
-		    block1.setThreadnum(threadnum);
-		    int change_row=this.blockService.updateBlock(block1);
-			if((change_row>0&&change_row1>0)) {
-			jsonobject.put("code",1);
-			jsonobject.put("msg","用户设置更新成功！");
-		}else {
-			jsonobject.put("code",0);
-			jsonobject.put("msg","用户设置更新失败！");
+		else {
+			user.setPassword("123456");
+			user.setStatus(1);
+			user.setRegisterday(new Date());
+			int row=this.userService.register(user);
+			if(row>0&&blockId!=0) {
+				Block block=new Block();
+				block.setMaster_id(userid);
+				block.setId(blockId);
+				this.blockService.updateBlock(block);
+			}
+			else if(row>0&&blockId==0) {
+				json.put("code", 1);
+				json.put("msg","成功添加一个新用户！");
+			}
+			else if(row==0) {
+				json.put("code", 0);
+				json.put("msg","新增用户失败1");
+			}
 		}
-		return jsonobject;
+		return json;
 	}
 	//获得所有资讯信息
 	@ResponseBody
@@ -220,6 +247,7 @@ public class AdminController {
 				json.put("userPhone",user.getPhone());
 				json.put("userSex",user.getSex());
 				json.put("userStatus",user.getHonor());
+				json.put("status",user.getStatus());
 				json.put("gradeValue",user.getGradeValue());
 				jsonArray.add(json);
 			}
@@ -227,6 +255,38 @@ public class AdminController {
 			jsonobject.put("code",0);
 			jsonobject.put("msg","");
 			jsonobject.put("count", userlist.size());
+			jsonobject.put("data", jsonArray);
+			System.out.println(jsonobject);
+			return jsonobject;
+		}
+		//获得所有用户信息
+		@ResponseBody
+		@RequestMapping("/getblocklist")
+		public JSONObject getblocklist(Model model,Page page,@RequestParam("limit") int limit) {
+			System.out.println("经过getblocklist");
+			JSONArray jsonArray = new JSONArray();
+			page.setRows(limit);
+			List<Block> blocklist=this.blockService.getblocklist(page);
+			for(Block block:blocklist) {
+				JSONObject json= new JSONObject();
+				json.put("Id",block.getId());
+				json.put("Name",block.getName());
+				json.put("Photo",block.getphoto());
+				json.put("Threadnum",block.getThreadnum());
+				json.put("Last_time",block.getlast_time());
+				json.put("Abstracts",block.getAbstracts());
+				json.put("masterid",block.getMaster_id());
+				if(block.getMaster_id()!=0) {
+					User user=this.userService.getuserbyid(block.getMaster_id());
+					json.put("User",user.getUsername());
+				}
+				else json.put("User","暂无");
+				jsonArray.add(json);
+			}
+			JSONObject jsonobject= new JSONObject();
+			jsonobject.put("code",0);
+			jsonobject.put("msg","");
+			jsonobject.put("count", blocklist.size());
 			jsonobject.put("data", jsonArray);
 			System.out.println(jsonobject);
 			return jsonobject;
@@ -246,6 +306,7 @@ public class AdminController {
 				json.put("userPhone",user.getPhone());
 				json.put("userSex",user.getSex());
 				json.put("userStatus",user.getHonor());
+				json.put("status",user.getStatus());
 				json.put("gradeValue",user.getGradeValue());
 				jsonArray.add(json);
 				}
@@ -285,11 +346,42 @@ public class AdminController {
 			if(userlist!=null) {
 			for(User user:userlist) {
 				JSONObject json= new JSONObject();
+				json.put("Id",user.getUserid());
 				json.put("userName",user.getUsername());
 				json.put("userPhone",user.getPhone());
 				json.put("userSex",user.getSex());
 				json.put("userStatus",user.getHonor());
-				json.put("userGrade",user.getGrade());
+				json.put("status",user.getStatus());
+				json.put("gradeValue",user.getGradeValue());
+				jsonArray.add(json);
+				}
+			jsonobject.put("code",0);
+			jsonobject.put("msg","");
+			jsonobject.put("count", userlist.size());
+			jsonobject.put("data", jsonArray);
+			}
+			else jsonobject.put("msg","没有查到结果！");
+			System.out.println(jsonobject);
+			return jsonobject;
+		}
+		//根据关键字实现用户的的模糊搜索
+		@ResponseBody
+		@RequestMapping("/searchadmin")
+		public JSONObject searchadmin(String key) {
+			System.out.println("经过searhadmin");
+			List<User> userlist=this.userService.searchadminbyname(key);
+			JSONObject jsonobject= new JSONObject();
+			JSONArray jsonArray = new JSONArray();
+			if(userlist!=null) {
+			for(User user:userlist) {
+				JSONObject json= new JSONObject();
+				json.put("Id",user.getUserid());
+				json.put("userName",user.getUsername());
+				json.put("userPhone",user.getPhone());
+				json.put("userSex",user.getSex());
+				json.put("userStatus",user.getHonor());
+				json.put("status",user.getStatus());
+				json.put("gradeValue",user.getGradeValue());
 				jsonArray.add(json);
 				}
 			jsonobject.put("code",0);
@@ -318,6 +410,23 @@ public class AdminController {
 		}	
 		return json;
 	}
+	//根据blockid删除版块  
+		@ResponseBody
+		@RequestMapping("/deleteblock")
+		public JSONObject deleteblock(Model model,int id) {
+			System.out.println("经过deleteblock");
+			JSONObject json= new JSONObject();
+			int change_row=this.blockService.deleteBlockById(id);
+			if(change_row>0) {
+				json.put("code", 1);
+				json.put("msg", "版块删除成功！");
+			}
+			else {
+				json.put("msg", "版块删除失败！");
+				json.put("code", 0);
+			}	
+			return json;
+		}
 	//根据newsid数组实现批量删除资讯  
 		@ResponseBody
 		@RequestMapping("/deletemorenews")
@@ -341,66 +450,113 @@ public class AdminController {
 			}	
 			return json;
 		}
-	//根据用户id更新用户权限
+	//根据用户id更新用户状态
 	@ResponseBody
-	@RequestMapping("/resetuserhonor")
-	public JSONObject resetuserhonor(Model model,HttpSession session,int userid) {
-		System.out.println("经过resetuserhonor");
+	@RequestMapping("/updateuser")
+	public JSONObject resetuserhonor(Model model,HttpSession session,int userid,int status) {
 		JSONObject json= new JSONObject();
-		User userinfo=new User();
-		userinfo.setUserid(userid);
-		userinfo.setHonor(4);
-		int change_row=this.userService.updateuserinfo(userinfo);
+		User user=this.userService.getuserbyid(userid);
+		user.setStatus(status);
+		int change_row=this.userService.updateuserinfo(user);
 		if(change_row>0) {
-			json.put("msg","权限更新成功！");
+			json.put("code",1);
+			json.put("msg","用户状态更新成功！");
 		}
 		else {
-			json.put("msg","权限更新失败！");
+			json.put("code",0);
+			json.put("msg","用户状态更新失败！");
 		}
 		return json;
 	}
 	
 	//根据用户id删除用户
-		@ResponseBody
-		@RequestMapping("/deleteuser")
-		public JSONObject deleteuser(Model model,HttpSession session,int userid) {
-			System.out.println("经过deleteuser");
-			JSONObject json= new JSONObject();
-			int change_row=this.userService.deleteUserById(userid);
-			if(change_row>0) {
-				json.put("msg","用户删除成功！");
-			}
-			else {
-				json.put("msg","用户删除失败！");
-			}
-			return json;
+	@ResponseBody
+	@RequestMapping("/deleteuser")
+	public JSONObject deleteuser(Model model,HttpSession session,int userid) {
+		System.out.println("经过deleteuser");
+		JSONObject json= new JSONObject();
+		int change_row=this.userService.deleteUserById(userid);
+		if(change_row>0) {
+			json.put("msg","用户删除成功！");
 		}
-		//新增一条资讯
-		@ResponseBody
-		@RequestMapping("/newsAdd")
-		public JSONObject newsAdd(HttpSession session,String title,String content,String status,String abstracts) {
-			System.out.println("经过newsAdd");
-			JSONObject json= new JSONObject();
-			Information news=new Information();
-			news.setTitle(title);
-			news.setContent(content);
-			news.setUrl(abstracts);
-			news.setStatus(status);
-			news.setTime(new Date());
-			news.setCollectinum(0);
-			news.setCompanyid(50);
-			int change_row=informationService.addinformation(news);
-			if(change_row>0) {
+		else {
+			json.put("msg","用户删除失败！");
+		}
+		return json;
+	}
+	//新增一条资讯
+	@ResponseBody
+	@RequestMapping("/newsAdd")
+	public JSONObject newsAdd(HttpSession session,String title,String content,String status,String abstracts) {
+		System.out.println("经过newsAdd");
+		JSONObject json= new JSONObject();
+		Information news=new Information();
+		news.setTitle(title);
+		news.setContent(content);
+		news.setUrl(abstracts);
+		news.setStatus(status);
+		news.setTime(new Date());
+		news.setCollectinum(0);
+		news.setCompanyid(50);
+		int change_row=informationService.addinformation(news);
+		if(change_row>0) {
+			json.put("code", 1);
+			json.put("msg", "添加资讯成功！");
+		}
+		else {
+			json.put("code", 0);
+			json.put("msg", "添加资讯失败！");
+		}
+		return json;
+			
+	}
+	//新增一个版块主题
+	@ResponseBody
+	@RequestMapping("/addblock")
+	public JSONObject addblock(int id,String title,int masterid,String photo,String abstracts) {
+		System.out.println("经过addblock");
+		JSONObject json= new JSONObject();
+		Block block=new Block();
+		block.setName(title);
+		block.setAbstracts(abstracts);
+		block.setMaster_id(masterid);
+		block.setphoto(photo);
+		if(id!=0) {
+			block.setId(id);
+			int change=this.blockService.updateBlock(block);
+			if(change>0) {
+				if(masterid!=0) {
+					User user=this.userService.getuserbyid(masterid);
+					user.setHonor(2);
+					this.userService.updateuserinfo(user);
+				}
 				json.put("code", 1);
-				json.put("msg", "添加资讯成功！");
+				json.put("msg", "主题版块信息更新成功！");
 			}
 			else {
 				json.put("code", 0);
-				json.put("msg", "添加资讯失败！");
+				json.put("msg", "主题版块信息更新失败！");
 			}
-			return json;
-			
 		}
+		else {
+			int row=this.blockService.addblock(block);
+			if(row>0) {
+				if(masterid!=0) {
+					User user=this.userService.getuserbyid(masterid);
+					user.setHonor(2);
+					this.userService.updateuserinfo(user);
+				}
+				json.put("code", 1);
+				json.put("msg", "成功添加新的主题版块！");
+			}
+			else {
+				json.put("code", 0);
+				json.put("msg", "增加主题版块失败，请重试！");
+			}
+		}
+		return json;
+			
+	}
 		//获得所有默认头像信息
 		@ResponseBody
 		@RequestMapping("/getalldefaultimages")

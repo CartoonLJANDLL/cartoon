@@ -37,13 +37,17 @@
 
 	<!--操作-->
 	<script type="text/html" id="userListBar">
+		
+		{{#  if(d.status == "1"){ }}
+		<a class="layui-btn layui-btn-xs layui-btn-warm" data-id='{{d.status}}' lay-event="usable">正常</a>
+		{{# } else if(d.status == "0"){ }}
+		<a class="layui-btn layui-btn-xs layui-btn-danger" data-id='{{d.status}}' lay-event="usable">禁用</a>
+		{{#  }}}
 		<a class="layui-btn layui-btn-xs" lay-event="edit">设置</a>
-		<a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">已启用</a>
 		<a class="layui-btn layui-btn-xs layui-btn-danger layui-btn-disabled" lay-event="del" disabled="disabled">删除</a>
 	</script>
 </form>
 <script type="text/javascript" src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
-<script type="text/javascript" src='<c:url value="/resources/layuicms/js/userList.js"></c:url>'></script>
 <script>
 layui.use(['form','layer','table','laytpl'],function(){
     var form = layui.form,
@@ -69,11 +73,12 @@ layui.use(['form','layer','table','laytpl'],function(){
         id : "userListTable",
         cols : [[
             {type: "checkbox", fixed:"left", width:50},
+            {field: 'Id',sort: 'true', title: '编号', minWidth:50, align:"center"},
             {field: 'userName',sort: 'true', title: '用户名', minWidth:100, align:"center"},
             {field: 'userPhone', title: '用户联系方式', minWidth:200, align:'center'},
             {field: 'userSex', title: '用户性别', align:'center'},
-            {field: 'userStatus', title: '用户状态',  align:'center',templet:function(d){
-                return d.userStatus ==0 ? "限制使用" : "正常使用";
+            {field: 'userStatus', title: '用户身份',  align:'center',templet:function(d){
+                return d.userStatus ==1 ? "普通用户" : "版块版主";
             }},
             {field: 'gradeValue', title: '用户等级值', align:'center'},
             {title: '操作', minWidth:175, templet:'#userListBar',fixed:"right",align:"center"}
@@ -109,14 +114,15 @@ layui.use(['form','layer','table','laytpl'],function(){
             success : function(layero, index){
                 var body = layui.layer.getChildFrame('body', index);
                 if(edit){
-                    body.find(".userName").val(edit.userName);  //登录名
+                	body.find(".userid").val(edit.Id);
+                    body.find(".userName").val(edit.userName);  //用户名
                     body.find(".userPhone").val(edit.userPhone);  //手机号
                     body.find(".userSex input[value="+edit.userSex+"]").prop("checked","checked");  //性别
-                    body.find(".gradeValue").val(edit.gradeValue);  //用户等级
-                    if(edit.userStatus==3){
-                    	body.find(".userStatus").prop("checked","checked");
-                    }
-                        //用户状态
+                    body.find(".gradeValue").val(edit.gradeValue);  //用户等级经验值
+                    body.find("#userStatus select option[value="+edit.userStatus+"]").prop("selected","selected");//用户身份
+                    if(edit.userStatus==2){
+                    	body.find("#chargeblock").css("display","block");
+                    }  
                     form.render();
                 }
                 setTimeout(function(){
@@ -167,23 +173,30 @@ layui.use(['form','layer','table','laytpl'],function(){
             addUser(data);
         }else if(layEvent === 'usable'){ //启用禁用
             var _this = $(this),
+            	status = _this.attr("data-id"),
                 usableText = "是否确定禁用此用户？",
-                btnText = "已禁用";
-            if(_this.text()=="已禁用"){
+                btnText = "禁用";
+            if(_this.text()=="禁用"){
                 usableText = "是否确定启用此用户？",
-                btnText = "已启用";
+                btnText = "正常";
             }
-            layer.confirm(usableText,{
-                icon: 3,
-                title:'系统提示',
-                cancel : function(index){
+            if(status==1){
+            	status=0;
+            }
+            else if(status==0){
+            	status=1;
+            }
+            layer.confirm(usableText,{icon:3, title:'提示信息'},function(index){
+                 $.post("../admin/updateuser",{
+                     userid : data.Id,
+                     status : status
+                 },function(data){
+                	 layer.msg(data.msg);
+                	 if(data.code==1){
+                		 tableIns.reload();
+                	 }
                     layer.close(index);
-                }
-            },function(index){
-                _this.text(btnText);
-                layer.close(index);
-            },function(index){
-                layer.close(index);
+                 })
             });
         }else if(layEvent === 'del'){ //删除
             layer.confirm('确定删除此用户？',{icon:3, title:'提示信息'},function(index){

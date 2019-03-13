@@ -8,6 +8,7 @@ public class UserCommit extends Commit{
 	private String sex;
 	private String phone;
 	private String headUrl;
+	private int status;
 
 
 	public int getGrade() {
@@ -45,6 +46,12 @@ public class UserCommit extends Commit{
 	}
 	public void setUrl(String url) {
 		this.headUrl = url;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	
 	
