@@ -4,7 +4,7 @@
 <mapper namespace="guomanwang.mapper.UserCommitMapper">
     
     <sql id="selectallcommit">
-        select b.id,b.userid,username,honor,sex,headurl,threadid,parentid,content,b.time,count(c.commitid) zannumber,count(d.commitid) isliked
+        select b.id,b.userid,username,honor,sex,headurl,status,threadid,parentid,content,b.time,count(c.commitid) zannumber,count(d.commitid) isliked
 		from commit b
 		INNER JOIN user a ON b.userid=a.userid
 		left OUTER JOIN commitzan c ON c.commitid=b.id

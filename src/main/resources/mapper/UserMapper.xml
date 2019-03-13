@@ -15,6 +15,8 @@
 		<result column="honor" property="Honor" />
 		<result column="introduce" property="Introduce" />
 		<result column="signdays" property="signdays" />
+		<result column="status" property="status" />
+		<result column="registerday" property="registerday" />
 	</resultMap>
 	
 	<update id="update" parameterType="guomanwang.domain.User">
@@ -28,9 +30,11 @@
 			<if test="Honor!=null">honor = #{Honor},</if>
 			<if test="headUrl!=null ">headurl = #{headUrl},</if>	
 			<if test="Introduce!=null">introduce = #{Introduce},</if>
+			<if test="status!=null ">status = #{status},</if>	
 		</set>
 		where userid = #{userId}
 	</update>
+	<!-- 找回密码、重置密码 -->
 	<update id="findpassbyphone" parameterType="guomanwang.domain.User">
 		update user 
 		<set>
@@ -41,8 +45,8 @@
 	
 	<insert id="save" parameterType="guomanwang.domain.User" 
 	 useGeneratedKeys="true" keyColumn="userid" keyProperty="userId">
-		insert into user(gradevalue,honor,username,password,phone,headurl) 
-		values(#{gradeValue},#{Honor},#{userName},#{passWord},#{telPhone},#{headUrl});
+		insert into user(gradevalue,honor,username,password,phone,headurl,registerday) 
+		values(#{gradeValue},#{Honor},#{userName},#{passWord},#{telPhone},#{headUrl},#{registerday});
 	</insert>
 	<select id="selectuserinfo" resultMap="resultUser">
 		select a.*,ifnull(b.id-1,0) grade
@@ -55,13 +59,13 @@
 	<select id="getuserlist" parameterType="guomanwang.domain.Page" resultMap="resultUser">
 		SELECT *
 		from user
-		where user.honor!="2" and user.honor!="4"
+		where user.honor &lt; 3
 		limit #{start},#{rows}
 	</select>
 	<select id="getusernumber" resultType="java.lang.Integer" >
 		SELECT count(*)
 		from user
-		where user.honor!="2" and user.honor!="4"
+		where user.honor &lt; 3
 	</select>
 	<select id="getuserbyid" resultMap="resultUser">
 		select a.*,ifnull(b.id-1,0) grade
@@ -86,7 +90,7 @@
 	<select id="searchuserbyname" resultMap="resultUser">
 		SELECT *
 		from user
-		where user.honor!="2" and user.honor!="2" and (username like "%"#{userName}"%" or phone like "%"#{telPhone}"%")
+		where user.honor &lt; 3 and (username like "%"#{userName}"%" or phone like "%"#{telPhone}"%")
 		order by userid
 	</select>
 	<select id="getSignTop20Users" resultMap="resultUser">
@@ -110,14 +114,20 @@
 	<select id="searchadminbyname" resultMap="resultUser">
 		SELECT *
 		from user
-		where (user.honor=2 or user.honor=4) and (username like "%"#{userName}"%" or phone like "%"#{telPhone}"%")
+		where user.honor &gt; 2 and (username like "%"#{userName}"%" or phone like "%"#{telPhone}"%")
 		order by userid
 	</select>
 	<!-- 分页查询管理员和超级管理员 -->
 	<select id="getadminlist" parameterType="guomanwang.domain.Page" resultMap="resultUser">
 		SELECT *
 		from user
-		where user.honor=2 or user.honor=4
+		where user.honor &gt; 2
 		limit #{start},#{rows}
+	</select>
+	<!-- 获得所有启用的用户 -->
+	<select id="getallusers" resultMap="resultUser">
+		SELECT *
+		from user
+		where user.honor &lt; 3 and status=1
 	</select>
 </mapper>
