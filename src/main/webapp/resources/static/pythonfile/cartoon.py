@@ -256,8 +256,6 @@ if __name__ == '__main__':
     uurl = 'https://list.youku.com/category/show/c_100_a_%E4%B8%AD%E5%9B%BD_ag_5_s_4_d_1_p_1.html?spm=a2h1n.8251845.0.0'
     #每个网站爬取多少页pagenum
     pagenum = 2
-	print("pagenum=")
-    print(pagenum)
     for j in range(0,pagenum):
         k = str(j)
         turl = tpre + k + tpix
