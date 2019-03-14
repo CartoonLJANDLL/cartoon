@@ -28,6 +28,7 @@ public class OperaController {
 	private OperaService operaService;
 	
 	//根据传进来的JSON数据param所包含的信息 page页码 type番剧类型  status完结状态， sort排序类型
+	@ResponseBody()
 	@RequestMapping("/alloperas")
 	public String alloperas(JSONObject param, Model model) throws IOException {
 		/*测试用JSONObject param = new JSONObject(); 
@@ -48,6 +49,7 @@ public class OperaController {
 	}
 	
 	//收藏番剧或取消收藏番剧,json数据类型param 包含userId 和 operaId两个键
+	@ResponseBody()
 	@RequestMapping("/collectopera")
 	public String collectOpera(JSONObject param, Model model) {
 		/*JSONObject param = new JSONObject();
@@ -63,6 +65,7 @@ public class OperaController {
 	}
 	
 	//模糊查询番剧  param可包含 name模糊查询的值，page 页码     看第二页时页码为2name值也要有  name为空时显示所有的番剧
+	@ResponseBody()
 	@RequestMapping("/selectoperabyname")
 	public String selectOperaByName(JSONObject param, Model model) {
 		/*JSONObject param = new JSONObject();
