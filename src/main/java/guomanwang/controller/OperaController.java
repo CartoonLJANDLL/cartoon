@@ -30,7 +30,7 @@ public class OperaController {
 	//根据传进来的JSON数据param所包含的信息 page页码 type番剧类型  status完结状态， sort排序类型
 	@ResponseBody()
 	@RequestMapping("/alloperas")
-	public String alloperas(JSONObject param, Model model) throws IOException {
+	public JSONObject alloperas(JSONObject param, Model model) throws IOException {
 		/*测试用JSONObject param = new JSONObject(); 
 		Integer page = 1;
 		/*Integer status = null;
@@ -44,14 +44,14 @@ public class OperaController {
 		JSONObject operas = operaService.selectAllOpera(param);
 		//System.out.println("opera/alloperas");
 		//System.out.println("HHHHH" + operas.get("data").toString());
-		model.addAttribute(operas);
-		return "opera";
+		
+		return operas;
 	}
 	
 	//收藏番剧或取消收藏番剧,json数据类型param 包含userId 和 operaId两个键
 	@ResponseBody()
 	@RequestMapping("/collectopera")
-	public String collectOpera(JSONObject param, Model model) {
+	public JSONObject collectOpera(JSONObject param, Model model) {
 		/*JSONObject param = new JSONObject();
 		Integer operaId = 1;
 		Integer userId = 1;
@@ -59,15 +59,15 @@ public class OperaController {
 		param.put("userId", userId);
 		System.out.println("opera/collectopera");*/
 		JSONObject jsonobject = operaService.nocollectOpera(param);
-		model.addAttribute(jsonobject);
+		
 		System.out.println(jsonobject.toString() + " RS");
-		return "";
+		return jsonobject;
 	}
 	
 	//模糊查询番剧  param可包含 name模糊查询的值，page 页码     看第二页时页码为2name值也要有  name为空时显示所有的番剧
 	@ResponseBody()
 	@RequestMapping("/selectoperabyname")
-	public String selectOperaByName(JSONObject param, Model model) {
+	public JSONObject selectOperaByName(JSONObject param, Model model) {
 		/*JSONObject param = new JSONObject();
         param.put("name", "小");*/
 		JSONObject jsonobject= new JSONObject();
@@ -75,8 +75,8 @@ public class OperaController {
 		
 		System.out.println("/opera/selectoperabyname");
 		System.out.println(jsonobject.get("data").toString() + "HHHHH");
-		model.addAttribute(jsonobject);
-		return "jsonobject";
+		
+		return jsonobject;
 	}
 	
 }
