@@ -142,6 +142,15 @@ public class CommonController {
 		}
 		return "news";
 	}
+	 @Scheduled(cron = "0 30 23 ? * *")//每天23点30启动自动抓取动漫视频任务
+		@RequestMapping("/reflashOperas")
+		public String reflashOperas() throws IOException, InterruptedException{
+			String str = "python G:\\cartoon.py";
+			System.out.println("开始执行动漫视频抓取任务，后面说的是假的");
+			TimerTask.autoscarynews(str);
+			
+			return "operas";
+		}
 	@RequestMapping("/add")
 	public String add(Model model,HttpServletRequest request,HttpServletResponse response){
 		HttpSession session = request.getSession();

@@ -3,73 +3,123 @@ package guomanwang.domain;
 import java.util.Date;
 
 public class Opera {
-    private Integer id;
+    private Integer opId;
+    //番剧名称
+    private String opName;
+    //番剧地址
+    private String opUrl;
+    //番剧的一句话描述
+    private String opDesc;
+    //番剧图片的地址
+    private String opPhotourl;
+    //番剧更新至何时
+    private String opUpdateto;
+    //番剧类型 玄幻 竞技 爱情之类
+    private String opType;
+    //番剧分享地址，点击即可直接观看
+    private String opIframeurl;
+    //番剧在本网站更新时间
+    private Date opTime;
+    //番剧状态 0未完结   1完结
+    private Integer opStatus;
+    //番剧的收藏量
+    private Integer opCollectnum;
+    //番剧的分享量
+    private Integer opSharenum;
 
-    private String name;
-
-    private String url;
-
-    private Date time;
-
-    private String photourl;
-
-    private Integer collectnum;
-
-    private Integer status;
-
-    public Integer getId() {
-        return id;
+    public Integer getOpId() {
+        return opId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setOpId(Integer opId) {
+        this.opId = opId;
     }
 
-    public String getName() {
-        return name;
+    public String getOpName() {
+        return opName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setOpName(String opName) {
+        this.opName = opName == null ? null : opName.trim();
     }
 
-    public String getUrl() {
-        return url;
+    public String getOpUrl() {
+        return opUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
+    public void setOpUrl(String opUrl) {
+        this.opUrl = opUrl == null ? null : opUrl.trim();
     }
 
-    public Date getTime() {
-        return time;
+    public String getOpDesc() {
+        return opDesc;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
+    public void setOpDesc(String opDesc) {
+        this.opDesc = opDesc == null ? null : opDesc.trim();
     }
 
-    public String getPhotourl() {
-        return photourl;
+    public String getOpPhotourl() {
+        return opPhotourl;
     }
 
-    public void setPhotourl(String photourl) {
-        this.photourl = photourl == null ? null : photourl.trim();
+    public void setOpPhotourl(String opPhotourl) {
+        this.opPhotourl = opPhotourl == null ? null : opPhotourl.trim();
     }
 
-    public Integer getCollectnum() {
-        return collectnum;
+    public String getOpUpdateto() {
+        return opUpdateto;
     }
 
-    public void setCollectnum(Integer collectnum) {
-        this.collectnum = collectnum;
+    public void setOpUpdateto(String opUpdateto) {
+        this.opUpdateto = opUpdateto == null ? null : opUpdateto.trim();
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getOpType() {
+        return opType;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setOpType(String opType) {
+        this.opType = opType == null ? null : opType.trim();
+    }
+
+    public String getOpIframeurl() {
+        return opIframeurl;
+    }
+
+    public void setOpIframeurl(String opIframeurl) {
+        this.opIframeurl = opIframeurl == null ? null : opIframeurl.trim();
+    }
+
+    public Date getOpTime() {
+        return opTime;
+    }
+
+    public void setOpTime(Date opTime) {
+        this.opTime = opTime;
+    }
+
+    public Integer getOpStatus() {
+        return opStatus;
+    }
+
+    public void setOpStatus(Integer opStatus) {
+        this.opStatus = opStatus;
+    }
+
+    public Integer getOpCollectnum() {
+        return opCollectnum;
+    }
+
+    public void setOpCollectnum(Integer opCollectnum) {
+        this.opCollectnum = opCollectnum;
+    }
+
+    public Integer getOpSharenum() {
+        return opSharenum;
+    }
+
+    public void setOpSharenum(Integer opSharenum) {
+        this.opSharenum = opSharenum;
     }
 }

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class UserOperaExample {
+public class OpCollectedExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public UserOperaExample() {
+    public OpCollectedExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -285,183 +285,63 @@ public class UserOperaExample {
             return (Criteria) this;
         }
 
-        public Criteria andCollectionIsNull() {
-            addCriterion("collection is null");
+        public Criteria andCollectedTimeIsNull() {
+            addCriterion("collected_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionIsNotNull() {
-            addCriterion("collection is not null");
+        public Criteria andCollectedTimeIsNotNull() {
+            addCriterion("collected_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionEqualTo(Integer value) {
-            addCriterion("collection =", value, "collection");
+        public Criteria andCollectedTimeEqualTo(Date value) {
+            addCriterion("collected_time =", value, "collectedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionNotEqualTo(Integer value) {
-            addCriterion("collection <>", value, "collection");
+        public Criteria andCollectedTimeNotEqualTo(Date value) {
+            addCriterion("collected_time <>", value, "collectedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionGreaterThan(Integer value) {
-            addCriterion("collection >", value, "collection");
+        public Criteria andCollectedTimeGreaterThan(Date value) {
+            addCriterion("collected_time >", value, "collectedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionGreaterThanOrEqualTo(Integer value) {
-            addCriterion("collection >=", value, "collection");
+        public Criteria andCollectedTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("collected_time >=", value, "collectedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionLessThan(Integer value) {
-            addCriterion("collection <", value, "collection");
+        public Criteria andCollectedTimeLessThan(Date value) {
+            addCriterion("collected_time <", value, "collectedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionLessThanOrEqualTo(Integer value) {
-            addCriterion("collection <=", value, "collection");
+        public Criteria andCollectedTimeLessThanOrEqualTo(Date value) {
+            addCriterion("collected_time <=", value, "collectedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionIn(List<Integer> values) {
-            addCriterion("collection in", values, "collection");
+        public Criteria andCollectedTimeIn(List<Date> values) {
+            addCriterion("collected_time in", values, "collectedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionNotIn(List<Integer> values) {
-            addCriterion("collection not in", values, "collection");
+        public Criteria andCollectedTimeNotIn(List<Date> values) {
+            addCriterion("collected_time not in", values, "collectedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionBetween(Integer value1, Integer value2) {
-            addCriterion("collection between", value1, value2, "collection");
+        public Criteria andCollectedTimeBetween(Date value1, Date value2) {
+            addCriterion("collected_time between", value1, value2, "collectedTime");
             return (Criteria) this;
         }
 
-        public Criteria andCollectionNotBetween(Integer value1, Integer value2) {
-            addCriterion("collection not between", value1, value2, "collection");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareIsNull() {
-            addCriterion("share is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareIsNotNull() {
-            addCriterion("share is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareEqualTo(Integer value) {
-            addCriterion("share =", value, "share");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNotEqualTo(Integer value) {
-            addCriterion("share <>", value, "share");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareGreaterThan(Integer value) {
-            addCriterion("share >", value, "share");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareGreaterThanOrEqualTo(Integer value) {
-            addCriterion("share >=", value, "share");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareLessThan(Integer value) {
-            addCriterion("share <", value, "share");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareLessThanOrEqualTo(Integer value) {
-            addCriterion("share <=", value, "share");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareIn(List<Integer> values) {
-            addCriterion("share in", values, "share");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNotIn(List<Integer> values) {
-            addCriterion("share not in", values, "share");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareBetween(Integer value1, Integer value2) {
-            addCriterion("share between", value1, value2, "share");
-            return (Criteria) this;
-        }
-
-        public Criteria andShareNotBetween(Integer value1, Integer value2) {
-            addCriterion("share not between", value1, value2, "share");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeIsNull() {
-            addCriterion("time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeIsNotNull() {
-            addCriterion("time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeEqualTo(Date value) {
-            addCriterion("time =", value, "time");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeNotEqualTo(Date value) {
-            addCriterion("time <>", value, "time");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeGreaterThan(Date value) {
-            addCriterion("time >", value, "time");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("time >=", value, "time");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeLessThan(Date value) {
-            addCriterion("time <", value, "time");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeLessThanOrEqualTo(Date value) {
-            addCriterion("time <=", value, "time");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeIn(List<Date> values) {
-            addCriterion("time in", values, "time");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeNotIn(List<Date> values) {
-            addCriterion("time not in", values, "time");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeBetween(Date value1, Date value2) {
-            addCriterion("time between", value1, value2, "time");
-            return (Criteria) this;
-        }
-
-        public Criteria andTimeNotBetween(Date value1, Date value2) {
-            addCriterion("time not between", value1, value2, "time");
+        public Criteria andCollectedTimeNotBetween(Date value1, Date value2) {
+            addCriterion("collected_time not between", value1, value2, "collectedTime");
             return (Criteria) this;
         }
     }

@@ -2,18 +2,14 @@ package guomanwang.domain;
 
 import java.util.Date;
 
-public class UserOpera {
+public class OpCollected {
     private Integer id;
 
     private Integer userId;
 
     private Integer operaId;
 
-    private Integer collection;
-
-    private Integer share;
-
-    private Date time;
+    private Date collectedTime;
 
     public Integer getId() {
         return id;
@@ -39,27 +35,11 @@ public class UserOpera {
         this.operaId = operaId;
     }
 
-    public Integer getCollection() {
-        return collection;
+    public Date getCollectedTime() {
+        return collectedTime;
     }
 
-    public void setCollection(Integer collection) {
-        this.collection = collection;
-    }
-
-    public Integer getShare() {
-        return share;
-    }
-
-    public void setShare(Integer share) {
-        this.share = share;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
+    public void setCollectedTime(Date collectedTime) {
+        this.collectedTime = collectedTime;
     }
 }

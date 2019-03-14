@@ -30,4 +30,5 @@ public interface OperaMapper {
     int updateByPrimaryKeySelective(Opera record);
     //通过主键更新,所有的六项都要更新
     int updateByPrimaryKey(Opera record);
+    
 }
