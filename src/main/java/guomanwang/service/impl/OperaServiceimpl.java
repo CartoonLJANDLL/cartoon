@@ -1,6 +1,9 @@
 package guomanwang.service.impl;
 
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,55 +100,73 @@ public class OperaServiceimpl implements OperaService {
 	
 	//取消收藏番剧opera  如果收藏了就取消收藏，没收藏则收藏
 	@Override
-	public String nocollectOpera(int operaId, int userId) {
+	public JSONObject nocollectOpera(JSONObject param) {
 		OpCollected opcollecte = new OpCollected();
 		Opera opera = new Opera();
-		
 		OpCollectedExample opcolExample = new OpCollectedExample();
-		OperaExample operaExample = new OperaExample();
-		
-		OperaExample.Criteria operacriteria = operaExample.createCriteria();
 		OpCollectedExample.Criteria opcolcriteria = opcolExample.createCriteria();
-		
-		opcolcriteria.andOperaIdEqualTo(operaId);
-		opcolcriteria.andUserIdEqualTo(userId);
-		operacriteria.andOpIdEqualTo(operaId);
-		
-		opera = this.operaMapper.selectByPrimaryKey(operaId);
-		opcollecte = this.userOperaMapper.selectByExample(opcolExample).get(0);
-		
-		int collectNum = opera.getOpCollectnum();
-		if(opcollecte != null) {
+		JSONObject jsonobject = new JSONObject();
+		int code = 0;
+		String msg = null;
+		System.out.println("PARAM" + param.toString());
+		if( param.has("userId") && param.has("operaId")) {
+			Integer operaId = param.getInt("operaId");
+			Integer userId = param.getInt("userId");
+			
 			opcolcriteria.andOperaIdEqualTo(operaId);
 			opcolcriteria.andUserIdEqualTo(userId);
-			if(this.userOperaMapper.deleteByExample(opcolExample) == 1) {
-				operacriteria.andOpIdEqualTo(operaId);
-				collectNum++;
-				operacriteria.andOpCollectnumEqualTo(collectNum);
-				if(this.operaMapper.updateByExampleSelective(opera, operaExample) == 1 ) {
-					System.out.println("更新Opera表中的collectnum字段成功!");
-				}else {
-					System.out.println("更新Opera表中的collectnum字段失败!");
+			
+			opera = this.operaMapper.selectByPrimaryKey(operaId);
+			
+			int collectNum = opera.getOpCollectnum();
+			
+			if( this.userOperaMapper.selectByExample(opcolExample).size() == 1) {//已收藏
+				opcolcriteria.andOperaIdEqualTo(operaId);
+				opcolcriteria.andUserIdEqualTo(userId);
+				if(this.userOperaMapper.deleteByExample(opcolExample) == 1) {
+					//删除成功即取消收藏成功，收藏量减一
+					code = 1;
+					msg = "取消收藏成功!";
+					collectNum--;
+					opera.setOpCollectnum(collectNum);
+					if(this.operaMapper.updateByPrimaryKeySelective(opera) == 1 ) {//更新收藏量字段成功
+						System.out.println("更新Opera表中的collectnum字段成功!");
+					}else {
+						System.out.println("更新Opera表中的collectnum字段失败!");
+					}
+					
+				}else {//删除失败，即取消收藏失败
+					msg = "操作异常!";
 				}
-				return "取消收藏成功uncollect";
-			}else {
-				return "取消收藏失败uncollectfailed";
+			}else {//表中无数据即没有收藏，则插入
+				opcollecte.setOperaId(operaId);
+				opcollecte.setUserId(userId);
+				Date date = new Date();
+				/*SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				String time = dateFormat.format(date);*/
+				opcollecte.setCollectedTime(date);
+				if(this.userOperaMapper.insert(opcollecte) == 1) {//插入数据 进行收藏成功
+					code = 1;
+					msg = "收藏成功！";
+					collectNum++;
+					opera.setOpCollectnum(collectNum);
+					if(this.operaMapper.updateByPrimaryKeySelective(opera) == 1 ) {//更新collectnum字段
+						System.out.println("更新Opera表中的collectnum字段成功!");
+					}else {
+						System.out.println("更新Opera表中的collectnum字段失败!");
+					}
+					
+				}else {
+					System.out.println("插入数据进行收藏操作失败");
+					msg = "操作异常!";
+				}
 			}
 		}else {
-			if(this.userOperaMapper.insert(opcollecte) == 1) {
-				operacriteria.andOpIdEqualTo(operaId);
-				collectNum--;
-				operacriteria.andOpCollectnumEqualTo(collectNum);
-				if(this.operaMapper.updateByExampleSelective(opera, operaExample) == 1 ) {
-					System.out.println("更新Opera表中的collectnum字段成功!");
-				}else {
-					System.out.println("更新Opera表中的collectnum字段失败!");
-				}
-				return "收藏成功collected";
-			}else {
-				return "收藏失败collectfailed";
-			}
+			System.out.println("无userid或Operaid");
 		}
+		jsonobject.put("code", code);
+		jsonobject.put("msg", msg);
+		return jsonobject;
 	}
 		
     //分享番剧

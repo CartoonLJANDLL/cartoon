@@ -20,7 +20,7 @@ public interface OperaService {
     JSONObject selectAllOpera(JSONObject param);
     //收藏番剧
     //取消收藏番剧
-    public String nocollectOpera(int operaId,int userId);
+    public JSONObject nocollectOpera(JSONObject param);
     //分享番剧
     int shareOpera(int operaid,int userid);
     //根据主键删除

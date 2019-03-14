@@ -47,13 +47,19 @@ public class OperaController {
 		return "opera";
 	}
 	
-	//收藏番剧或取消收藏番剧
+	//收藏番剧或取消收藏番剧,json数据类型param 包含userId 和 operaId两个键
 	@RequestMapping("/collectopera")
-	public String collectOpera(int operaId,int userId,Model model) {
-		System.out.println("opera/collectopera");
-		String rs = operaService.nocollectOpera(operaId, userId);
-		System.out.println(rs + " RS");
-		return rs;
+	public String collectOpera(JSONObject param, Model model) {
+		/*JSONObject param = new JSONObject();
+		Integer operaId = 1;
+		Integer userId = 1;
+		param.put("operaId", operaId);
+		param.put("userId", userId);
+		System.out.println("opera/collectopera");*/
+		JSONObject jsonobject = operaService.nocollectOpera(param);
+		model.addAttribute(jsonobject);
+		System.out.println(jsonobject.toString() + " RS");
+		return "";
 	}
 	
 	//模糊查询番剧  param可包含 name模糊查询的值，page 页码     看第二页时页码为2name值也要有  name为空时显示所有的番剧
