@@ -34,7 +34,19 @@ def getStatus(updateto):
     else:
         status = 0
     return status
-
+#清洗optype数据，去掉不必要的部分
+def getWashedOptype(optype):
+    optype = optype.replace('类型：', '')
+    optype = optype.replace('番剧 /', '')
+    optype = optype.replace('番剧','')
+    optype = optype.replace('内地 ','')
+    optype = optype.replace('中国 / ','')
+    optype = re.sub(r'\b\d+(?:\.\d+)?\s+', '', optype)
+    # optype.replace('')
+    # optype.replace('')
+    # optype.replace('')
+    # optype.replace('')
+    return optype
 #解析腾讯视频
 def getTXOpera(turl):
     html =getOperaHtml(turl)
@@ -53,6 +65,7 @@ def getTXOpera(turl):
         aurl = a.attr.href
         respon = getOperaHtml(aurl)
         optype = respon('.video_tags._video_tags a').text()
+        optype = getWashedOptype(optype)
         fimgurl = 'http:' + img.attr('r-lazyload')
         print("FIMG" + fimgurl)
         imgurl = getTImgs(fimgurl)
@@ -86,6 +99,7 @@ def getIQiOpera(iurl):
         aurl = a.attr.href
         ahtml = getOperaHtml(aurl)
         optype = ahtml('.episodeIntro-type').text()
+        optype = getWashedOptype(optype)
         fimgurl = 'http:' + img.attr.src
         imgurl = getImgs(fimgurl)
         updateto = list('.site-piclist_pic_link p').text()
@@ -129,6 +143,7 @@ def getYouKuOpera(uurl):
         updateto = list('.p-time span').text()
         status = getStatus(updateto)
         optype = list('.info-list li').text()
+        optype = getWashedOptype(optype)
         #name_desc = list('.role_info').text()
         cartname = img.attr.alt
         statuses.append(status)
@@ -255,7 +270,8 @@ if __name__ == '__main__':
     upix = '.html?spm=a2h1n.8251845.0.0'
     uurl = 'https://list.youku.com/category/show/c_100_a_%E4%B8%AD%E5%9B%BD_ag_5_s_4_d_1_p_1.html?spm=a2h1n.8251845.0.0'
     #每个网站爬取多少页pagenum
-    pagenum = 2
+    pagenum = 1
+    print(pagenum)
     for j in range(0,pagenum):
         k = str(j)
         turl = tpre + k + tpix
