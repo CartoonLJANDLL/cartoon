@@ -46,6 +46,16 @@ public class OperaServiceimpl implements OperaService {
 		opcollecte = this.userOperaMapper.selectByExample(opcolExample).get(0);
 		return opcollecte;
 	}
+	
+	//通过userId找到该人收藏的所有op_collected
+	public List<OpCollected> getAllCollectedOpera(int userId) {
+		OpCollectedExample opcolExample = new OpCollectedExample();
+		OpCollectedExample.Criteria opcolcriteria = opcolExample.createCriteria();
+		opcolcriteria.andUserIdEqualTo(userId);
+		List<OpCollected> opcollecte = this.userOperaMapper.selectByExample(opcolExample);
+		return opcollecte;
+		
+	}
 	//查询所有Opera//根据传进来的JSON数据param所包含的信息 page页码 type番剧类型  status完结状态， sort排序类型
 	@Override
 	public JSONObject selectAllOpera(JSONObject param) {
@@ -83,6 +93,20 @@ public class OperaServiceimpl implements OperaService {
 		PageHelper.startPage(op_page,20);//每页20条记录
 		List<Opera> operas = operaMapper.selectByExample(operaExample);
 		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
+		
+		if( param.has("userId")) {
+			int userId = param.getInt("userId");
+			List<OpCollected> opcollected = getAllCollectedOpera(userId);
+			for( int j = 0; j < operas.size(); j++) {
+				for ( int i = 0; i < opcollected.size(); i++) {
+					if( operas.get(j).getOpId() == opcollected.get(i).getOperaId()) {
+						operas.get(j).setCollecte(1);//默认为0，未收藏，标记为1，已收藏
+					}
+				}
+			}
+			
+		}
+		
 		//封装返回
 		long total = pageInfo.getTotal(); //获得总条数
 		int pages = pageInfo.getPages(); //获得总页数
@@ -206,6 +230,21 @@ public class OperaServiceimpl implements OperaService {
 		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
 		long total = pageInfo.getTotal(); //获得总条数
 		int pages = pageInfo.getPages(); //获得总页数
+		
+		//判断是否收藏
+		if( param.has("userId")) {
+			int userId = param.getInt("userId");
+			List<OpCollected> opcollected = getAllCollectedOpera(userId);
+			for( int j = 0; j < operas.size(); j++) {
+				for ( int i = 0; i < opcollected.size(); i++) {
+					if( operas.get(j).getOpId() == opcollected.get(i).getOperaId()) {
+						operas.get(j).setCollecte(1);//默认为0，未收藏，标记为1，已收藏
+					}
+				}
+			}
+			
+		}
+		
 		if( operas.size() > 0) {
 			jsonobject.put("data", operas);
 			jsonobject.put("code",1);

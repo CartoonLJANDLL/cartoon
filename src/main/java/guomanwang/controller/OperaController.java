@@ -28,22 +28,24 @@ public class OperaController {
 	private OperaService operaService;
 	
 	//根据传进来的JSON数据param所包含的信息 page页码 type番剧类型  status完结状态， sort排序类型
+	//传出去的数据都封装在operas中， operas.data是番剧有关信息，若有用户id传入，该番剧被收藏的话，operas.get("data")底下的get(i).getcollecte可获得
+	//collecte的值，值为1则已收藏，为0未收藏，模糊查询的同理
 	@ResponseBody()
 	@RequestMapping("/alloperas")
 	public JSONObject alloperas(JSONObject param, Model model) throws IOException {
-		/*测试用JSONObject param = new JSONObject(); 
+		/*JSONObject param = new JSONObject(); 
 		Integer page = 1;
-		/*Integer status = null;
-		String type  = "";*/
-//		param.put("page", page);
-		/*param.put("status", 1);
+		Integer status = null;
+		String type  = "";
+        param.put("page", page);
+		//param.put("status", 1);
 		param.put("type", type);
-		param.put("sort", "op_time");*/
+		param.put("sort", "op_time");
 		System.out.println(param.toString() + "OOOOO"); 
-		
+		param.put("userId", 1);*/
 		JSONObject operas = operaService.selectAllOpera(param);
 		//System.out.println("opera/alloperas");
-		//System.out.println("HHHHH" + operas.get("data").toString());
+		System.out.println("HHHHH" + operas.get("data").toString());
 		
 		return operas;
 	}

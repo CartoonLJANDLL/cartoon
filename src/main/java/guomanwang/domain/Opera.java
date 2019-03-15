@@ -26,8 +26,19 @@ public class Opera {
     private Integer opCollectnum;
     //番剧的分享量
     private Integer opSharenum;
+    //标识是否被收藏
+    private Integer collecte = 0;
+    
+    
+    public Integer getCollecte() {
+		return collecte;
+	}
 
-    public Integer getOpId() {
+	public void setCollecte(Integer collecte) {
+		this.collecte = collecte;
+	}
+
+	public Integer getOpId() {
         return opId;
     }
 
