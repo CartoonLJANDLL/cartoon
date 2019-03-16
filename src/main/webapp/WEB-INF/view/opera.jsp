@@ -27,6 +27,7 @@
 		ul .first{width:72%;}
 		ul .second{width:10%;}
 		ul .thred{width:15%;}
+		ul .last{width:100%;}
 		.layui-row .layui-col-md2 .share{position:absolute;z-indent:3;right:0px;bottom:0px;background-color:#009688;height:60px;padding:3px 6px;display:none;color:white;}
 		.layui-row .layui-col-md2 .share table tr{line-height:25px;}
 	</style>
@@ -34,10 +35,10 @@
 	<jsp:include page="menu_header.jsp"/>
 		<div class="layui-carousel" id="test1">
 		  <div carousel-item>
-			<div><img src="<c:url value='/resources/img/tianming.jpg'></c:url>"></div>
-			<div><img src="<c:url value='/resources/img/tianyu.png'></c:url>"></div>
-			<div><img src="<c:url value='/resources/img/wgj.jpg'></c:url>"></div>
-			<div><img src="<c:url value='/resources/img/qsmy.jpg'></c:url>"></div>
+			<div class="layui-bg-green">宣传栏位1</div>
+			<div class="layui-bg-green">宣传栏位2</div>
+			<div class="layui-bg-green">宣传栏位3</div>
+			<div class="layui-bg-green">宣传栏位4</div>
 		  </div>
 		</div>
 <!-- 条目中可以是任意内容，如：<img src=""> -->
@@ -46,23 +47,23 @@
 					<div class="layui-row layui-form" >
 						<div class="layui-col-lg3 sort">
 							<button class="layui-btn layui-btn-sm layui-btn-danger">排序</button>
-							<input type="radio" name="sort" value="" title="默认" checked>
+							<input type="radio" name="sort" value=" " title="默认" checked>
 							<input type="radio" name="sort" value="最新" title="最新">
 							<input type="radio" name="sort" value="最热" title="最热">
 						</div>
 						<div class="layui-col-lg4 type">
 							<button class="layui-btn layui-btn-sm layui-btn-danger">类型</button>
-							<input type="radio" name="type" value="" title="默认" checked>
-							<input type="radio" name="type" value="1" title="玄幻">
-							<input type="radio" name="type" value="2" title="武侠">
-							<input type="radio" name="type" value="3" title="竞技">
-							<input type="radio" name="type" value="4" title="冒险">
+							<input type="radio" name="type" value=" " title="默认" checked>
+							<input type="radio" name="type" value="玄幻" title="玄幻">
+							<input type="radio" name="type" value="武侠" title="武侠">
+							<input type="radio" name="type" value="竞技" title="竞技">
+							<input type="radio" name="type" value="冒险" title="冒险">
 						</div>
 						<div class="layui-col-lg3 status">
 							<button class="layui-btn layui-btn-sm layui-btn-danger">状态</button>
-							<input type="radio" name="status" value="" title="默认" checked>
-							<input type="radio" name="status" value="已完结" title="已完结">
-							<input type="radio" name="status" value="未完结" title="未完结">
+							<input type="radio" name="status" value="0" title="默认" checked>
+							<input type="radio" name="status" value="1" title="已完结">
+							<input type="radio" name="status" value="0" title="未完结">
 						</div>
 						<div class="layui-col-lg2 layui-form">
 							<div class="layui-inline">
@@ -105,30 +106,30 @@
 		,arrow: 'always' //始终显示箭头
 		//,anim: 'fade' //切换动画方式
 	  });
-	  var type= $('input[name="type"]:checked').val(),
-	  	  sort = $('input[name="sort"]:checked').val(),
-	  	  status= $('input[name="type"]:checked').val();
+	  var param=JSON.stringify({'page':1});
 	  //初始化即获得默认番剧数据
-	  $.post('/guomanwang/common/samecompanynews?companyid=8&page=1', function(res){
+	  $.post('/guomanwang/opera/alloperas',{
+		  	 param :param
+            }, function(res){
 		//从后端获得的列表返回在data集合中
 		layui.each(res.data, function(index, item){
 			 $("#result").append(['<div class="layui-col-md2">'
 			 			,'<div style="position:relative;" class="list_item">'
-						,'<img src="../resources/img/qsmy.jpg">'
-						,'<div class="jishu">更新至多少集</div>'
+						,'<img src="http://r1.ykimg.com/0516000059CDB501859B5D03080DE349" height="50%">'
+						,'<div class="jishu">'+item.opUpdateto+'</div>'
 				  		,'</div>'
 						,'<ul>'
-				  			,'<li class="first"><h3>秦时明月之君临天下</h3></li>'
+				  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
 				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
 				  			,'<li class="thred">'
 								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
 				  			,'</li>'	
-				  			,'<li class="layui-word-aux">一句话介绍占位</li>'
+				  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
 				  		,'</ul>'
 				  	,'<div class="share" >'
 					  ,'<table >'
-					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
-					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
+					  	,'<tr><td class="qq"><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
+					  	,'<tr><td class="weibo"><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
 					  ,'</table>'
 					  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
 			  		,'</div>'
@@ -137,38 +138,42 @@
 		//分页器相关设置
 		laypage.render({
 			  elem: 'pager'
-			  ,count: res.pages
+			  ,count: res.page
 			  ,limit:1
 			  ,jump: function(obj, first){
 			    
 			    //首次不执行
 			    if(!first){
 			    	$("#result").empty();
-			  	  	$.post('/guomanwang/common/samecompanynews?companyid=8&page='+obj.curr, function(res){
+			    	param=JSON.stringify({'page':obj.curr});
+			  	  	$.post('/guomanwang/opera/alloperas',{
+			  	  		param :param
+			  	  	}, function(res){
 			  		//从后端获得的列表返回在data集合中
 			  		layui.each(res.data, function(index, item){
-			  			 $("#result").append(['<div class="layui-col-md2">'
-			  			 			,'<div style="position:relative;" class="list_item">'
-			  						,'<img src="../resources/img/qsmy.jpg">'
-			  						,'<div class="jishu">更新至多少集</div>'
-			  				  		,'</div>'
-			  						,'<ul>'
-			  				  			,'<li class="first"><h3>秦时明月之君临天下</h3></li>'
-			  				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
-			  				  			,'<li class="thred">'
-			  								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
-			  				  			,'</li>'	
-			  				  			,'<li class="layui-word-aux">一句话介绍占位</li>'
-			  				  		,'</ul>'
-			  				  	,'<div class="share" >'
-			  					  ,'<table >'
-			  					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
-			  					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
-			  					  ,'</table>'
-			  					  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
-			  			  		,'</div>'
-			  			  ,'</div>'].join(''));
+						 $("#result").append(['<div class="layui-col-md2">'
+					 			,'<div style="position:relative;" class="list_item">'
+								,'<img src="http://r1.ykimg.com/0516000059CDB501859B5D03080DE349" height="50%">'
+								,'<div class="jishu">'+item.opUpdateto+'</div>'
+						  		,'</div>'
+								,'<ul>'
+						  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
+						  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+						  			,'<li class="thred">'
+										,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+						  			,'</li>'	
+						  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
+						  		,'</ul>'
+						  	,'<div class="share" >'
+							  ,'<table >'
+							  	,'<tr><td class="qq"><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
+							  	,'<tr><td class="weibo"><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
+							  ,'</table>'
+							  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
+					  		,'</div>'
+					  ,'</div>'].join(''));
 			  		});
+			  		
 			  	  })
 			  	}
 			  }
@@ -181,33 +186,76 @@
 		  	type=$("input[name='type']:checked").val(),
 		  	status=$("input[name='status']:checked").val();
 		  	$("#result").empty();
-		  	$.get('/guomanwang/common/samecompanynews?companyid='+type+'&page=1', function(res){
-			//假设你的列表返回在data集合中
-			layui.each(res.data, function(index, item){
-				 $("#result").append(['<div class="layui-col-md2">'
-			 			,'<div style="position:relative;" class="list_item">'
-						,'<img src="../resources/img/qsmy.jpg">'
-						,'<div class="jishu">更新至多少集</div>'
-				  		,'</div>'
-						,'<ul>'
-				  			,'<li class="first"><h3>秦时明月之君临天下</h3></li>'
-				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
-				  			,'<li class="thred">'
-								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
-				  			,'</li>'	
-				  			,'<li class="layui-word-aux">一句话介绍占位</li>'
-				  		,'</ul>'
-				  		,'<div class="share" >'
-					  	,'<table >'
-					  		,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
-					  		,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
-					  ,'</table>'
-					  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
-			  			,'</div>'
-			  		,'</div>'].join(''));
-						}); 
-					  });
-			});
+		  	param=JSON.stringify({'page':1,'sort':sort,'type':type,'status':status});
+		  	$.post('/guomanwang/opera/alloperas',{
+	  	  		param :param
+	  	  	},function(res){
+					//从后端获得的列表返回在data集合中
+					layui.each(res.data, function(index, item){
+						 $("#result").append(['<div class="layui-col-md2">'
+					 			,'<div style="position:relative;" class="list_item">'
+								,'<img src="http://r1.ykimg.com/0516000059CDB501859B5D03080DE349" height="50%">'
+								,'<div class="jishu">'+item.opUpdateto+'</div>'
+						  		,'</div>'
+								,'<ul>'
+						  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
+						  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+						  			,'<li class="thred">'
+										,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+						  			,'</li>'	
+						  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
+						  		,'</ul>'
+						  	,'<div class="share" >'
+							  ,'<table >'
+							  	,'<tr><td class="qq"><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
+							  	,'<tr><td class="weibo"><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
+							  ,'</table>'
+							  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
+					  		,'</div>'
+					  ,'</div>'].join(''));
+					})
+					//分页器相关设置
+					laypage.render({
+						  elem: 'pager'
+						  ,count: res.page
+						  ,limit:1
+						  ,jump: function(obj, first){
+						    
+						    //首次不执行
+						    if(!first){
+						    	$("#result").empty();
+						  	  	$.post('/guomanwang/common/samecompanynews?companyid='+type+'&page='+obj.curr, function(res){
+						  		//从后端获得的列表返回在data集合中
+						  		layui.each(res.data, function(index, item){
+						  			 $("#result").append(['<div class="layui-col-md2">'
+						  			 			,'<div style="position:relative;" class="list_item">'
+						  						,'<img src="../resources/img/qsmy.jpg">'
+						  						,'<div class="jishu">更新至多少集</div>'
+						  				  		,'</div>'
+						  						,'<ul>'
+						  				  			,'<li class="first"><h3>秦时明月之君临天下</h3></li>'
+						  				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+						  				  			,'<li class="thred">'
+						  								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+						  				  			,'</li>'	
+						  				  			,'<li class="layui-word-aux">一句话介绍占位</li>'
+						  				  		,'</ul>'
+						  				  	,'<div class="share" >'
+						  					  ,'<table >'
+						  					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
+						  					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
+						  					  ,'</table>'
+						  					  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
+						  			  		,'</div>'
+						  			  ,'</div>'].join(''));
+						  		});
+						  	  })
+						  	}
+						  }
+					});
+
+				  });
+	});
 	 //番剧搜索
     form.on('submit(search)', function(data){
 		//弹出loading
@@ -244,16 +292,41 @@
       //收藏
        $(".layui-row").on('click','.shoucang',function(){
 		layer.msg("您点击了收藏按钮");
+		$.get('/commit/dianzan',{
+        	 commitid :commitid,
+        	 userid:userid
+         },function(data){
+        layer.msg(data.msg);
+        if(data.code==1){
+          location.reload();
+            };
+         })
              
       });
-      //分享
+      //点击分享
       $(".layui-row").on('click','.thred',function(){
 		$(this).parent().parent().find(".share").slideDown("slow");      
       });
       $(".layui-row").on('click','.hideshare',function(){
   		$(this).parent().slideUp("slow");      
         });
-
+	  //分享
+	  $(".layui-row").on('click','.qq',function(){
+		  var title="纵横国漫网欢迎您！",
+	  	  content=$(this).parents(".layui-col-md2").find("h3").text()+'-'+$(this).parents(".layui-col-md2").find(".last").text(),
+	  	  url="liujiang.space:8080/guomanwang/common/opera",
+	  	  pic="liujiang.space:8080/guomanwang/resource"+$(this).parents(".layui-col-md2").find("img").attr("src").replace("..","");
+		  var sharestring="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url="+url+"&sharesource=qzone&title="+title+"&pics="+pic+"&summary="+content;
+		  window.open(sharestring);
+	  });
+	  $(".layui-row").on('click','.weibo',function(){
+		  var title="[纵横国漫网欢迎您！]",
+		  	  content=$(this).parents(".layui-col-md2").find("h3").text()+'-'+$(this).parents(".layui-col-md2").find(".last").text(),
+		  	  url="liujiang.space:8080/guomanwang/common/opera",
+		  	  pic=$(this).parents(".layui-col-md2").find("img").attr("src").replace("..","");
+		  var sharestring="http://service.weibo.com/share/share.php?url="+url+"&sharesource=weibo&title="+title+content+"&pic="+pic;
+		  window.open(sharestring);
+	  });
 	});
 	</script>
 	</body>

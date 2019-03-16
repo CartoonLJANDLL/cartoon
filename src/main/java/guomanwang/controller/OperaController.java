@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageHelper;
@@ -48,7 +49,7 @@ public class OperaController {
 	//collecte的值，值为1则已收藏，为0未收藏，模糊查询的同理
 	@ResponseBody()
 	@RequestMapping("/alloperas")
-	public JSONObject alloperas(JSONObject param) throws IOException {
+	public JSONObject alloperas(String param) throws IOException {
 		/*JSONObject param = new JSONObject(); 
 		Integer page = 1;
 		Integer status = null;
@@ -59,7 +60,8 @@ public class OperaController {
 		param.put("sort", "op_time");
 		System.out.println(param.toString() + "OOOOO"); 
 		param.put("userId", 1);*/
-		JSONObject operas = operaService.selectAllOpera(param);
+		JSONObject json = JSONObject.fromObject(param);   
+		JSONObject operas = operaService.selectAllOpera(json);
 		//System.out.println("opera/alloperas");
 		System.out.println("HHHHH" + operas.get("data").toString());
 		
