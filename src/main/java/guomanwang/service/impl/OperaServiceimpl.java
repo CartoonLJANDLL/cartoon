@@ -9,6 +9,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -106,7 +108,6 @@ public class OperaServiceimpl implements OperaService {
 			}
 			
 		}
-		
 		//封装返回
 		long total = pageInfo.getTotal(); //获得总条数
 		int pages = pageInfo.getPages(); //获得总页数
@@ -121,8 +122,55 @@ public class OperaServiceimpl implements OperaService {
 		return jsonobject;
 	}
 	
-	
+	//通过番剧名模糊查询
+	@Override
+	public JSONObject selectOperaByName(JSONObject param) {
+		
+        Integer op_page = new Integer(1);
+		if( param.has("page")) {
+			op_page = param.getInt("page");
+		}
+		if( param.has("name")) {
+			String name = param.getString("name");
+			name = "%" + name + "%";
+			criteria.andOpNameLike(name);
+		}
+		JSONObject jsonobject= new JSONObject();
+		jsonobject.put("code",0);
+		jsonobject.put("msg","无符合条件的结果");
+		
+		PageHelper.startPage(op_page,20);
+		List<Opera> operas = this.operaMapper.selectByExample(operaExample);
+		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
+		long total = pageInfo.getTotal(); //获得总条数
+		int pages = pageInfo.getPages(); //获得总页数
+		
+		//判断是否收藏
+		if( param.has("userId")) {
+			int userId = param.getInt("userId");
+			List<OpCollected> opcollected = getAllCollectedOpera(userId);
+			for( int j = 0; j < operas.size(); j++) {
+				for ( int i = 0; i < opcollected.size(); i++) {
+					if( operas.get(j).getOpId() == opcollected.get(i).getOperaId()) {
+						operas.get(j).setCollecte(1);//默认为0，未收藏，标记为1，已收藏
+					}
+				}
+			}
+			
+		}
+		
+		if( operas.size() > 0) {
+			jsonobject.put("data", operas);
+			jsonobject.put("code",1);
+			jsonobject.put("msg","查询到符合条件的结果");
+			jsonobject.put("count", total);
+			jsonobject.put("page", pages);
+		}	
+		return jsonobject;
+	}
+			
 	//取消收藏番剧opera  如果收藏了就取消收藏，没收藏则收藏
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	@Override
 	public JSONObject nocollectOpera(JSONObject param) {
 		OpCollected opcollecte = new OpCollected();
@@ -202,65 +250,72 @@ public class OperaServiceimpl implements OperaService {
 		int rs = userOperaMapper.insertSelective(opcollecte);
 		return rs;
 	}
-    //根据id删除番剧
+    //根据传入的选择性传入的参数删除 name operaId 返回参数code 为0 操作异常回滚  为1Opera表删除成功  为2 opera和op_collected表删除成功
+	//msg为String  解释
 	@Override
-	public int deleteByPrimaryKey(Integer id) {
-		
-		return operaMapper.deleteByPrimaryKey(id);
-	}
-    //通过番剧名模糊查询
-	@Override
-	public JSONObject selectOperaByName(JSONObject param) {
-		
-        Integer op_page = new Integer(1);
-		if( param.has("page")) {
-			op_page = param.getInt("page");
-		}
-		if( param.has("name")) {
-			String name = param.getString("name");
-			name = "%" + name + "%";
-			criteria.andOpNameLike(name);
-		}
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public JSONObject deleteOperaSelective(JSONObject param) {
 		JSONObject jsonobject= new JSONObject();
-		jsonobject.put("code",0);
-		jsonobject.put("msg","无符合条件的结果");
+		OpCollectedExample opcolExample = new OpCollectedExample();
+		OpCollectedExample.Criteria opcolCriteria = opcolExample.createCriteria();
 		
-		PageHelper.startPage(op_page,20);
-		List<Opera> operas = this.operaMapper.selectByExample(operaExample);
-		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
-		long total = pageInfo.getTotal(); //获得总条数
-		int pages = pageInfo.getPages(); //获得总页数
-		
-		//判断是否收藏
-		if( param.has("userId")) {
-			int userId = param.getInt("userId");
-			List<OpCollected> opcollected = getAllCollectedOpera(userId);
-			for( int j = 0; j < operas.size(); j++) {
-				for ( int i = 0; i < opcollected.size(); i++) {
-					if( operas.get(j).getOpId() == opcollected.get(i).getOperaId()) {
-						operas.get(j).setCollecte(1);//默认为0，未收藏，标记为1，已收藏
-					}
+		int code = 0;
+		String msg = "操作失败，未改变数据库";
+		//传入参数是operId
+		if( param.has("operaId")) {
+			int rs = this.operaMapper.deleteByPrimaryKey( param.getInt("operaId"));
+			if( rs > 0 ) {
+				msg = "删除opera表中数据成功！";
+				code = 1;
+				jsonobject.put("operaResultSet", rs);
+				opcolCriteria.andOperaIdEqualTo( param.getInt("operaId"));
+				List<OpCollected> opcol = this.userOperaMapper.selectByExample(opcolExample);
+				int opcolrs = this.userOperaMapper.deleteByExample( opcolExample); //op_collected表中删除掉的数据条数 
+				if( opcolrs > 0) {
+					code = 2;
+					jsonobject.put("opcollectedRS", opcolrs);
+					msg = msg + "删除op_collected表中数据成功！";
+				}else {
+					if( opcol.size() > 0)
+						msg = msg + "删除op_collected表中数据失败!回滚操作，未改变数据库！";
 				}
+			}else {
+				msg = "删除opera表中数据失败！回滚操作，未改变数据库！";
 			}
-			
 		}
-		
-		if( operas.size() > 0) {
-			jsonobject.put("data", operas);
-			jsonobject.put("code",1);
-			jsonobject.put("msg","查询到符合条件的结果");
-			jsonobject.put("count", total);
-			jsonobject.put("page", pages);
-		}	
+		//传入参数是name
+		if( param.has("name")) {
+			OperaExample operaExample = new OperaExample();
+			OperaExample.Criteria operaCriteria = operaExample.createCriteria();
+			operaCriteria.andOpNameEqualTo( param.getString("name"));
+			Opera opera = this.operaMapper.selectByExample(operaExample).get(0);
+			int rs = this.operaMapper.deleteByExample(operaExample);
+			if( rs > 0 ) {
+				jsonobject.put("operaResultSet", rs);
+				msg = "删除opera表中数据成功！";
+				code = 1;
+				opcolCriteria.andOperaIdEqualTo( opera.getOpId());
+				List<OpCollected> opcol = this.userOperaMapper.selectByExample(opcolExample);
+				int opcolrs = this.userOperaMapper.deleteByExample( opcolExample); //op_collected表中删除掉的数据条数 
+				if( opcolrs > 0) {
+					code = 2;
+					jsonobject.put("opcollectedRS", opcolrs);
+					msg = msg + "删除op_collected表中数据成功！";
+				}else {
+					if( opcol.size() > 0)
+						msg = msg + "删除op_collected表中数据失败!回滚操作，未改变数据库！";
+				}
+			}else {
+				msg = "删除opera表中数据失败！回滚操作，未改变数据库！";
+			}
+		}
+		jsonobject.put("code", code);
+		jsonobject.put("msg", msg);
 		return jsonobject;
 	}
-		
-    //根据自定义条件选择性更新
-	@Override
-	public int updateByExampleSelective(Opera record, OperaExample example) {
-		
-		return this.operaMapper.updateByExampleSelective(record, example);
-	}
+    
+
+	
 	//获得Opera数量
 	@Override
 	public int getOperaNum() {
@@ -280,18 +335,86 @@ public class OperaServiceimpl implements OperaService {
 		// TODO Auto-generated method stub
 		return this.operaMapper.selectByPrimaryKey(id);
 	}
-	//插入一部番剧，选择性新增
+	//插入一部番剧，选择性新增,code=0失败  code = 1 成功 msg返回插入成功与否信息
+	//传入参数json类型的   包含键 name番剧名字   url番剧地址    desc番剧的一句话描述   photourl番剧的图片地址  updateto更新至  type 类型iframeurl分享地址
+	//name url photourl一定要有不然没啥看头，其他的可有可无
 	@Override
-	public int insertOpera(Opera opera) {
-		// TODO Auto-generated method stub
-		return this.operaMapper.insertSelective(opera);
+	public JSONObject insertOpera(JSONObject param) {
+		JSONObject jsonobject= new JSONObject();
+		Opera opera = new Opera();
+		OperaExample operaExample = new OperaExample();
+		OperaExample.Criteria operaCriteria = operaExample.createCriteria();
+		jsonobject.put("code",0);
+		jsonobject.put("msg","添加番剧失败！");
+		//封装成opera传值过来
+		if( param.has("opera")) {
+			opera = (Opera) param.get("opera");
+			operaCriteria.andOpNameEqualTo( opera.getOpName());
+			if( this.operaMapper.selectByExample(operaExample).size() == 0) {
+				int rs = this.operaMapper.insertSelective(opera);
+				if( rs == 1) {
+					jsonobject.put("code", 1);
+					jsonobject.put("msg", "添加番剧成功！");
+					return jsonobject;
+				}
+			}else {
+				jsonobject.put("msg", "番剧已存在，添加失败!");
+			}
+			
+		}
+		//未封装成opera传过来
+		if( param.has( "name")) {
+			opera.setOpName( param.getString("name"));
+			operaCriteria.andOpNameEqualTo( opera.getOpName());
+			if( this.operaMapper.selectByExample(operaExample).size() == 0) {
+				if( param.has( "url")) {
+					opera.setOpUrl( param.getString("url"));
+					if( param.has( "photourl")) {
+						opera.setOpPhotourl(param.getString( "photourl"));
+						if( param.has("desc")) {
+							opera.setOpDesc( param.getString( "desc"));
+						}
+						if( param.has("type")) {
+							opera.setOpType( param.getString( "type"));
+						}
+						if( param.has("iframeurl")) {
+							opera.setOpIframeurl( param.getString( "iframeurl"));
+						}
+						if( param.has( "updateto")) {
+							String updateto = param.getString( "updateto");
+							if( updateto.contains("全")) {
+								opera.setOpStatus(1);
+							}else {
+								opera.setOpStatus(0);
+							}
+							opera.setOpUpdateto( updateto);
+						}
+						Date date = new Date();
+						opera.setOpTime(date);
+						int rs = this.operaMapper.insertSelective(opera);
+						if( rs == 1) {
+							jsonobject.put("code", 1);
+							jsonobject.put("msg", "添加番剧成功！");
+							return jsonobject;
+						}
+					}
+				}
+			}
+			
+		}
+		return jsonobject;
 	}
 	
-
 	@Override
 	public OpCollected getUserOpera(int userId, int operaId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+    //根据自定义条件选择性更新 封装好的opera 或者单独的各个参数
+	@Override
+	public JSONObject updateByExampleSelective(JSONObject param) {
+		
+		
+		return null;
+	}
 }

@@ -82,11 +82,11 @@ public class Opera {
         return opUpdateto;
     }
 
-    public void setOpUpdateto(String opUpdateto) {
-        this.opUpdateto = opUpdateto == null ? null : opUpdateto.trim();
-    }
+	public void setOpUpdateto(String opUpdateto) {
+		this.opUpdateto = opUpdateto;
+	}
 
-    public String getOpType() {
+	public String getOpType() {
         return opType;
     }
 

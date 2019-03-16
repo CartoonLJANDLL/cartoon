@@ -24,13 +24,13 @@ public interface OperaService {
     //分享番剧
     int shareOpera(int operaid,int userid);
     //根据主键删除
-    int deleteByPrimaryKey(Integer id);
+    JSONObject deleteOperaSelective(JSONObject param);
     //根据番剧名模糊查询番剧
     JSONObject selectOperaByName(JSONObject param);
     //添加番剧
-    public int insertOpera(Opera opera);
+    public JSONObject insertOpera(JSONObject param);
     //根据自定义条件选择性更新
-    int updateByExampleSelective(@Param("record") Opera record, @Param("example") OperaExample example);
+    JSONObject updateByExampleSelective(JSONObject param);
   //通过主键选择性更新 即传入多少值就更新多少值，并且where id =#{id}
     int updateByPrimaryKeySelective(Opera record);
     
