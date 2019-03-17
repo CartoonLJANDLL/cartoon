@@ -66,9 +66,9 @@ def getTXOpera(turl):
         respon = getOperaHtml(aurl)
         optype = respon('.video_tags._video_tags a').text()
         optype = getWashedOptype(optype)
-        fimgurl = 'http:' + img.attr('r-lazyload')
-        print("FIMG" + fimgurl)
-        imgurl = getTImgs(fimgurl)
+        imgurl = 'http:' + img.attr('r-lazyload')
+        #print("FIMG" + fimgurl)
+        #imgurl = getTImgs(fimgurl)
         updateto = list('.figure_caption').text()
         status = getStatus(updateto)
         name_desc = list('.figure_desc').text()
@@ -100,8 +100,8 @@ def getIQiOpera(iurl):
         ahtml = getOperaHtml(aurl)
         optype = ahtml('.episodeIntro-type').text()
         optype = getWashedOptype(optype)
-        fimgurl = 'http:' + img.attr.src
-        imgurl = getImgs(fimgurl)
+        imgurl = 'http:' + img.attr.src
+        #imgurl = getImgs(fimgurl)
         updateto = list('.site-piclist_pic_link p').text()
         status = getStatus(updateto)
         print("Status")
@@ -138,8 +138,8 @@ def getYouKuOpera(uurl):
         img = list('.quic')
         aurl = 'https:' + a.attr.href
         iframeurl = 'http: // player.youku.com / embed /' + aurl.split('/')[-1]
-        fimgurl = img.attr.src
-        imgurl = getImgs(fimgurl)
+        imgurl = img.attr.src
+        #imgurl = getImgs(fimgurl)
         updateto = list('.p-time span').text()
         status = getStatus(updateto)
         optype = list('.info-list li').text()

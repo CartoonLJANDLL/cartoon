@@ -79,8 +79,19 @@ public class OperaServiceimpl implements OperaService {
 		if( param.has("sort") && param.get("sort") != "") {
 			String sortDESC = "  DESC";//降序
 			String sortASC = " ASC";//升序
-			String op_sort = param.getString("sort");
-			operaExample.setOrderByClause(op_sort  + sortDESC);//设置根据这个字段排序升序  DESC为降序
+			String sort1 = "最新";
+			String sort2 = "最热";
+			String op_sort1 = "op_time";
+			String op_sort2 = "op_collectnum";
+			
+			if( sort1.equals( param.getString("sort"))) {
+				operaExample.setOrderByClause(op_sort1  + sortDESC);
+			}
+			if( sort2.equals( param.getString( "sort"))) {
+				operaExample.setOrderByClause( op_sort2 + sortDESC);
+			}
+			 
+			//设置根据这个字段排序升序  DESC为降序
 		}
 		if( param.has("status")) {
 			Integer op_status = param.getInt("status");
@@ -189,50 +200,55 @@ public class OperaServiceimpl implements OperaService {
 			opcolcriteria.andUserIdEqualTo(userId);
 			
 			opera = this.operaMapper.selectByPrimaryKey(operaId);
-			
-			int collectNum = opera.getOpCollectnum();
-			
-			if( this.userOperaMapper.selectByExample(opcolExample).size() == 1) {//已收藏
-				opcolcriteria.andOperaIdEqualTo(operaId);
-				opcolcriteria.andUserIdEqualTo(userId);
-				if(this.userOperaMapper.deleteByExample(opcolExample) == 1) {
-					//删除成功即取消收藏成功，收藏量减一
-					code = 1;
-					msg = "取消收藏成功!";
-					collectNum--;
-					opera.setOpCollectnum(collectNum);
-					if(this.operaMapper.updateByPrimaryKeySelective(opera) == 1 ) {//更新收藏量字段成功
-						System.out.println("更新Opera表中的collectnum字段成功!");
-					}else {
-						System.out.println("更新Opera表中的collectnum字段失败!");
+			if( opera == null) {
+				System.out.println("不存在该番剧！");
+				msg = "该番剧不存在!";
+			}else {
+				int collectNum = opera.getOpCollectnum();
+				
+				if( this.userOperaMapper.selectByExample(opcolExample).size() == 1) {//已收藏
+					opcolcriteria.andOperaIdEqualTo(operaId);
+					opcolcriteria.andUserIdEqualTo(userId);
+					if(this.userOperaMapper.deleteByExample(opcolExample) == 1) {
+						//删除成功即取消收藏成功，收藏量减一
+						code = 1;
+						msg = "取消收藏成功!";
+						collectNum--;
+						opera.setOpCollectnum(collectNum);
+						if(this.operaMapper.updateByPrimaryKeySelective(opera) == 1 ) {//更新收藏量字段成功
+							System.out.println("更新Opera表中的collectnum字段成功!");
+						}else {
+							System.out.println("更新Opera表中的collectnum字段失败!");
+						}
+						
+					}else {//删除失败，即取消收藏失败
+						msg = "操作异常!";
 					}
-					
-				}else {//删除失败，即取消收藏失败
-					msg = "操作异常!";
-				}
-			}else {//表中无数据即没有收藏，则插入
-				opcollecte.setOperaId(operaId);
-				opcollecte.setUserId(userId);
-				Date date = new Date();
-				/*SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-				String time = dateFormat.format(date);*/
-				opcollecte.setCollectedTime(date);
-				if(this.userOperaMapper.insert(opcollecte) == 1) {//插入数据 进行收藏成功
-					code = 1;
-					msg = "收藏成功！";
-					collectNum++;
-					opera.setOpCollectnum(collectNum);
-					if(this.operaMapper.updateByPrimaryKeySelective(opera) == 1 ) {//更新collectnum字段
-						System.out.println("更新Opera表中的collectnum字段成功!");
+				}else {//表中无数据即没有收藏，则插入
+					opcollecte.setOperaId(operaId);
+					opcollecte.setUserId(userId);
+					Date date = new Date();
+					/*SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+					String time = dateFormat.format(date);*/
+					opcollecte.setCollectedTime(date);
+					if(this.userOperaMapper.insert(opcollecte) == 1) {//插入数据 进行收藏成功
+						code = 1;
+						msg = "收藏成功！";
+						collectNum++;
+						opera.setOpCollectnum(collectNum);
+						if(this.operaMapper.updateByPrimaryKeySelective(opera) == 1 ) {//更新collectnum字段
+							System.out.println("更新Opera表中的collectnum字段成功!");
+						}else {
+							System.out.println("更新Opera表中的collectnum字段失败!");
+						}
+						
 					}else {
-						System.out.println("更新Opera表中的collectnum字段失败!");
+						System.out.println("插入数据进行收藏操作失败");
+						msg = "操作异常!";
 					}
-					
-				}else {
-					System.out.println("插入数据进行收藏操作失败");
-					msg = "操作异常!";
 				}
 			}
+			
 		}else {
 			System.out.println("无userid或Operaid");
 		}
