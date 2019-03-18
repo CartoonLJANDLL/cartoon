@@ -137,7 +137,9 @@ def getYouKuOpera(uurl):
         a = list('.p-thumb a')
         img = list('.quic')
         aurl = 'https:' + a.attr.href
-        iframeurl = 'http: // player.youku.com / embed /' + aurl.split('/')[-1]
+        burl = aurl.split('id_')[-1]
+        rl = burl.split('.html')[0]
+        iframeurl = 'http://player.youku.com/embed/' + rl
         imgurl = img.attr.src
         #imgurl = getImgs(fimgurl)
         updateto = list('.p-time span').text()
