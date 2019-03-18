@@ -31,15 +31,15 @@ public class OperaController {
 	//收藏番剧或取消收藏番剧,json数据类型param 包含userId 和 operaId两个键
 	@ResponseBody()
 	@RequestMapping("/collectopera")
-	public JSONObject collectOpera(/*String param*/) {
-		JSONObject param = new JSONObject();
+	public JSONObject collectOpera(String param) {
+		/*JSONObject param = new JSONObject();
 		Integer operaId = 1;
 		Integer userId = 1;
 		param.put("operaId", operaId);
 		param.put("userId", userId);
-		System.out.println("opera/collectopera");
-		/*JSONObject json = JSONObject.fromObject(param); */
-		JSONObject jsonobject = operaService.nocollectOpera(/*json*/param);
+		System.out.println("opera/collectopera");*/
+	    JSONObject json = JSONObject.fromObject(param); 
+		JSONObject jsonobject = operaService.nocollectOpera(json/*param*/);
 		
 		System.out.println(jsonobject.toString() + " RS");
 		return jsonobject;
@@ -50,8 +50,8 @@ public class OperaController {
 	//collecte的值，值为1则已收藏，为0未收藏，模糊查询的同理
 	@ResponseBody()
 	@RequestMapping("/alloperas")
-	public JSONObject alloperas(/*String param*/) throws IOException {
-		JSONObject param = new JSONObject(); 
+	public JSONObject alloperas(String param) throws IOException {
+		/*JSONObject param = new JSONObject(); 
 		Integer page = 1;
 		Integer status = null;
 		String type  = "";
@@ -60,9 +60,9 @@ public class OperaController {
 		param.put("type", type);
 		param.put("sort", "op_time");
 		System.out.println(param.toString() + "OOOOO"); 
-		param.put("userId", 1);
-		/*JSONObject json = JSONObject.fromObject(param);  */ 
-		JSONObject operas = operaService.selectAllOpera(/*json*/param);
+		param.put("userId", 1);*/
+		JSONObject json = JSONObject.fromObject(param);   
+		JSONObject operas = operaService.selectAllOpera(json/*param*/);
 		//System.out.println("opera/alloperas");
 		System.out.println("HHHHH" + operas.get("data").toString());
 		
@@ -72,12 +72,12 @@ public class OperaController {
 	//模糊查询番剧  param可包含 name模糊查询的值，page 页码     看第二页时页码为2 name值也要有  name为空时显示所有的番剧
 	@ResponseBody()
 	@RequestMapping("/selectoperabyname")
-	public JSONObject selectOperaByName(/*String param*/) {
-		JSONObject param = new JSONObject();
-        param.put("name", "小");
-		/*JSONObject json = JSONObject.fromObject(param);*/
+	public JSONObject selectOperaByName(String param) {
+		/*JSONObject param = new JSONObject();
+        param.put("name", "小");*/
+		JSONObject json = JSONObject.fromObject(param);
 		JSONObject jsonobject= new JSONObject();
-		jsonobject = operaService.selectOperaByName(/*json*/param);
+		jsonobject = operaService.selectOperaByName(json/*param*/);
 		
 		System.out.println("/opera/selectoperabyname");
 		System.out.println(jsonobject.get("data").toString() + "HHHHH");
@@ -91,16 +91,16 @@ public class OperaController {
 	//name url photourl一定要有不然没啥看头，其他的可有可无
 	@ResponseBody()
 	@RequestMapping("/insertopera")
-	public JSONObject insertOpera( /*String param*/) {
+	public JSONObject insertOpera( String param) {
 		JSONObject jsonobject = new JSONObject();
-		JSONObject param = new JSONObject();
+		/*JSONObject param = new JSONObject();
 		
 		param.put("name", "小小");
 		param.put("url", "www.baidu.com");
 		param.put("photourl", "http://jxnu.edu.cn");
-		param.put("updateto", "32ji");
-		/*JSONObject json = JSONObject.fromObject(param);*/
-		jsonobject = this.operaService.insertOpera(/*json*/param);
+		param.put("updateto", "32ji");*/
+		JSONObject json = JSONObject.fromObject(param);
+		jsonobject = this.operaService.insertOpera(json/*param*/);
 		System.out.println("JSONObject" + jsonobject.toString());
 		return jsonobject; 
 	}
@@ -108,11 +108,11 @@ public class OperaController {
 	//删除一个番剧，删掉番剧的记录，删掉op_collected表中的记录,根据番剧名name 或者番剧id operaId 番剧url删除
 	@ResponseBody()
 	@RequestMapping("/deleteopera")
-	public JSONObject deleteOpera( /*String param*/) {
-		JSONObject param = new JSONObject();
-		param.put("name", "小小");
-		/*JSONObject json = JSONObject.fromObject(param);*/
-        JSONObject jsonobject = this.operaService.deleteOperaSelective(/*json*/param);
+	public JSONObject deleteOpera( String param) {
+		/*JSONObject param = new JSONObject();
+		param.put("name", "小小");*/
+		JSONObject json = JSONObject.fromObject(param);
+        JSONObject jsonobject = this.operaService.deleteOperaSelective(json/*param*/);
         System.out.println("XIAOXIAO" + jsonobject.toString());
 		
 		return jsonobject; 
@@ -121,14 +121,41 @@ public class OperaController {
 	//update一个opera 可更新的字段主要是url 番剧名字  一句话描述  所有字段，只要有值就可以更新
 	@ResponseBody()
 	@RequestMapping("/updateopera")
-	public JSONObject updateOpera( /*String param*/) {
-		JSONObject param = new JSONObject();
-		param.put("name", "小小");
-		/*JSONObject json = JSONObject.fromObject(param);*/
-        JSONObject jsonobject = this.operaService.updateByExampleSelective(param);
+	public JSONObject updateOpera( String param) {
+		/*JSONObject param = new JSONObject();
+		Integer opId = 399;
+		param.put("name", "小da");
+		param.put("opId", opId);*/
+		JSONObject json = JSONObject.fromObject(param);
+        JSONObject jsonobject = this.operaService.updateByExampleSelective(/*param*/json);
         System.out.println("XIAOXIAO" + jsonobject.toString());
 		
 		return jsonobject; 
+		
+	}
+	//查找一个人的所有收藏 参数为userId返回值为operas和code msg
+	@ResponseBody()
+	@RequestMapping("/personcollectedopera")
+	public JSONObject personcollectedopera( String json) {
+		/*JSONObject json = new JSONObject();
+		json.put("userId",1);*/
+		
+		JSONObject param = JSONObject.fromObject(json);
+		JSONObject jsonobject = new JSONObject();
+		int code = 0;
+		String msg = "查找异常！";
+		int op_page = 1;
+		if( param.has( "op_page")) {
+			op_page = param.getInt( "op_page");
+		}
+		if( param.has("userId") ) {
+			jsonobject = this.operaService.getAllCollectedOpera( param.getInt( "userId"), op_page);
+		}else {
+			jsonobject.put("code", code);
+			jsonobject.put("msg", msg);
+		}
+		System.out.println("HHH" + jsonobject.toString());
+		return jsonobject;
 		
 	}
 	

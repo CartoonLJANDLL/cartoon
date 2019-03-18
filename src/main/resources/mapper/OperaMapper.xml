@@ -15,6 +15,9 @@
     <result column="op_collectnum" property="opCollectnum" jdbcType="INTEGER" />
     <result column="op_sharenum" property="opSharenum" jdbcType="INTEGER" />
   </resultMap>
+  <select id="selectCollectOpera" parameterType = "int" resultMap = "BaseResultMap">
+        select * from opera where op_id in ( select opera_id from op_collected where user_id = #{userId})
+  </select>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >

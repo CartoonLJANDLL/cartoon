@@ -30,5 +30,6 @@ public interface OperaMapper {
     int updateByPrimaryKeySelective(Opera record);
     //通过主键更新,所有的六项都要更新
     int updateByPrimaryKey(Opera record);
-    
+    //查找个人收藏中的所有番剧
+    List<Opera> selectCollectOpera(int userId);
 }

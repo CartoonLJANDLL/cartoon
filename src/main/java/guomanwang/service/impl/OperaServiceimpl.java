@@ -36,7 +36,7 @@ public class OperaServiceimpl implements OperaService {
 	@Autowired
 	@Qualifier("OpCollectedMapper")
 	private OpCollectedMapper userOperaMapper;
-	
+	int pageSize = 18;
 	//通过userid和Operaid找到userOpera
 	public OpCollected getOpCollected(int userId, int operaId) {
 		OpCollectedExample opcolExample = new OpCollectedExample();
@@ -50,13 +50,36 @@ public class OperaServiceimpl implements OperaService {
 	}
 	
 	//通过userId找到该人收藏的所有op_collected
-	public List<OpCollected> getAllCollectedOpera(int userId) {
+	public List<OpCollected> getAllOpCollectedOpera(int userId) {
 		OpCollectedExample opcolExample = new OpCollectedExample();
 		OpCollectedExample.Criteria opcolcriteria = opcolExample.createCriteria();
 		opcolcriteria.andUserIdEqualTo(userId);
 		List<OpCollected> opcollecte = this.userOperaMapper.selectByExample(opcolExample);
 		return opcollecte;
 		
+	}
+	//通过Opera的id找到Opera
+	public JSONObject getAllCollectedOpera(int userId, int op_page){
+		
+		List<Opera> operas = new ArrayList<Opera>();
+		PageHelper.startPage(op_page,pageSize);//每页20条记录
+		operas = this.operaMapper.selectCollectOpera(userId);
+		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
+		JSONObject jsonobject = new JSONObject();
+		jsonobject.put("code", 0);
+		jsonobject.put("msg", "未查询到收藏结果!");
+		
+		//封装返回
+		long count = pageInfo.getTotal(); //获得总条数
+		int pages = pageInfo.getPages(); //获得总页数
+		if( operas.size() > 0) {
+			jsonobject.put("data", operas);
+			jsonobject.put("code",1);
+			jsonobject.put("msg","查询到收藏");
+			jsonobject.put("count", count);
+			jsonobject.put("page", pages);
+		}	
+		return jsonobject;
 	}
 	//查询所有Opera//根据传进来的JSON数据param所包含的信息 page页码 type番剧类型  status完结状态， sort排序类型
 	@Override
@@ -103,13 +126,13 @@ public class OperaServiceimpl implements OperaService {
 		}
 		operaExample.setDistinct(true);//设置去重
 
-		PageHelper.startPage(op_page,20);//每页20条记录
+		PageHelper.startPage(op_page,pageSize);//每页18条记录
 		List<Opera> operas = operaMapper.selectByExample(operaExample);
 		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
 		
 		if( param.has("userId")) {
 			int userId = param.getInt("userId");
-			List<OpCollected> opcollected = getAllCollectedOpera(userId);
+			List<OpCollected> opcollected = getAllOpCollectedOpera(userId);
 			for( int j = 0; j < operas.size(); j++) {
 				for ( int i = 0; i < opcollected.size(); i++) {
 					if( operas.get(j).getOpId() == opcollected.get(i).getOperaId()) {
@@ -150,7 +173,7 @@ public class OperaServiceimpl implements OperaService {
 		jsonobject.put("code",0);
 		jsonobject.put("msg","无符合条件的结果");
 		
-		PageHelper.startPage(op_page,20);
+		PageHelper.startPage(op_page,pageSize);
 		List<Opera> operas = this.operaMapper.selectByExample(operaExample);
 		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
 		long total = pageInfo.getTotal(); //获得总条数
@@ -159,7 +182,7 @@ public class OperaServiceimpl implements OperaService {
 		//判断是否收藏
 		if( param.has("userId")) {
 			int userId = param.getInt("userId");
-			List<OpCollected> opcollected = getAllCollectedOpera(userId);
+			List<OpCollected> opcollected = getAllOpCollectedOpera(userId);
 			for( int j = 0; j < operas.size(); j++) {
 				for ( int i = 0; i < opcollected.size(); i++) {
 					if( operas.get(j).getOpId() == opcollected.get(i).getOperaId()) {
@@ -340,11 +363,7 @@ public class OperaServiceimpl implements OperaService {
 		return this.userOperaMapper.countByExample(opcolExample);
 	}
 	//根据id选择性更新opera，即有的值就更新
-	@Override
-	public int updateByPrimaryKeySelective(Opera record) {
-		// TODO Auto-generated method stub
-		return this.operaMapper.updateByPrimaryKeySelective(record);
-	}
+	
 	//根据id获得Opera
 	@Override
 	public Opera getOperaById(int id) {
@@ -429,8 +448,78 @@ public class OperaServiceimpl implements OperaService {
     //根据自定义条件选择性更新 封装好的opera 或者单独的各个参数
 	@Override
 	public JSONObject updateByExampleSelective(JSONObject param) {
+		JSONObject jsonobject = new JSONObject();
+		OperaExample operaExample = new OperaExample();
+		OperaExample.Criteria operacriteria = operaExample.createCriteria();
+		Opera opera = new Opera();
+		jsonobject.put("code",0);
+		jsonobject.put("msg","更新失败!");
 		
+		if( param.has("opId")) {
+			int opId = param.getInt("opId");
+			opera.setOpId(opId);
+			operacriteria.andOpIdEqualTo(opId);
+		}
+		if( param.has("type") && param.get("type") != "") {
+			String op_type = param.getString("type");
+			opera.setOpType(op_type);
+		}
+		if( param.has( "name") && param.get("name") != "") {
+			String op_name = param.getString( "name");
+			opera.setOpName(op_name);
+		}
+		if( param.has( "url") && param.get("url") != "") {
+			String op_url = param.getString( "url");
+			opera.setOpName(op_url);
+		}
+		if( param.has( "name") && param.get("name") != "") {
+			String op_name = param.getString( "name");
+			opera.setOpName(op_name);
+		}
+		if( param.has( "desc") && param.get("desc") != "") {
+			String op_desc = param.getString( "desc");
+			opera.setOpName(op_desc);
+		}
+		if( param.has( "photourl") && param.get("photourl") != "") {
+			String op_photourl = param.getString( "photourl");
+			opera.setOpName(op_photourl);
+		}
+		if( param.has( "updateto") && param.get("updateto") != "") {
+			String op_updateto = param.getString( "updateto");
+			opera.setOpName(op_updateto);
+		}
+		if( param.has( "iframeurl") && param.get("iframeurl") != "") {
+			String op_iframeurl = param.getString( "iframeurl");
+			opera.setOpName(op_iframeurl);
+		}
+		if( param.has( "time") && param.get("time") != "") {
+			Date op_time = (Date)param.get( "time");
+			opera.setOpTime(op_time);
+		}
+		if( param.has( "status") && param.get("status") != "") {
+			int op_status = param.getInt( "status");
+			opera.setOpStatus(op_status);
+		}
+		if( param.has( "collectnum") && param.get("collectnum") != "") {
+			int op_collectnum = param.getInt( "collectnum");
+			opera.setOpStatus(op_collectnum);
+		}
+		if( param.has( "sharenum") && param.get("sharenum") != "") {
+			int op_sharenum = param.getInt( "sharenum");
+			opera.setOpStatus(op_sharenum);
+		}
+		if( this.operaMapper.updateByExampleSelective(opera, operaExample) > 0) {
+			jsonobject.put("code", 1);
+			jsonobject.put("msg", "更新成功!");
+			System.out.println("更新成功");
+		}
 		
-		return null;
+		return jsonobject;
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Opera record) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
