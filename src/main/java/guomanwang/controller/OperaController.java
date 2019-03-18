@@ -73,14 +73,13 @@ public class OperaController {
 	@ResponseBody()
 	@RequestMapping("/selectoperabyname")
 	public JSONObject selectOperaByName(String param) {
-		/*JSONObject param = new JSONObject();
-        param.put("name", "小");*/
+		//JSONObject param = new JSONObject();
+        //param.put("name", "小");
 		JSONObject json = JSONObject.fromObject(param);
 		JSONObject jsonobject= new JSONObject();
+		
 		jsonobject = operaService.selectOperaByName(json/*param*/);
 		
-		System.out.println("/opera/selectoperabyname");
-		System.out.println(jsonobject.get("data").toString() + "HHHHH");
 		
 		return jsonobject;
 	}

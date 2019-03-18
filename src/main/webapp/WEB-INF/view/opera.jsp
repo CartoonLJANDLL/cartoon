@@ -8,6 +8,7 @@
 <title>番剧</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="keywords" content="纵横国漫网">
+<meta name="referrer" content="no-referrer"/>
 <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
 <link rel="stylesheet" href="<c:url value='/resources/layuicms/layui/css/layui.css'></c:url>">
 	</head>
@@ -15,9 +16,10 @@
 		.layui-bg-green,.layui-bg-red{margin:10px auto;width: 100%;height: 50px;text-align: center;padding-top:5px ;}
 		.layui-row img{width: 100%;}
 		.layuui-nav .layui-icon{color:#999;}
-		.layui-col-md2{position:relative;}
+		.layui-col-md2{position:relative;height:370px;}
 		.layui-row .layui-col-md2:hover{box-shadow:0px 8px 6px #888888;}
 		.layui-col-md2 .jishu{position:absolute;z-indent:2;left:5px;bottom:5px;color:white;}
+		.layui-col-md2 img{height:300px;}
 		.layui-row{margin-top: 20px;}
 		.layui-row .layui-btn{box-shadow:0px 3px 0px #888888;}
 		.layui-carousel img{width:100%;height:100%;}
@@ -47,13 +49,13 @@
 					<div class="layui-row layui-form" >
 						<div class="layui-col-lg3 sort">
 							<button class="layui-btn layui-btn-sm layui-btn-danger">排序</button>
-							<input type="radio" name="sort" value=" " title="默认" checked>
+							<input type="radio" name="sort" value="" title="默认" checked>
 							<input type="radio" name="sort" value="最新" title="最新">
 							<input type="radio" name="sort" value="最热" title="最热">
 						</div>
 						<div class="layui-col-lg4 type">
 							<button class="layui-btn layui-btn-sm layui-btn-danger">类型</button>
-							<input type="radio" name="type" value=" " title="默认" checked>
+							<input type="radio" name="type" value="" title="默认" checked>
 							<input type="radio" name="type" value="玄幻" title="玄幻">
 							<input type="radio" name="type" value="武侠" title="武侠">
 							<input type="radio" name="type" value="竞技" title="竞技">
@@ -61,7 +63,7 @@
 						</div>
 						<div class="layui-col-lg3 status">
 							<button class="layui-btn layui-btn-sm layui-btn-danger">状态</button>
-							<input type="radio" name="status" value="0" title="默认" checked>
+							<input type="radio" name="status" value="-1" title="默认" checked>
 							<input type="radio" name="status" value="1" title="已完结">
 							<input type="radio" name="status" value="0" title="未完结">
 						</div>
@@ -115,8 +117,10 @@
 		layui.each(res.data, function(index, item){
 			 $("#result").append(['<div class="layui-col-md2">'
 			 			,'<div style="position:relative;" class="list_item">'
-						,'<img src="http://r1.ykimg.com/0516000059CDB501859B5D03080DE349" height="50%">'
+						,'<img src="'+item.opPhotourl+'" height="50%">'
 						,'<div class="jishu">'+item.opUpdateto+'</div>'
+						,'<input type="hidden" class="opvideourl" value="'+item.opIframeurl+'">'
+						,'<input type="hidden" class="opurl" value="'+item.opUrl+'">'
 				  		,'</div>'
 						,'<ul>'
 				  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
@@ -146,15 +150,18 @@
 			    if(!first){
 			    	$("#result").empty();
 			    	param=JSON.stringify({'page':obj.curr});
+			    	console.log(param);
 			  	  	$.post('/guomanwang/opera/alloperas',{
 			  	  		param :param
-			  	  	}, function(res){
+			  	  	}, function(result){
 			  		//从后端获得的列表返回在data集合中
-			  		layui.each(res.data, function(index, item){
+			  		layui.each(result.data, function(index, item){
 						 $("#result").append(['<div class="layui-col-md2">'
 					 			,'<div style="position:relative;" class="list_item">'
-								,'<img src="http://r1.ykimg.com/0516000059CDB501859B5D03080DE349" height="50%">'
+								,'<img src="'+item.opPhotourl+'" height="50%">'
 								,'<div class="jishu">'+item.opUpdateto+'</div>'
+								,'<input type="hidden" class="opvideourl" value="'+item.opIframeurl+'">'
+								,'<input type="hidden" class="opurl" value="'+item.opUrl+'">'
 						  		,'</div>'
 								,'<ul>'
 						  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
@@ -186,90 +193,133 @@
 		  	type=$("input[name='type']:checked").val(),
 		  	status=$("input[name='status']:checked").val();
 		  	$("#result").empty();
-		  	param=JSON.stringify({'page':1,'sort':sort,'type':type,'status':status});
+		  
+		  	var paramstring={'page':1};
+		  	if(sort!=null){$.extend(paramstring, {'sort':sort});}
+		  	if(type!=null){$.extend(paramstring, {'type':type});}
+		  	if(status!=null){$.extend(paramstring, {'status':status});}
+		  	param=JSON.stringify(paramstring);
 		  	$.post('/guomanwang/opera/alloperas',{
 	  	  		param :param
 	  	  	},function(res){
-					//从后端获得的列表返回在data集合中
-					layui.each(res.data, function(index, item){
-						 $("#result").append(['<div class="layui-col-md2">'
-					 			,'<div style="position:relative;" class="list_item">'
-								,'<img src="http://r1.ykimg.com/0516000059CDB501859B5D03080DE349" height="50%">'
-								,'<div class="jishu">'+item.opUpdateto+'</div>'
+			//从后端获得的列表返回在data集合中
+			layui.each(res.data, function(index, item){
+				 $("#result").append(['<div class="layui-col-md2">'
+			 			,'<div style="position:relative;" class="list_item">'
+						,'<img src="'+item.opPhotourl+'" height="50%">'
+						,'<div class="jishu">'+item.opUpdateto+'</div>'
+						,'<input type="hidden" class="opvideourl" value="'+item.opIframeurl+'">'
+						,'<input type="hidden" class="opurl" value="'+item.opUrl+'">'
+				  		,'</div>'
+						,'<ul>'
+				  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
+				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+				  			,'<li class="thred">'
+								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+				  			,'</li>'	
+				  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
+				  		,'</ul>'
+				  	,'<div class="share" >'
+					  ,'<table >'
+					  	,'<tr><td class="qq"><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
+					  	,'<tr><td class="weibo"><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
+					  ,'</table>'
+					  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
+			  		,'</div>'
+			  ,'</div>'].join(''));
+			})
+			//分页器相关设置
+			laypage.render({
+				  elem: 'pager'
+				  ,count: res.page
+				  ,limit:1
+				  ,jump: function(obj, first){
+				    
+				    //首次不执行
+				    if(!first){
+				    	$("#result").empty();
+					  	var paramstring={'page':obj.curr};
+					  	if(sort!=null||sort!=""){$.extend(paramstring, {'sort':sort});}
+					  	if(type!=null||type!=""){$.extend(paramstring, {'type':type});}
+					  	if(status!=null||status!=""){$.extend(paramstring, {'status':status});}
+					  	param=JSON.stringify(paramstring);
+					  	$.post('/guomanwang/opera/alloperas',{
+				  	  		param :param
+				  	  	},function(res){
+				  		//从后端获得的列表返回在data集合中
+				  		layui.each(res.data, function(index, item){
+							 $("#result").append(['<div class="layui-col-md2">'
+						 			,'<div style="position:relative;" class="list_item">'
+									,'<img src="'+item.opPhotourl+'" height="50%">'
+									,'<div class="jishu">'+item.opUpdateto+'</div>'
+									,'<input type="hidden" class="opvideourl" value="'+item.opIframeurl+'">'
+									,'<input type="hidden" class="opurl" value="'+item.opUrl+'">'
+							  		,'</div>'
+									,'<ul>'
+							  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
+							  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+							  			,'<li class="thred">'
+											,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+							  			,'</li>'	
+							  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
+							  		,'</ul>'
+							  	,'<div class="share" >'
+								  ,'<table >'
+								  	,'<tr><td class="qq"><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
+								  	,'<tr><td class="weibo"><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
+								  ,'</table>'
+								  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
 						  		,'</div>'
-								,'<ul>'
-						  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
-						  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
-						  			,'<li class="thred">'
-										,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
-						  			,'</li>'	
-						  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
-						  		,'</ul>'
-						  	,'<div class="share" >'
-							  ,'<table >'
-							  	,'<tr><td class="qq"><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
-							  	,'<tr><td class="weibo"><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
-							  ,'</table>'
-							  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
-					  		,'</div>'
-					  ,'</div>'].join(''));
-					})
-					//分页器相关设置
-					laypage.render({
-						  elem: 'pager'
-						  ,count: res.page
-						  ,limit:1
-						  ,jump: function(obj, first){
-						    
-						    //首次不执行
-						    if(!first){
-						    	$("#result").empty();
-						  	  	$.post('/guomanwang/common/samecompanynews?companyid='+type+'&page='+obj.curr, function(res){
-						  		//从后端获得的列表返回在data集合中
-						  		layui.each(res.data, function(index, item){
-						  			 $("#result").append(['<div class="layui-col-md2">'
-						  			 			,'<div style="position:relative;" class="list_item">'
-						  						,'<img src="../resources/img/qsmy.jpg">'
-						  						,'<div class="jishu">更新至多少集</div>'
-						  				  		,'</div>'
-						  						,'<ul>'
-						  				  			,'<li class="first"><h3>秦时明月之君临天下</h3></li>'
-						  				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
-						  				  			,'<li class="thred">'
-						  								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
-						  				  			,'</li>'	
-						  				  			,'<li class="layui-word-aux">一句话介绍占位</li>'
-						  				  		,'</ul>'
-						  				  	,'<div class="share" >'
-						  					  ,'<table >'
-						  					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
-						  					  	,'<tr><td><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
-						  					  ,'</table>'
-						  					  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
-						  			  		,'</div>'
-						  			  ,'</div>'].join(''));
-						  		});
-						  	  })
-						  	}
-						  }
-					});
+						  ,'</div>'].join(''));
+				  		});
+				  	  })
+				  	}
+				  }
+			});
 
-				  });
+		  });
 	});
 	 //番剧搜索
     form.on('submit(search)', function(data){
 		//弹出loading
+		var key=$("#searchinput").val();
+		param=JSON.stringify({'page':1,'name':key});
 		var index = top.layer.msg('正在搜索，请稍候',{icon: 16,time:false,shade:0.8});
-	    		$.post('/opera/search',{
-	    			key:$("#searchinput").val()
+	    		$.post('/guomanwang/opera/selectoperabyname',{
+	    			param :param
 	    		},function(res){
 	            	top.layer.msg(res.msg);
 	            	setTimeout(function(){
 	    	            top.layer.close(index);
 	    	            //刷新当前页面
 	    	            if(res.code==1){
-	    	            	$("#reult").fadeOut();
-	    	            	$(".searchresult").fadeIn();
+	    	            	$("#result").empty();
+	    	            	$("#pager").fadeOut();
+					  		layui.each(res.data, function(index, item){
+								 $("#result").append(['<div class="layui-col-md2">'
+							 			,'<div style="position:relative;" class="list_item">'
+										,'<img src="'+item.opPhotourl+'" height="50%">'
+										,'<div class="jishu">'+item.opUpdateto+'</div>'
+										,'<input type="hidden" class="opvideourl" value="'+item.opIframeurl+'">'
+										,'<input type="hidden" class="opurl" value="'+item.opUrl+'">'
+								  		,'</div>'
+										,'<ul>'
+								  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
+								  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+								  			,'<li class="thred">'
+												,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+								  			,'</li>'	
+								  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
+								  		,'</ul>'
+								  	,'<div class="share" >'
+									  ,'<table >'
+									  	,'<tr><td class="qq"><i class="layui-icon" style="padding-right:3px;">&#xe676;</i>QQ</td></tr>'
+									  	,'<tr><td class="weibo"><i class="layui-icon" style="padding-right:3px;">&#xe675;</i>微博</td></tr>'
+									  ,'</table>'
+									  ,'<div align="center" class="hideshare"><i class="layui-icon">&#xe61a;</i></div>'
+							  		,'</div>'
+							  ,'</div>'].join(''));
+					  		});
 	    	            }
 	    	            
 	    	        },1000);
@@ -278,7 +328,12 @@
 	        return false;
 	    });
 	  $(".layui-row").on('click','.list_item',function(){
-		  var test=$(this).find(".jishu").text();
+		  var opvideourl=$(this).find(".opvideourl").val().replace("==.html",""),
+		  	  opurl=$(this).find(".opurl").val();
+		  if(opvideourl==null||opvideourl==""){
+			  opvideourl=opurl;
+		  }
+		  var string=opvideourl.replace("id_","");
 		    layer.open({
 		        type: 2
 		        ,title: '视频播放界面'
@@ -286,7 +341,7 @@
 		        ,shade: 0.8
 		        ,maxmin:true
 		        ,shadeClose: true
-		        ,content: ['http://player.youku.com/embed/XODU2MTEyNjI4','no']
+		        ,content: [string,'no']
 		      });
 	  });
       //收藏

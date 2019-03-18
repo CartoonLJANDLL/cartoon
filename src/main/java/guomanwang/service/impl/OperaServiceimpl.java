@@ -159,7 +159,8 @@ public class OperaServiceimpl implements OperaService {
 	//通过番剧名模糊查询
 	@Override
 	public JSONObject selectOperaByName(JSONObject param) {
-		
+		OperaExample operaExample = new OperaExample();
+		OperaExample.Criteria operacriteria = operaExample.createCriteria();
         Integer op_page = new Integer(1);
 		if( param.has("page")) {
 			op_page = param.getInt("page");
@@ -167,7 +168,8 @@ public class OperaServiceimpl implements OperaService {
 		if( param.has("name")) {
 			String name = param.getString("name");
 			name = "%" + name + "%";
-			criteria.andOpNameLike(name);
+			System.out.println("NAME" + name);
+			operacriteria.andOpNameLike(name);
 		}
 		JSONObject jsonobject= new JSONObject();
 		jsonobject.put("code",0);
