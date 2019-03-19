@@ -55,15 +55,16 @@
 						</div>
 						<div class="layui-col-lg4 type">
 							<button class="layui-btn layui-btn-sm layui-btn-danger">类型</button>
-							<input type="radio" name="type" value="" title="默认" checked>
+							<input type="radio" name="type" value="" title="全部" checked>
 							<input type="radio" name="type" value="玄幻" title="玄幻">
 							<input type="radio" name="type" value="武侠" title="武侠">
 							<input type="radio" name="type" value="竞技" title="竞技">
 							<input type="radio" name="type" value="冒险" title="冒险">
+							<input type="radio" name="type" value="搞笑" title="搞笑">
 						</div>
 						<div class="layui-col-lg3 status">
 							<button class="layui-btn layui-btn-sm layui-btn-danger">状态</button>
-							<input type="radio" name="status" value="-1" title="默认" checked>
+							<input type="radio" name="status" value="-1" title="全部" checked>
 							<input type="radio" name="status" value="1" title="已完结">
 							<input type="radio" name="status" value="0" title="未完结">
 						</div>
@@ -108,23 +109,28 @@
 		,arrow: 'always' //始终显示箭头
 		//,anim: 'fade' //切换动画方式
 	  });
-	  var param=JSON.stringify({'page':1});
+	  var userid="${user.getUserid()}";
+	  if(userid==""||userid==null){userid=0;}
+	  var param=JSON.stringify({'page':1,'userId':userid});
 	  //初始化即获得默认番剧数据
 	  $.post('/guomanwang/opera/alloperas',{
 		  	 param :param
             }, function(res){
 		//从后端获得的列表返回在data集合中
 		layui.each(res.data, function(index, item){
+			var html='<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size: 30px;"></i>|</li>';
+			if(item.collecte==1){html='<li class="second"><i class="layui-icon layui-icon-rate-solid shoucang" style="font-size: 30px;color: #FF5722;"></i>|</li>';}
 			 $("#result").append(['<div class="layui-col-md2">'
 			 			,'<div style="position:relative;" class="list_item">'
 						,'<img src="'+item.opPhotourl+'" height="50%">'
 						,'<div class="jishu">'+item.opUpdateto+'</div>'
 						,'<input type="hidden" class="opvideourl" value="'+item.opIframeurl+'">'
 						,'<input type="hidden" class="opurl" value="'+item.opUrl+'">'
+						,'<input type="hidden" class="operaid" value="'+item.opId+'">'
 				  		,'</div>'
 						,'<ul>'
 				  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
-				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+				  			,html
 				  			,'<li class="thred">'
 								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
 				  			,'</li>'	
@@ -149,7 +155,7 @@
 			    //首次不执行
 			    if(!first){
 			    	$("#result").empty();
-			    	param=JSON.stringify({'page':obj.curr});
+			    	param=JSON.stringify({'page':obj.curr,'userId':userid});
 			    	console.log(param);
 			  	  	$.post('/guomanwang/opera/alloperas',{
 			  	  		param :param
@@ -162,10 +168,11 @@
 								,'<div class="jishu">'+item.opUpdateto+'</div>'
 								,'<input type="hidden" class="opvideourl" value="'+item.opIframeurl+'">'
 								,'<input type="hidden" class="opurl" value="'+item.opUrl+'">'
+								,'<input type="hidden" class="operaid" value="'+item.opId+'">'
 						  		,'</div>'
 								,'<ul>'
 						  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
-						  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+						  			,'<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size: 30px;"></i>|</li>'
 						  			,'<li class="thred">'
 										,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
 						  			,'</li>'	
@@ -194,7 +201,7 @@
 		  	status=$("input[name='status']:checked").val();
 		  	$("#result").empty();
 		  
-		  	var paramstring={'page':1};
+		  	var paramstring={'page':1,'userId':userid};
 		  	if(sort!=null){$.extend(paramstring, {'sort':sort});}
 		  	if(type!=null){$.extend(paramstring, {'type':type});}
 		  	if(status!=null){$.extend(paramstring, {'status':status});}
@@ -210,10 +217,11 @@
 						,'<div class="jishu">'+item.opUpdateto+'</div>'
 						,'<input type="hidden" class="opvideourl" value="'+item.opIframeurl+'">'
 						,'<input type="hidden" class="opurl" value="'+item.opUrl+'">'
+						,'<input type="hidden" class="operaid" value="'+item.opId+'">'
 				  		,'</div>'
 						,'<ul>'
 				  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
-				  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+				  			,'<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size: 30px;"></i>|</li>'
 				  			,'<li class="thred">'
 								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
 				  			,'</li>'	
@@ -238,7 +246,7 @@
 				    //首次不执行
 				    if(!first){
 				    	$("#result").empty();
-					  	var paramstring={'page':obj.curr};
+					  	var paramstring={'page':obj.curr,'userId':userid};
 					  	if(sort!=null||sort!=""){$.extend(paramstring, {'sort':sort});}
 					  	if(type!=null||type!=""){$.extend(paramstring, {'type':type});}
 					  	if(status!=null||status!=""){$.extend(paramstring, {'status':status});}
@@ -254,10 +262,11 @@
 									,'<div class="jishu">'+item.opUpdateto+'</div>'
 									,'<input type="hidden" class="opvideourl" value="'+item.opIframeurl+'">'
 									,'<input type="hidden" class="opurl" value="'+item.opUrl+'">'
+									,'<input type="hidden" class="operaid" value="'+item.opId+'">'
 							  		,'</div>'
 									,'<ul>'
 							  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
-							  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+							  			,'<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size: 30px;"></i>|</li>'
 							  			,'<li class="thred">'
 											,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
 							  			,'</li>'	
@@ -283,7 +292,7 @@
     form.on('submit(search)', function(data){
 		//弹出loading
 		var key=$("#searchinput").val();
-		param=JSON.stringify({'page':1,'name':key});
+		param=JSON.stringify({'page':1,'name':key,'userId':userid});
 		var index = top.layer.msg('正在搜索，请稍候',{icon: 16,time:false,shade:0.8});
 	    		$.post('/guomanwang/opera/selectoperabyname',{
 	    			param :param
@@ -302,10 +311,11 @@
 										,'<div class="jishu">'+item.opUpdateto+'</div>'
 										,'<input type="hidden" class="opvideourl" value="'+item.opIframeurl+'">'
 										,'<input type="hidden" class="opurl" value="'+item.opUrl+'">'
+										,'<input type="hidden" class="operaid" value="'+item.opId+'">'
 								  		,'</div>'
 										,'<ul>'
 								  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
-								  			,'<li class="second"><i class="layui-icon shoucang" style="font-size: 30px;">&#xe67a;</i>|</li>'
+								  			,'<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size: 30px;"></i>|</li>'
 								  			,'<li class="thred">'
 												,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
 								  			,'</li>'	
@@ -346,17 +356,26 @@
 	  });
       //收藏
        $(".layui-row").on('click','.shoucang',function(){
-		layer.msg("您点击了收藏按钮");
-		$.get('/commit/dianzan',{
-        	 commitid :commitid,
-        	 userid:userid
-         },function(data){
-        layer.msg(data.msg);
-        if(data.code==1){
-          location.reload();
-            };
-         })
-             
+		var operaId=$(this).parents(".layui-col-md2").find(".operaid").val();
+		if(userid==null||userid==""){
+			layer.msg("请先登录再来进行操作！");
+		}
+		else{
+			param=JSON.stringify({'userId':userid,'operaId':operaId});
+			$.post('/guomanwang/opera/collectopera',{
+				param :param
+			},function(data){
+	        layer.msg(data.msg);
+            setTimeout(function(){
+                layer.close();
+                if(data.code==1){
+             	   location.reload();
+                }
+            },1500);
+	         })
+
+		}
+            
       });
       //点击分享
       $(".layui-row").on('click','.thred',function(){
