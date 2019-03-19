@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.pagehelper.PageHelper;
 import com.google.gson.Gson;
 
 import guomanwang.domain.Block;
 import guomanwang.domain.Defaulthead;
 import guomanwang.domain.Information;
+import guomanwang.domain.Opera;
 import guomanwang.domain.Page;
 import guomanwang.domain.Thread;
 import guomanwang.domain.User;
@@ -31,6 +33,7 @@ import guomanwang.domain.UserGrade;
 import guomanwang.service.BlockService;
 import guomanwang.service.DefaultheadService;
 import guomanwang.service.InformationService;
+import guomanwang.service.OperaService;
 import guomanwang.service.ThreadService;
 import guomanwang.service.UserGradeService;
 import guomanwang.service.UserService;
@@ -49,6 +52,9 @@ public class AdminController {
 	@Autowired
 	@Qualifier("UserServiceimpl")
 	private UserService userService;
+	@Autowired
+	@Qualifier("OperaServiceimpl")
+	private OperaService operaService;
 	@Autowired
 	@Qualifier("InformationServiceimpl")
 	private InformationService informationService;
@@ -76,6 +82,12 @@ public class AdminController {
 		System.out.println("经过newslist");
 		return "newsList";
 	}
+	//打印番剧列表
+	@RequestMapping("/operaList")
+	public String operalist(Model model) {
+		System.out.println("经过operalist");
+		return "operaList";
+	}
 	//打印用户列表
 	@RequestMapping("/userList")
 	public String userList(Model model) {
@@ -94,7 +106,13 @@ public class AdminController {
 		System.out.println("经过addnews");
 		return "addnews";
 	}
-	//添加资讯
+	//添加番剧
+	@RequestMapping("/addopera")
+	public String addopera(Model model) {
+		System.out.println("经过addopera");
+		return "addopera";
+	}
+	//板块列表
 	@RequestMapping("/blockList")
 	public String blockset(Model model) {
 		System.out.println("经过addnews");
@@ -208,6 +226,18 @@ public class AdminController {
 		jsonobject.put("data", jsonArray);
 		System.out.println(jsonobject);
 		return jsonobject;
+	}	
+	//获得所有资讯信息
+	@ResponseBody
+	@RequestMapping("/getoperalist")
+	public JSONObject getoperalist(int page,@RequestParam("limit") int limit) {
+		JSONObject param=new JSONObject();
+		param.put("page",page);
+		param.put("limit",limit);
+		JSONObject operas = operaService.selectAllOpera(param);
+		operas.put("code", 0);
+		operas.put("msg", "");
+		return operas;
 	}
 	//获得最新的10条帖子
 		@ResponseBody

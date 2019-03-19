@@ -9,7 +9,7 @@
 		{
 			"title": "番剧列表",
 			"icon": "icon-text",
-			"href": "../admin/fanjuList",
+			"href": "../admin/operaList",
 			"spread": false
 		},
 		{
