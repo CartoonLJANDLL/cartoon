@@ -22,6 +22,7 @@ import guomanwang.domain.OpCollectedExample;
 import guomanwang.mapper.OperaMapper;
 import guomanwang.mapper.OpCollectedMapper;
 import guomanwang.service.OperaService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Service("OperaServiceimpl")
@@ -37,6 +38,12 @@ public class OperaServiceimpl implements OperaService {
 	@Qualifier("OpCollectedMapper")
 	private OpCollectedMapper userOperaMapper;
 	int pageSize = 18;
+	//页面大小limit
+	public int getPageSize( JSONObject param) {
+		if( param.has( "limit"))
+			pageSize = param.getInt( "limit");
+		return pageSize;
+	}
 	//通过userid和Operaid找到userOpera
 	public OpCollected getOpCollected(int userId, int operaId) {
 		OpCollectedExample opcolExample = new OpCollectedExample();
@@ -59,10 +66,10 @@ public class OperaServiceimpl implements OperaService {
 		
 	}
 	//通过Opera的id找到Opera
-	public JSONObject getAllCollectedOpera(int userId, int op_page){
+	public JSONObject getAllCollectedOpera(int userId, int op_page, int pageSize){
 		
 		List<Opera> operas = new ArrayList<Opera>();
-		PageHelper.startPage(op_page,pageSize);//每页20条记录
+		PageHelper.startPage(op_page,pageSize);
 		operas = this.operaMapper.selectCollectOpera(userId);
 		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
 		JSONObject jsonobject = new JSONObject();
@@ -81,6 +88,7 @@ public class OperaServiceimpl implements OperaService {
 		}	
 		return jsonobject;
 	}
+	
 	//查询所有Opera//根据传进来的JSON数据param所包含的信息 page页码 type番剧类型  status完结状态， sort排序类型
 	@Override
 	public JSONObject selectAllOpera(JSONObject param) {
@@ -126,7 +134,7 @@ public class OperaServiceimpl implements OperaService {
 		}
 		operaExample.setDistinct(true);//设置去重
 
-		PageHelper.startPage(op_page,pageSize);//每页18条记录
+		PageHelper.startPage(op_page,getPageSize(param));//每页18条记录
 		List<Opera> operas = operaMapper.selectByExample(operaExample);
 		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
 		
@@ -175,7 +183,7 @@ public class OperaServiceimpl implements OperaService {
 		jsonobject.put("code",0);
 		jsonobject.put("msg","无符合条件的结果");
 		
-		PageHelper.startPage(op_page,pageSize);
+		PageHelper.startPage(op_page,getPageSize(param));
 		List<Opera> operas = this.operaMapper.selectByExample(operaExample);
 		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
 		long total = pageInfo.getTotal(); //获得总条数
@@ -291,6 +299,18 @@ public class OperaServiceimpl implements OperaService {
 		int rs = userOperaMapper.insertSelective(opcollecte);
 		return rs;
 	}
+	//解析传过来的字符串为int数组
+	public List<Integer> getStringToInt( String a) {
+		List<Integer> b = new ArrayList<Integer>();
+		String[] op = a.split( "\\D");
+	    for( int i = 0; i < op.length; i++) {
+	    	if( !"".equals( op[i])) {
+	    		b.add( Integer.parseInt( op[i].trim()));
+	    	}
+	    }
+	    
+		return b;
+	}
     //根据传入的选择性传入的参数删除 name operaId 返回参数code 为0 操作异常回滚  为1Opera表删除成功  为2 opera和op_collected表删除成功
 	//msg为String  解释
 	@Override
@@ -302,26 +322,40 @@ public class OperaServiceimpl implements OperaService {
 		
 		int code = 0;
 		String msg = "操作失败，未改变数据库";
+		
 		//传入参数是operId
 		if( param.has("operaId")) {
-			int rs = this.operaMapper.deleteByPrimaryKey( param.getInt("operaId"));
-			if( rs > 0 ) {
-				msg = "删除opera表中数据成功！";
-				code = 1;
-				jsonobject.put("operaResultSet", rs);
-				opcolCriteria.andOperaIdEqualTo( param.getInt("operaId"));
-				List<OpCollected> opcol = this.userOperaMapper.selectByExample(opcolExample);
-				int opcolrs = this.userOperaMapper.deleteByExample( opcolExample); //op_collected表中删除掉的数据条数 
-				if( opcolrs > 0) {
-					code = 2;
-					jsonobject.put("opcollectedRS", opcolrs);
-					msg = msg + "删除op_collected表中数据成功！";
+			String operaId = param.getString("operaId");
+			List<Integer> opIds = getStringToInt( operaId);
+			for( int i = 0; i < opIds.size(); i++) {
+				int opId = opIds.get(i);
+				Opera opera = this.operaMapper.selectByPrimaryKey( opId);
+				int rs = this.operaMapper.deleteByPrimaryKey( opId);
+				if( rs > 0 && opera != null) {
+					msg = "删除opera表中数据成功！";
+					code = 1;
+					jsonobject.put("operaResultSet", rs);
+					opcolCriteria.andOperaIdEqualTo( opId);
+					List<OpCollected> opcol = this.userOperaMapper.selectByExample(opcolExample);
+					int opcolrs = this.userOperaMapper.deleteByExample( opcolExample); //op_collected表中删除掉的数据条数 
+					if( opcolrs > 0) {
+						code = 2;
+						jsonobject.put("opcollectedRS", opcolrs);
+						msg = msg + "删除op_collected表中数据成功！";
+					}else {
+						if( opcol.size() > 0)
+							msg = msg + "删除op_collected表中数据失败!回滚操作，未改变数据库！";
+					}
 				}else {
-					if( opcol.size() > 0)
-						msg = msg + "删除op_collected表中数据失败!回滚操作，未改变数据库！";
+					if( opera == null) {
+						msg =msg + "数据库中无此条记录" + i;
+					}else {
+						msg = "删除opera表中数据失败！回滚操作，未改变数据库！";
+						jsonobject.put("code", code);
+						jsonobject.put("msg", msg);
+						return jsonobject;
+					}
 				}
-			}else {
-				msg = "删除opera表中数据失败！回滚操作，未改变数据库！";
 			}
 		}
 		//传入参数是name
@@ -329,26 +363,35 @@ public class OperaServiceimpl implements OperaService {
 			OperaExample operaExample = new OperaExample();
 			OperaExample.Criteria operaCriteria = operaExample.createCriteria();
 			operaCriteria.andOpNameEqualTo( param.getString("name"));
-			Opera opera = this.operaMapper.selectByExample(operaExample).get(0);
-			int rs = this.operaMapper.deleteByExample(operaExample);
-			if( rs > 0 ) {
-				jsonobject.put("operaResultSet", rs);
-				msg = "删除opera表中数据成功！";
+			if( this.operaMapper.selectByExample(operaExample).isEmpty()) {
+				msg =msg + "数据库中无此条记录" + param.getString("name");
 				code = 1;
-				opcolCriteria.andOperaIdEqualTo( opera.getOpId());
-				List<OpCollected> opcol = this.userOperaMapper.selectByExample(opcolExample);
-				int opcolrs = this.userOperaMapper.deleteByExample( opcolExample); //op_collected表中删除掉的数据条数 
-				if( opcolrs > 0) {
-					code = 2;
-					jsonobject.put("opcollectedRS", opcolrs);
-					msg = msg + "删除op_collected表中数据成功！";
-				}else {
-					if( opcol.size() > 0)
-						msg = msg + "删除op_collected表中数据失败!回滚操作，未改变数据库！";
-				}
 			}else {
-				msg = "删除opera表中数据失败！回滚操作，未改变数据库！";
+				Opera opera = this.operaMapper.selectByExample(operaExample).get(0);
+				int rs = this.operaMapper.deleteByExample(operaExample);
+				if( rs > 0 ) {
+					jsonobject.put("operaResultSet", rs);
+					msg = "删除opera表中数据成功！";
+					code = 1;
+					opcolCriteria.andOperaIdEqualTo( opera.getOpId());
+					List<OpCollected> opcol = this.userOperaMapper.selectByExample(opcolExample);
+					int opcolrs = this.userOperaMapper.deleteByExample( opcolExample); //op_collected表中删除掉的数据条数 
+					if( opcolrs > 0) {
+						code = 2;
+						jsonobject.put("opcollectedRS", opcolrs);
+						msg = msg + "删除op_collected表中数据成功！";
+					}else {
+						if( opcol.size() > 0)
+							msg = msg + "删除op_collected表中数据失败!回滚操作，未改变数据库！";
+					}
+				}else {
+					msg = "删除opera表中数据失败！回滚操作，未改变数据库！";
+					jsonobject.put("code", code);
+					jsonobject.put("msg", msg);
+					return jsonobject;
+				}
 			}
+			
 		}
 		jsonobject.put("code", code);
 		jsonobject.put("msg", msg);
@@ -461,60 +504,63 @@ public class OperaServiceimpl implements OperaService {
 			int opId = param.getInt("opId");
 			opera.setOpId(opId);
 			operacriteria.andOpIdEqualTo(opId);
+			if( param.has("type") && param.get("type") != "") {
+				String op_type = param.getString("type");
+				opera.setOpType(op_type);
+			}
+			if( param.has( "name") && param.get("name") != "") {
+				String op_name = param.getString( "name");
+				opera.setOpName(op_name);
+			}
+			if( param.has( "url") && param.get("url") != "") {
+				String op_url = param.getString( "url");
+				opera.setOpName(op_url);
+			}
+			if( param.has( "name") && param.get("name") != "") {
+				String op_name = param.getString( "name");
+				opera.setOpName(op_name);
+			}
+			if( param.has( "desc") && param.get("desc") != "") {
+				String op_desc = param.getString( "desc");
+				opera.setOpName(op_desc);
+			}
+			if( param.has( "photourl") && param.get("photourl") != "") {
+				String op_photourl = param.getString( "photourl");
+				opera.setOpName(op_photourl);
+			}
+			if( param.has( "updateto") && param.get("updateto") != "") {
+				String op_updateto = param.getString( "updateto");
+				opera.setOpName(op_updateto);
+			}
+			if( param.has( "iframeurl") && param.get("iframeurl") != "") {
+				String op_iframeurl = param.getString( "iframeurl");
+				opera.setOpName(op_iframeurl);
+			}
+			if( param.has( "time") && param.get("time") != "") {
+				Date op_time = (Date)param.get( "time");
+				opera.setOpTime(op_time);
+			}
+			if( param.has( "status") && param.get("status") != "") {
+				int op_status = param.getInt( "status");
+				opera.setOpStatus(op_status);
+			}
+			if( param.has( "collectnum") && param.get("collectnum") != "") {
+				int op_collectnum = param.getInt( "collectnum");
+				opera.setOpStatus(op_collectnum);
+			}
+			if( param.has( "sharenum") && param.get("sharenum") != "") {
+				int op_sharenum = param.getInt( "sharenum");
+				opera.setOpStatus(op_sharenum);
+			}
+			if( this.operaMapper.updateByExampleSelective(opera, operaExample) > 0) {
+				jsonobject.put("code", 1);
+				jsonobject.put("msg", "更新成功!");
+				System.out.println("更新成功");
+			}
+		}else {
+			System.out.println("未传id值过来，操作异常!");
 		}
-		if( param.has("type") && param.get("type") != "") {
-			String op_type = param.getString("type");
-			opera.setOpType(op_type);
-		}
-		if( param.has( "name") && param.get("name") != "") {
-			String op_name = param.getString( "name");
-			opera.setOpName(op_name);
-		}
-		if( param.has( "url") && param.get("url") != "") {
-			String op_url = param.getString( "url");
-			opera.setOpName(op_url);
-		}
-		if( param.has( "name") && param.get("name") != "") {
-			String op_name = param.getString( "name");
-			opera.setOpName(op_name);
-		}
-		if( param.has( "desc") && param.get("desc") != "") {
-			String op_desc = param.getString( "desc");
-			opera.setOpName(op_desc);
-		}
-		if( param.has( "photourl") && param.get("photourl") != "") {
-			String op_photourl = param.getString( "photourl");
-			opera.setOpName(op_photourl);
-		}
-		if( param.has( "updateto") && param.get("updateto") != "") {
-			String op_updateto = param.getString( "updateto");
-			opera.setOpName(op_updateto);
-		}
-		if( param.has( "iframeurl") && param.get("iframeurl") != "") {
-			String op_iframeurl = param.getString( "iframeurl");
-			opera.setOpName(op_iframeurl);
-		}
-		if( param.has( "time") && param.get("time") != "") {
-			Date op_time = (Date)param.get( "time");
-			opera.setOpTime(op_time);
-		}
-		if( param.has( "status") && param.get("status") != "") {
-			int op_status = param.getInt( "status");
-			opera.setOpStatus(op_status);
-		}
-		if( param.has( "collectnum") && param.get("collectnum") != "") {
-			int op_collectnum = param.getInt( "collectnum");
-			opera.setOpStatus(op_collectnum);
-		}
-		if( param.has( "sharenum") && param.get("sharenum") != "") {
-			int op_sharenum = param.getInt( "sharenum");
-			opera.setOpStatus(op_sharenum);
-		}
-		if( this.operaMapper.updateByExampleSelective(opera, operaExample) > 0) {
-			jsonobject.put("code", 1);
-			jsonobject.put("msg", "更新成功!");
-			System.out.println("更新成功");
-		}
+		
 		
 		return jsonobject;
 	}

@@ -23,7 +23,13 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">链接地址</label>
 					<div class="layui-input-block">
-						<textarea placeholder="请输入来源超链接" lay-verify="abstracts" class="layui-textarea abstracts"></textarea>
+						<input type="text" class="layui-input opurl" lay-verify="opurl" placeholder="请输入番剧来源超链接">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">视频分享通用代码</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input opiframeurl" lay-verify="opiframeurl" placeholder="请输入番剧视频分享通用代码">
 					</div>
 				</div>
 			</div>
@@ -34,52 +40,30 @@
 			</div>
 		</div>
 		<div class="layui-form-item magb0">
-			<label class="layui-form-label">番剧简介</label>
+			<label class="layui-form-label">一句话简介</label>
 			<div class="layui-input-block">
-				<textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="news_content"></textarea>
+				<input type="text" class="layui-input opdesc" name="opdesc" lay-verify="opdesc">
 			</div>
 		</div>
+		<div class="layui-center" style="margin-top:15px;">
+		<a class="layui-btn layui-btn-fluid" lay-filter="addopera" lay-submit><i class="layui-icon">&#xe609;</i>确认添加</a>
+		<!-- <a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="look" lay-submit>预览</a> -->
+		</div>
+		<input type="hidden" class="layui-input opid" name="opid" lay-verify="opdesc" value="">
 	</div>
 	<div class="layui-col-md3 layui-col-xs12">
 		<blockquote class="layui-elem-quote title"><i class="seraph icon-caidan"></i> 番剧类型</blockquote>
 		<div class="border category">
 			<div class="">
-				<p><input type="checkbox" name="advance" title="冒险" lay-skin="primary" /></p>
-				<p><input type="checkbox" name="xuanhuan" title="玄幻" lay-skin="primary" /></p>
-				<p><input type="checkbox" name="youth" title="青春" lay-skin="primary" /></p>
-				<p><input type="checkbox" name="wuxia" title="武侠" lay-skin="primary" /></p>
-				<p><input type="checkbox" name="humous" title="搞笑" lay-skin="primary" /></p>
+				<p><input type="checkbox" name="type" value="冒险" title="冒险" lay-skin="primary" /></p>
+				<p><input type="checkbox" name="type" value="玄幻" title="玄幻" lay-skin="primary" /></p>
+				<p><input type="checkbox" name="type" value="青春" title="青春" lay-skin="primary" /></p>
+				<p><input type="checkbox" name="type" value="武侠" title="武侠" lay-skin="primary" /></p>
+				<p><input type="checkbox" name="type" value="搞笑" title="搞笑" lay-skin="primary" /></p>
+				<p><input type="checkbox" name="type" value="校园" title="校园" lay-skin="primary" /></p>
+				<p><input type="checkbox" name="type" value="热血" title="热血" lay-skin="primary" /></p>
 			</div>
-		</div>
-		<blockquote class="layui-elem-quote title magt10"><i class="layui-icon">&#xe609;</i>添加</blockquote>
-		<div class="border">
-			<div class="layui-form-item">
-				<label class="layui-form-label"><i class="layui-icon">&#xe60e;</i> 状　态</label>
-				<div class="layui-input-block status">
-					<select name="status" lay-verify="required">
-						<option value="置顶">置顶</option>
-						<option value="默认">默认</option>
-					</select>
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label"><i class="layui-icon">&#xe609;</i> 发　布</label>
-				<div class="layui-input-block">
-					<input type="radio" name="release" title="立即添加" lay-skin="primary" lay-filter="release" checked />
-				</div>
-			</div>
-			<div class="layui-form-item layui-hide releaseDate">
-				<label class="layui-form-label"></label>
-				<div class="layui-input-block">
-					<input type="text" class="layui-input" id="release" placeholder="请选择日期和时间" readonly />
-				</div>
-			</div>
-			<hr class="layui-bg-gray" />
-			<div class="layui-right">
-				<a class="layui-btn layui-btn-sm" lay-filter="addNews" lay-submit><i class="layui-icon">&#xe609;</i>确认添加</a>
-				<!-- <a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="look" lay-submit>预览</a> -->
-			</div>
-		</div>
+		</div>		
 	</div>
 </form>
 <script type="text/javascript" src='<c:url value="/resources/layuicms/layui/layui.js"></c:url>'></script>
@@ -99,91 +83,75 @@ layui.use(['form','layer','layedit','laydate','upload'],function(){
     //上传缩略图
     upload.render({
         elem: '.thumbBox',
-        url: '../../json/userface.json',
-        method : "get",  //
+        url: '/guomanwang/user/uploadHeadImage?src=/resources/img/opera',
+        method : "post",
         done: function(res, index, upload){
-            var num = parseInt(4*Math.random());  //生成0-4的随机数，随机显示一个头像信息
-            $('.thumbImg').attr('src',res.data[num].src);
-            $('.thumbBox').css("background","#fff");
-        }
-    });
-
-    //格式化时间
-    function filterTime(val){
-        if(val < 10){
-            return "0" + val;
-        }else{
-            return val;
-        }
-    }
-    //定时发布
-    var time = new Date();
-    var submitTime = time.getFullYear()+'-'+filterTime(time.getMonth()+1)+'-'+filterTime(time.getDate())+' '+filterTime(time.getHours())+':'+filterTime(time.getMinutes())+':'+filterTime(time.getSeconds());
-    laydate.render({
-        elem: '#release',
-        type: 'datetime',
-        trigger : "click",
-        done : function(value, date, endDate){
-            submitTime = value;
-        }
-    });
-    form.on("radio(release)",function(data){
-        if(data.elem.title == "定时发布"){
-            $(".releaseDate").removeClass("layui-hide");
-            $(".releaseDate #release").attr("lay-verify","required");
-        }else{
-            $(".releaseDate").addClass("layui-hide");
-            $(".releaseDate #release").removeAttr("lay-verify");
-            submitTime = time.getFullYear()+'-'+(time.getMonth()+1)+'-'+time.getDate()+' '+time.getHours()+':'+time.getMinutes()+':'+time.getSeconds();
+  	      //如果上传失败
+  	      if(res.code > 0){
+  	        return layer.msg('番剧缩略图上传失败');
+  	      }
+  	      //上传成功 
+  	      if(res.code==0){
+  	        $('.thumbImg').attr('src',".."+res.src);      
+  	      }
+  	      
         }
     });
 
     form.verify({
         title : function(val){
             if(val == ''){
-                return "资讯标题不能为空";
+                return "番剧名称不能为空";
             }
         },
-        abstracts : function(val){
+        opurl : function(val, index, elem){
             if(val == ''){
-                return "资讯超链接不能为空";
+                return "番剧来源超链接不能为空";
             }
+            else if(!/^http(s*):\/\/[\S]/.test(val)){
+                return "请输入正确的番剧来源超链接！";
+              }
         },
-        /*content : function(val){
+        opdesc : function(val){
             if(val == ''){
-                return "资讯内容不能为空";
+                return "番剧一句话简介内容不能为空";
             }
-        }*/
+            else if(val.length>15){
+                return "一句话简介长度不能超过15个字符";
+            }
+        }
     })
-    form.on("submit(addNews)",function(data){
-        //弹出loading
+    form.on("submit(addopera)",function(data){
+        //获得复选框选中的番剧类型
+        var type =[]; 
+	    $('input[name="type"]:checked').each(function(){ 
+	        type.push($(this).val()); 
+	    });
+	    var param=JSON.stringify({
+	    	'opId' : $(".opid").val(),
+            'name' : $(".title").val(),
+            'url' : $(".opurl").val(), 
+            'iframeurl' : $(".opiframeurl").val(),  
+            'desc' : $(".opdesc").val(),
+            'photourl' : $(".thumbImg").attr("src"),
+            'type':type
+        });
+	  	//弹出loading
         var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
-         $.post('<c:url value="/admin/newsAdd"></c:url>',{
-             title : $(".title").val(),  //资讯标题
-             abstracts : $(".abstracts").val(),  //资讯超链接
-             content : layedit.getContent(editIndex).split('<audio controls="controls" style="display: none;"></audio>')[0],  //资讯内容
-             newsImg : $(".thumbImg").attr("src"),  //缩略图
-             status : $('.status select').val(),    //发布状态
-             time : submitTime,    //发布时间
+         $.post('/guomanwang/opera/updateopera',{
+        	 param :param
          },function(res){
         	 top.layer.msg(res.msg);
          })
         setTimeout(function(){
             top.layer.close(index);
-            
-            layer.closeAll("iframe");
             //刷新父页面
-            parent.location.reload();
+           	layer.closeAll("iframe");
+           	parent.location.reload();
+            
         },500);
         return false;
     })
-
-    //预览
-    form.on("submit(look)",function(){
-        layer.alert("此功能需要前台展示，实际开发中传入对应的必要参数进行资讯内容页面访问");
-        return false;
-    })
-
     //创建一个编辑器
     var editIndex = layedit.build('news_content',{
         height : 535,

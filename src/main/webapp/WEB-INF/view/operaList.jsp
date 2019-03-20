@@ -82,10 +82,12 @@
 	            {type: "checkbox", fixed:"left", width:50},
 	            {field: 'opId', title: 'ID', width:60, align:"center"},
 	            {field: 'opName', title: '番剧名称', width:150},
+	            {field: 'opPhotourl', title: '番剧缩略图', hide:true, width:150},
 	            {field: 'opDesc', sort: 'true', title: '简介', align:'center', minWidth:300,templet:function(d){
 	                return d.opDesc =="" ? "暂无" : d.opDesc;
 	            }},
 	            {field: 'opUrl', title: '来源', align:'center'},
+	            {field: 'opIframeurl', title: '视频分享通用代码', hide:true, align:'center'},
 	            {title: '操作', width:170, templet:'#operaListBar',fixed:"right",align:"center"}
 	        ]]
 	    });
@@ -152,17 +154,19 @@
 	  //添加资讯
 	    function addopera(edit){
 	        var index = layui.layer.open({
-	            title : "添加资讯",
+	            title : "添加番剧|编辑番剧",
 	            type : 2,
 	            content : 'addopera',
 	            success : function(layero, index){
 	                var body = layui.layer.getChildFrame('body', index);
 	                if(edit){
-	                    body.find(".title").val(edit.title);
-	                    body.find(".abstracts").val(edit.url);
-	                    body.find(".thumbImg").attr("src",edit.newsImg);
-	                    body.find("#content").val(edit.content);
-	                    body.find(".status select").val(edit.status);
+	                    body.find(".title").val(edit.opName);
+	                    body.find(".opurl").val(edit.opUrl);
+	                    body.find(".thumbImg").attr("src",edit.opPhotourl);
+	                    body.find(".opdesc").val(edit.opDesc);
+	                    body.find(".opiframeurl").val(edit.opIframeurl);
+	                    body.find(".opid").val(edit.opId);
+	                    body.find(".layui-btn-fluid").text("立即更新");
 	                    form.render();
 	                }
 	                setTimeout(function(){

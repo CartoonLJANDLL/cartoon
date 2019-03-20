@@ -12,6 +12,8 @@ import net.sf.json.JSONObject;
 public interface OperaService {
     //获得番剧数量
 	public int getOperaNum();
+	//获得pageSize值
+	public int getPageSize(JSONObject param);
     //通过番剧id找到相关资讯  
     public Opera getOperaById(int id);
     //通过userid和Operaid找到userOpera
@@ -34,7 +36,7 @@ public interface OperaService {
   //通过主键选择性更新 即传入多少值就更新多少值，并且where id =#{id}
     int updateByPrimaryKeySelective(Opera record);
     //个人收藏中的所有番剧
-    public JSONObject getAllCollectedOpera( int userId, int op_page);
+    public JSONObject getAllCollectedOpera( int userId, int op_page, int pageSize);
     
     
     

@@ -107,12 +107,19 @@ public class OperaController {
 	//删除一个番剧，删掉番剧的记录，删掉op_collected表中的记录,根据番剧名name 或者番剧id operaId 番剧url删除
 	@ResponseBody()
 	@RequestMapping("/deleteopera")
-	public JSONObject deleteOpera( String param) {
-		/*JSONObject param = new JSONObject();
-		param.put("name", "小小");*/
-		JSONObject json = JSONObject.fromObject(param);
-        JSONObject jsonobject = this.operaService.deleteOperaSelective(json/*param*/);
-        System.out.println("XIAOXIAO" + jsonobject.toString());
+	public JSONObject deleteOpera( /*String param*/) {
+		JSONObject param = new JSONObject();
+		param.put("name", "小小");
+		//int[] operaId = {1,2,3,4};
+		
+		String[] operaId = {"1","2","3"};
+		//String operaId = "1";
+		param.put("operaId", operaId);
+		//JSONObject json = JSONObject.fromObject(param);
+        JSONObject jsonobject = this.operaService.deleteOperaSelective(/*json*/param);
+        String op = param.getString("operaId");
+        System.out.println("PARA" + param.getString("operaId").toString());
+        System.out.println("XIAOXIAO" + jsonobject.toString() + "HHHH" + op.toString());
 		
 		return jsonobject; 
 	}
@@ -120,13 +127,13 @@ public class OperaController {
 	//update一个opera 可更新的字段主要是url 番剧名字  一句话描述  所有字段，只要有值就可以更新
 	@ResponseBody()
 	@RequestMapping("/updateopera")
-	public JSONObject updateOpera( String param) {
-		/*JSONObject param = new JSONObject();
-		Integer opId = 399;
+	public JSONObject updateOpera( /*String param*/) {
+		JSONObject param = new JSONObject();
+		Integer opId = 5;
 		param.put("name", "小da");
-		param.put("opId", opId);*/
+		param.put("opId", opId);
 		JSONObject json = JSONObject.fromObject(param);
-        JSONObject jsonobject = this.operaService.updateByExampleSelective(/*param*/json);
+        JSONObject jsonobject = this.operaService.updateByExampleSelective(param/*json*/);
         System.out.println("XIAOXIAO" + jsonobject.toString());
 		
 		return jsonobject; 
@@ -136,9 +143,9 @@ public class OperaController {
 	@ResponseBody()
 	@RequestMapping("/personcollectedopera")
 	public JSONObject personcollectedopera( String json) {
-		/*JSONObject json = new JSONObject();
-		json.put("userId",1);*/
-		
+		/*JSONObject param = new JSONObject();
+		param.put("userId",1);
+		param.put("limit", 20);*/
 		JSONObject param = JSONObject.fromObject(json);
 		JSONObject jsonobject = new JSONObject();
 		int code = 0;
@@ -148,11 +155,13 @@ public class OperaController {
 			op_page = param.getInt( "op_page");
 		}
 		if( param.has("userId") ) {
-			jsonobject = this.operaService.getAllCollectedOpera( param.getInt( "userId"), op_page);
+			int pageSize = this.operaService.getPageSize(param);
+			jsonobject = this.operaService.getAllCollectedOpera( param.getInt( "userId"), op_page, pageSize);
 		}else {
 			jsonobject.put("code", code);
 			jsonobject.put("msg", msg);
 		}
+		System.out.println();
 		System.out.println("HHH" + jsonobject.toString());
 		return jsonobject;
 		

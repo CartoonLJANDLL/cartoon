@@ -431,26 +431,25 @@ public class UserController {
 	//上传图片
 	@RequestMapping("/uploadHeadImage")
 	@ResponseBody
-	public JSONObject uploadHeadImage(@RequestParam("file") MultipartFile file, @ModelAttribute User user, HttpServletRequest request, InputStream stream)
+	public JSONObject uploadHeadImage(@RequestParam("file") MultipartFile file, @ModelAttribute User user, HttpServletRequest request,@RequestParam(value="src",defaultValue="/resources/img/people") String src, InputStream stream)
 			throws IOException {
 		Assert.notNull(file, "上传文件不能为空");
 		HttpSession session = request.getSession();
-		String src="/resources/img/people/";
 		String path = request.getSession().getServletContext().getRealPath("/"+src);
 		//String path="D:/Spring/guomanwang/src/main/webapp/resources/img/people";
 		JSONObject json= new JSONObject();
 		//System.currentTimeMillis()根据系统时间产生随机数，保证上传的图片名字不一样
 		String name=System.currentTimeMillis()+file.getOriginalFilename();
 		File dir = new File(path, name);
-		src=src+name;
+		src=src+"/"+name;
 		System.out.println(src);
 		if (!dir.exists()) {
 			dir.mkdirs();
-			json.put("msg","上传成功");
+			json.put("msg","图片上传成功");
 			json.put("code",0);
 			json.put("src",src);
 		} else {
-			json.put("msg","上传失败");
+			json.put("msg","图片上传失败");
 			json.put("code",1);
 		}
 		file.transferTo(dir);
