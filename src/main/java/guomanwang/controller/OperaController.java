@@ -127,13 +127,14 @@ public class OperaController {
 	//update一个opera 可更新的字段主要是url 番剧名字  一句话描述  所有字段，只要有值就可以更新
 	@ResponseBody()
 	@RequestMapping("/updateopera")
-	public JSONObject updateOpera( /*String param*/) {
-		JSONObject param = new JSONObject();
+	public JSONObject updateOpera( String param) {
+/*		JSONObject param = new JSONObject();
 		Integer opId = 5;
 		param.put("name", "小da");
-		param.put("opId", opId);
+		param.put("opId", opId);*/
 		JSONObject json = JSONObject.fromObject(param);
-        JSONObject jsonobject = this.operaService.updateByExampleSelective(param/*json*/);
+		System.out.println(json.get("name"));
+        JSONObject jsonobject = this.operaService.updateByExampleSelective(/*param*/json);
         System.out.println("XIAOXIAO" + jsonobject.toString());
 		
 		return jsonobject; 
