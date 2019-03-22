@@ -499,7 +499,7 @@ public class OperaServiceimpl implements OperaService {
 		Opera opera = new Opera();
 		jsonobject.put("code",0);
 		jsonobject.put("msg","更新失败!");
-		
+		System.out.println(param.toString() + "OOOOOOOOOOOOOOO");
 		if( param.has("opId")) {
 			int opId = param.getInt("opId");
 			opera.setOpId(opId);
@@ -515,10 +515,6 @@ public class OperaServiceimpl implements OperaService {
 			if( param.has( "url") && param.get("url") != "") {
 				String op_url = param.getString( "url");
 				opera.setOpName(op_url);
-			}
-			if( param.has( "name") && param.get("name") != "") {
-				String op_name = param.getString( "name");
-				opera.setOpName(op_name);
 			}
 			if( param.has( "desc") && param.get("desc") != "") {
 				String op_desc = param.getString( "desc");
@@ -555,7 +551,7 @@ public class OperaServiceimpl implements OperaService {
 			if( this.operaMapper.updateByExampleSelective(opera, operaExample) > 0) {
 				jsonobject.put("code", 1);
 				jsonobject.put("msg", "更新成功!");
-				System.out.println("更新成功");
+				System.out.println("更新成功" + opera.getOpName());
 			}
 		}else {
 			System.out.println("未传id值过来，操作异常!");

@@ -80,7 +80,6 @@ public class OperaController {
 		
 		jsonobject = operaService.selectOperaByName(json/*param*/);
 		
-		
 		return jsonobject;
 	}
 	
@@ -93,7 +92,6 @@ public class OperaController {
 	public JSONObject insertOpera( String param) {
 		JSONObject jsonobject = new JSONObject();
 		/*JSONObject param = new JSONObject();
-		
 		param.put("name", "小小");
 		param.put("url", "www.baidu.com");
 		param.put("photourl", "http://jxnu.edu.cn");
@@ -128,7 +126,7 @@ public class OperaController {
 	@ResponseBody()
 	@RequestMapping("/updateopera")
 	public JSONObject updateOpera( String param) {
-/*		JSONObject param = new JSONObject();
+		/*JSONObject param = new JSONObject();
 		Integer opId = 5;
 		param.put("name", "小da");
 		param.put("opId", opId);*/
