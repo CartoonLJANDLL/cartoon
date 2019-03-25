@@ -514,23 +514,23 @@ public class OperaServiceimpl implements OperaService {
 			}
 			if( param.has( "url") && param.get("url") != "") {
 				String op_url = param.getString( "url");
-				opera.setOpName(op_url);
+				opera.setOpUrl(op_url);
 			}
 			if( param.has( "desc") && param.get("desc") != "") {
 				String op_desc = param.getString( "desc");
-				opera.setOpName(op_desc);
+				opera.setOpDesc(op_desc);
 			}
 			if( param.has( "photourl") && param.get("photourl") != "") {
 				String op_photourl = param.getString( "photourl");
-				opera.setOpName(op_photourl);
+				opera.setOpPhotourl(op_photourl);
 			}
 			if( param.has( "updateto") && param.get("updateto") != "") {
 				String op_updateto = param.getString( "updateto");
-				opera.setOpName(op_updateto);
+				opera.setOpUpdateto(op_updateto);
 			}
 			if( param.has( "iframeurl") && param.get("iframeurl") != "") {
 				String op_iframeurl = param.getString( "iframeurl");
-				opera.setOpName(op_iframeurl);
+				opera.setOpIframeurl(op_iframeurl);
 			}
 			if( param.has( "time") && param.get("time") != "") {
 				Date op_time = (Date)param.get( "time");
@@ -542,11 +542,11 @@ public class OperaServiceimpl implements OperaService {
 			}
 			if( param.has( "collectnum") && param.get("collectnum") != "") {
 				int op_collectnum = param.getInt( "collectnum");
-				opera.setOpStatus(op_collectnum);
+				opera.setOpCollectnum(op_collectnum);
 			}
 			if( param.has( "sharenum") && param.get("sharenum") != "") {
 				int op_sharenum = param.getInt( "sharenum");
-				opera.setOpStatus(op_sharenum);
+				opera.setOpSharenum(op_sharenum);
 			}
 			if( this.operaMapper.updateByExampleSelective(opera, operaExample) > 0) {
 				jsonobject.put("code", 1);

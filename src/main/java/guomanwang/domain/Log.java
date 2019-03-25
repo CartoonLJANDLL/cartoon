@@ -5,10 +5,11 @@ import java.util.Date;
 public class Log {
     private Integer logid;
 
+    //生成时间
     private Date ctime;
-
+    //结束时间
     private Date endtime;
-
+    
     private Float exctime;
 
     private String level;
@@ -16,23 +17,23 @@ public class Log {
     private String loggername;
 
     private String filename;
-
+    //请求主机地址
     private String host;
-
+    //线程
     private String thread;
-
+    //类名
     private String clazz;
-
+    //方法名
     private String method;
-
+    //参数名
     private String params;
-
+    //行号  出现异常在多少行
     private String linenumber;
-
+    //异常报错的信息
     private String message;
-
+    //异常堆栈
     private String throwables;
-
+    
     private String uri;
 
     private Integer userid;
