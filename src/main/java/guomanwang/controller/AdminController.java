@@ -227,7 +227,7 @@ public class AdminController {
 		System.out.println(jsonobject);
 		return jsonobject;
 	}	
-	//获得所有资讯信息
+	//后端获得番剧分页信息
 	@ResponseBody
 	@RequestMapping("/getoperalist")
 	public JSONObject getoperalist(int page,@RequestParam("limit") int limit) {
@@ -235,6 +235,19 @@ public class AdminController {
 		param.put("page",page);
 		param.put("limit",limit);
 		JSONObject operas = operaService.selectAllOpera(param);
+		operas.put("code", 0);
+		operas.put("msg", "");
+		return operas;
+	}
+	//后端获得番剧查询结果
+	@ResponseBody
+	@RequestMapping("/searchoperasbyname")
+	public JSONObject searchoperasbyname(int page,@RequestParam("limit") int limit,String key) {
+		JSONObject param=new JSONObject();
+		param.put("page",page);
+		param.put("limit",limit);
+		param.put("name",key);
+		JSONObject operas = operaService.selectOperaByName(param);
 		operas.put("code", 0);
 		operas.put("msg", "");
 		return operas;

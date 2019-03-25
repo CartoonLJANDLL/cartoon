@@ -22,7 +22,7 @@
 		<form class="layui-form">
 			<div class="layui-inline">
 				<div class="layui-input-inline">
-					<input type="text" class="layui-input searchVal" placeholder="请输入标题关键字搜索" />
+					<input type="text" class="layui-input searchVal" placeholder="请输入番剧名称关键字搜索" lay-verify="required"/>
 				</div>
 				<a class="layui-btn search_btn" data-type="reload">搜索</a>
 			</div>
@@ -49,7 +49,7 @@
 	<script type="text/html" id="operaListBar">
 		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
-		<a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="look" href='{{d.url}}' target="_blank">查看</a>
+		<a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="look" href='{{d.opUrl}}' target="_blank">查看</a>
 	</script>
 	
 </form>
@@ -93,13 +93,14 @@
 	    });
 	    //搜索
 	    $(".search_btn").on("click",function(){
+	    	var key=$(".searchVal").val();
 	    	var index = top.layer.msg('数据查询中，请稍候',{icon: 16,time:false,shade:0.8});
 	        if($(".searchVal").val() != ''){
 	            table.reload("operaListTable",{
 	                where: {
-	                    key: $(".searchVal").val()  //搜索的关键字
+	                	key: key  //搜索的关键字
 	                },
-	            	url:'admin/searchnews',
+	            	url:'/guomanwang/admin/searchoperasbyname',
 	            	method:'post',
 	            })
 	            setTimeout(function(){
@@ -113,13 +114,16 @@
 	    table.on('tool(operaList)', function(obj){
 	        var layEvent = obj.event,
 	            data = obj.data;
-
+	        
+	        var param=JSON.stringify({
+		    	'operaId' : data.opId
+	        });
 	        if(layEvent === 'edit'){ //编辑
 	            addopera(data);
 	        } else if(layEvent === 'del'){ //删除
-	            layer.confirm('确定删除此资讯？',{icon:3, title:'提示信息'},function(index){
-	                 $.get('deleteopera',{
-	                     id : data.id  //将需要删除的newsId作为参数传入
+	            layer.confirm('确定删除此番剧？'+data.opId,{icon:3, title:'提示信息'},function(index){
+	                 $.post('/guomanwang/opera/deleteopera',{
+	                	 param : param
 	                 },function(data){
 	                    tableIns.reload();
 	                    layer.msg(data.msg);
@@ -135,12 +139,14 @@
 	            ids = [];
 	        if(data.length > 0) {
 	            for (var i in data) {
-	                ids.push(data[i].id);
+	                ids.push(data[i].opId);
 	            }
-	            layer.confirm('确定删除选中的资讯？'+ids, {icon: 3, title: '提示信息'}, function (index) {
-	                 $.get('/admin/deletemorenews',{
-	                	 traditional :true,
-	                	 ids : ids.toString()  //将需要删除的ids数组作为参数传入
+		        var param=JSON.stringify({
+			    	'operaId' : ids
+		        });
+	            layer.confirm('确定删除选中的多个番剧？', {icon: 3, title: '提示信息'}, function (index) {
+	                 $.get('/guomanwang/opera/deleteopera',{
+	                	 param : param  //将需要删除的ids数组作为参数传入
 	                 },function(data){
 	                tableIns.reload();
 	                layer.msg(data.msg);

@@ -35,14 +35,14 @@
 			</div>
 			<div class="layui-col-md3 layui-col-xs5">
 				<div class="layui-upload-list thumbBox mag0 magt3">
-					<img class="layui-upload-img thumbImg">
+					<img class="layui-upload-img thumbImg" lay-verify="opPhoto">
 				</div>
 			</div>
 		</div>
 		<div class="layui-form-item magb0">
 			<label class="layui-form-label">一句话简介</label>
 			<div class="layui-input-block">
-				<input type="text" class="layui-input opdesc" name="opdesc" lay-verify="opdesc">
+				<input type="text" class="layui-input opdesc" name="opdesc" lay-verify="required|opdesc">
 			</div>
 		</div>
 		<div class="layui-center" style="margin-top:15px;">
@@ -111,11 +111,13 @@ layui.use(['form','layer','layedit','laydate','upload'],function(){
               }
         },
         opdesc : function(val){
-            if(val == ''){
-                return "番剧一句话简介内容不能为空";
-            }
-            else if(val.length>15){
+			if(val.length>15){
                 return "一句话简介长度不能超过15个字符";
+            }
+        },
+        opPhoto : function(val,elem){
+			if(elem.src==''||elem.src==null){
+                return "番剧缩略图是必需的，请选择一张缩略图";
             }
         }
     })
