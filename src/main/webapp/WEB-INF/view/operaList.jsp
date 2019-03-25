@@ -151,7 +151,7 @@
 	            layer.msg("请选择需要删除的资讯");
 	        }
 	    })
-	  //添加资讯
+	  //添加番剧
 	    function addopera(edit){
 	        var index = layui.layer.open({
 	            title : "添加番剧|编辑番剧",
@@ -170,7 +170,7 @@
 	                    form.render();
 	                }
 	                setTimeout(function(){
-	                    layui.layer.tips('点击此处返回资讯列表', '.layui-layer-setwin .layui-layer-close', {
+	                    layui.layer.tips('点击此处返回番剧列表', '.layui-layer-setwin .layui-layer-close', {
 	                        tips: 3
 	                    });
 	                },500)

@@ -77,8 +77,6 @@ layui.use(['form','layer','layedit','laydate','upload'],function(){
         laydate = layui.laydate,
         $ = layui.jquery;
 
-    //用于同步编辑器内容到textarea
-    layedit.sync(editIndex);
 
     //上传缩略图
     upload.render({
@@ -137,12 +135,22 @@ layui.use(['form','layer','layedit','laydate','upload'],function(){
             'type':type
         });
 	  	//弹出loading
+	  	var text=$(".layui-btn-fluid").text();
         var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
-         $.post('/guomanwang/opera/updateopera',{
-        	 param :param
-         },function(res){
-        	 top.layer.msg(res.msg);
-         })
+        if(text=="立即更新"){
+            $.post('/guomanwang/opera/updateopera',{
+           	 param :param
+            },function(res){
+           	 top.layer.msg(res.msg);
+            })
+        } 
+        else{
+            $.post('/guomanwang/opera/insertopera',{
+              	 param :param
+               },function(res){
+              	 top.layer.msg(res.msg);
+               })
+        }
         setTimeout(function(){
             top.layer.close(index);
             //刷新父页面
@@ -152,13 +160,6 @@ layui.use(['form','layer','layedit','laydate','upload'],function(){
         },500);
         return false;
     })
-    //创建一个编辑器
-    var editIndex = layedit.build('news_content',{
-        height : 535,
-        uploadImage : {
-            url : "../../json/newsImg.json"
-        }
-    });
 
 })
 </script>
