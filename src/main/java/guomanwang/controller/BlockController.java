@@ -1,6 +1,5 @@
 package guomanwang.controller;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,10 @@ import com.github.pagehelper.PageInfo;
 
 import guomanwang.domain.Block;
 import guomanwang.domain.User;
+import guomanwang.interceptor.Operation;
 import guomanwang.service.BlockService;
+
+
 @RequestMapping("/block")
 @Controller("BlockController")
 public class BlockController {
@@ -26,6 +28,7 @@ public class BlockController {
 	@Qualifier("BlockServiceimpl")
 	private BlockService blockService;
 	
+	@Operation(name="查询所有版块")
 	@RequestMapping("/queryAll")
 	public String viewAllBlock(Model model) {		
 		List<Block> blocks = new ArrayList<Block>();	

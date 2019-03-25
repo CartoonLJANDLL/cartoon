@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="guomanwang.mapper.LogMapper" >
+  <resultMap id="BaseResultMap" type="guomanwang.domain.Log" >
+    <id column="logid" property="logid" jdbcType="INTEGER" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="endtime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="exctime" property="exctime" jdbcType="REAL" />
+    <result column="level" property="level" jdbcType="VARCHAR" />
+    <result column="loggerName" property="loggername" jdbcType="VARCHAR" />
+    <result column="fileName" property="filename" jdbcType="VARCHAR" />
+    <result column="host" property="host" jdbcType="VARCHAR" />
+    <result column="thread" property="thread" jdbcType="VARCHAR" />
+    <result column="clazz" property="clazz" jdbcType="VARCHAR" />
+    <result column="method" property="method" jdbcType="VARCHAR" />
+    <result column="params" property="params" jdbcType="VARCHAR" />
+    <result column="lineNumber" property="linenumber" jdbcType="VARCHAR" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="throwables" property="throwables" jdbcType="VARCHAR" />
+    <result column="uri" property="uri" jdbcType="VARCHAR" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    logid, ctime, endtime, exctime, level, loggerName, fileName, host, thread, clazz, 
+    method, params, lineNumber, message, throwables, uri, userid
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="guomanwang.domain.LogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from log
+    where logid = #{logid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from log
+    where logid = #{logid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="guomanwang.domain.LogExample" >
+    delete from log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="guomanwang.domain.Log" >
+    insert into log (logid, ctime, endtime, 
+      exctime, level, loggerName, 
+      fileName, host, thread, 
+      clazz, method, params, 
+      lineNumber, message, throwables, 
+      uri, userid)
+    values (#{logid,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}, 
+      #{exctime,jdbcType=REAL}, #{level,jdbcType=VARCHAR}, #{loggername,jdbcType=VARCHAR}, 
+      #{filename,jdbcType=VARCHAR}, #{host,jdbcType=VARCHAR}, #{thread,jdbcType=VARCHAR}, 
+      #{clazz,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, #{params,jdbcType=VARCHAR}, 
+      #{linenumber,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, #{throwables,jdbcType=VARCHAR}, 
+      #{uri,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="guomanwang.domain.Log" >
+    insert into log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logid != null" >
+        logid,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="endtime != null" >
+        endtime,
+      </if>
+      <if test="exctime != null" >
+        exctime,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="loggername != null" >
+        loggerName,
+      </if>
+      <if test="filename != null" >
+        fileName,
+      </if>
+      <if test="host != null" >
+        host,
+      </if>
+      <if test="thread != null" >
+        thread,
+      </if>
+      <if test="clazz != null" >
+        clazz,
+      </if>
+      <if test="method != null" >
+        method,
+      </if>
+      <if test="params != null" >
+        params,
+      </if>
+      <if test="linenumber != null" >
+        lineNumber,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="throwables != null" >
+        throwables,
+      </if>
+      <if test="uri != null" >
+        uri,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logid != null" >
+        #{logid,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exctime != null" >
+        #{exctime,jdbcType=REAL},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="loggername != null" >
+        #{loggername,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="host != null" >
+        #{host,jdbcType=VARCHAR},
+      </if>
+      <if test="thread != null" >
+        #{thread,jdbcType=VARCHAR},
+      </if>
+      <if test="clazz != null" >
+        #{clazz,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null" >
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null" >
+        #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="linenumber != null" >
+        #{linenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="throwables != null" >
+        #{throwables,jdbcType=VARCHAR},
+      </if>
+      <if test="uri != null" >
+        #{uri,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="guomanwang.domain.LogExample" resultType="java.lang.Integer" >
+    select count(*) from log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update log
+    <set >
+      <if test="record.logid != null" >
+        logid = #{record.logid,jdbcType=INTEGER},
+      </if>
+      <if test="record.ctime != null" >
+        ctime = #{record.ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endtime != null" >
+        endtime = #{record.endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.exctime != null" >
+        exctime = #{record.exctime,jdbcType=REAL},
+      </if>
+      <if test="record.level != null" >
+        level = #{record.level,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loggername != null" >
+        loggerName = #{record.loggername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.filename != null" >
+        fileName = #{record.filename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.host != null" >
+        host = #{record.host,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thread != null" >
+        thread = #{record.thread,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clazz != null" >
+        clazz = #{record.clazz,jdbcType=VARCHAR},
+      </if>
+      <if test="record.method != null" >
+        method = #{record.method,jdbcType=VARCHAR},
+      </if>
+      <if test="record.params != null" >
+        params = #{record.params,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linenumber != null" >
+        lineNumber = #{record.linenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.message != null" >
+        message = #{record.message,jdbcType=VARCHAR},
+      </if>
+      <if test="record.throwables != null" >
+        throwables = #{record.throwables,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uri != null" >
+        uri = #{record.uri,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null" >
+        userid = #{record.userid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update log
+    set logid = #{record.logid,jdbcType=INTEGER},
+      ctime = #{record.ctime,jdbcType=TIMESTAMP},
+      endtime = #{record.endtime,jdbcType=TIMESTAMP},
+      exctime = #{record.exctime,jdbcType=REAL},
+      level = #{record.level,jdbcType=VARCHAR},
+      loggerName = #{record.loggername,jdbcType=VARCHAR},
+      fileName = #{record.filename,jdbcType=VARCHAR},
+      host = #{record.host,jdbcType=VARCHAR},
+      thread = #{record.thread,jdbcType=VARCHAR},
+      clazz = #{record.clazz,jdbcType=VARCHAR},
+      method = #{record.method,jdbcType=VARCHAR},
+      params = #{record.params,jdbcType=VARCHAR},
+      lineNumber = #{record.linenumber,jdbcType=VARCHAR},
+      message = #{record.message,jdbcType=VARCHAR},
+      throwables = #{record.throwables,jdbcType=VARCHAR},
+      uri = #{record.uri,jdbcType=VARCHAR},
+      userid = #{record.userid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="guomanwang.domain.Log" >
+    update log
+    <set >
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endtime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exctime != null" >
+        exctime = #{exctime,jdbcType=REAL},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="loggername != null" >
+        loggerName = #{loggername,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        fileName = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="host != null" >
+        host = #{host,jdbcType=VARCHAR},
+      </if>
+      <if test="thread != null" >
+        thread = #{thread,jdbcType=VARCHAR},
+      </if>
+      <if test="clazz != null" >
+        clazz = #{clazz,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null" >
+        method = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null" >
+        params = #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="linenumber != null" >
+        lineNumber = #{linenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="throwables != null" >
+        throwables = #{throwables,jdbcType=VARCHAR},
+      </if>
+      <if test="uri != null" >
+        uri = #{uri,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where logid = #{logid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="guomanwang.domain.Log" >
+    update log
+    set ctime = #{ctime,jdbcType=TIMESTAMP},
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+      exctime = #{exctime,jdbcType=REAL},
+      level = #{level,jdbcType=VARCHAR},
+      loggerName = #{loggername,jdbcType=VARCHAR},
+      fileName = #{filename,jdbcType=VARCHAR},
+      host = #{host,jdbcType=VARCHAR},
+      thread = #{thread,jdbcType=VARCHAR},
+      clazz = #{clazz,jdbcType=VARCHAR},
+      method = #{method,jdbcType=VARCHAR},
+      params = #{params,jdbcType=VARCHAR},
+      lineNumber = #{linenumber,jdbcType=VARCHAR},
+      message = #{message,jdbcType=VARCHAR},
+      throwables = #{throwables,jdbcType=VARCHAR},
+      uri = #{uri,jdbcType=VARCHAR},
+      userid = #{userid,jdbcType=INTEGER}
+    where logid = #{logid,jdbcType=INTEGER}
+  </update>
+</mapper>

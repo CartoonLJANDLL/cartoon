@@ -16,6 +16,7 @@ import java.util.List;
 
 import guomanwang.domain.Information;
 import guomanwang.domain.Opera;
+import guomanwang.interceptor.Operation;
 import guomanwang.service.OperaService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -29,6 +30,7 @@ public class OperaController {
 	private OperaService operaService;
 	
 	//收藏番剧或取消收藏番剧,json数据类型param 包含userId 和 operaId两个键
+	/*@Operation(name="collectopera")*/
 	@ResponseBody()
 	@RequestMapping("/collectopera")
 	public JSONObject collectOpera(String param) {
@@ -48,6 +50,7 @@ public class OperaController {
 	//根据传进来的JSON数据param所包含的信息 page页码 type番剧类型  status完结状态， sort排序类型
 	//传出去的数据都封装在operas中， operas.data是番剧有关信息，若有用户id传入，该番剧被收藏的话，operas.get("data")底下的get(i).getcollecte可获得
 	//collecte的值，值为1则已收藏，为0未收藏，模糊查询的同理
+	/*@Operation(name="alloperas")*/
 	@ResponseBody()
 	@RequestMapping("/alloperas")
 	public JSONObject alloperas(String param) throws IOException {
@@ -105,19 +108,19 @@ public class OperaController {
 	//删除一个番剧，删掉番剧的记录，删掉op_collected表中的记录,根据番剧名name 或者番剧id operaId 番剧url删除
 	@ResponseBody()
 	@RequestMapping("/deleteopera")
-	public JSONObject deleteOpera( /*String param*/) {
-		JSONObject param = new JSONObject();
-		param.put("name", "小小");
+	public JSONObject deleteOpera( String param) {
+		/*JSONObject param = new JSONObject();
+		param.put("name", "小小");*/
 		//int[] operaId = {1,2,3,4};
 		
-		String[] operaId = {"1","2","3"};
+		/*String[] operaId = {"1","2","3"};*/
 		//String operaId = "1";
-		param.put("operaId", operaId);
-		//JSONObject json = JSONObject.fromObject(param);
-        JSONObject jsonobject = this.operaService.deleteOperaSelective(/*json*/param);
-        String op = param.getString("operaId");
+		/*param.put("operaId", operaId);*/
+		JSONObject json = JSONObject.fromObject(param);
+        JSONObject jsonobject = this.operaService.deleteOperaSelective(json/*param*/);
+       /* String op = param.getString("operaId");
         System.out.println("PARA" + param.getString("operaId").toString());
-        System.out.println("XIAOXIAO" + jsonobject.toString() + "HHHH" + op.toString());
+        System.out.println("XIAOXIAO" + jsonobject.toString() + "HHHH" + op.toString());*/
 		
 		return jsonobject; 
 	}
