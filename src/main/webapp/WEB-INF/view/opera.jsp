@@ -101,7 +101,7 @@
       element = layui.element,
       laypage = layui.laypage,
       layer=layui.layer;
-	  
+
 	  //建造轮播图实例
 	  carousel.render({
 		elem: '#test1'
@@ -194,7 +194,18 @@
 		});
 
 	  });
-
+	  if(typeof(EventSource)!=="undefined")
+	  {
+			  var source=new EventSource("/guomanwang/opera/getDate");
+			  source.onopen = function(){
+				  
+			  }
+			  source.onmessage=function(event) {
+			    	console.log(event.data);
+			   };
+	  }else{
+		  layer.msg("Sorry, your browser does not support server-sent events...");
+	  }
 	  form.on('radio', function(data){
 		  var sort=$("input[name='sort']:checked").val(),
 		  	type=$("input[name='type']:checked").val(),

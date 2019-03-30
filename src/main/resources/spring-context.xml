@@ -4,6 +4,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context 
@@ -11,10 +12,14 @@
 	http://www.springframework.org/schema/tx 
 	http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 	http://www.springframework.org/schema/task
-	http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+	http://www.springframework.org/schema/task/spring-task-3.2.xsd
+	http://www.springframework.org/schema/websocket
+	http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 	
 	<context:annotation-config />
 	<context:component-scan base-package="guomanwang.service.impl" />
+	<!-- websocket注入 -->
+	<context:component-scan base-package="guomanwang.websocket" /> 
 	<!-- 设置定时任务 -->
 	<task:annotation-driven/>
 </beans>

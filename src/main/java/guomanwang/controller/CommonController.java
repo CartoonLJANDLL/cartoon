@@ -132,24 +132,37 @@ public class CommonController {
 		return "shownews";
 	}
 	@Scheduled(cron = "0 30 22 ? * *")//每天22点30启动自动抓取动漫资讯任务
-	@RequestMapping("/reflash")
-	public String reflash() throws IOException, InterruptedException{
+	@RequestMapping("/refreshnews")
+	@ResponseBody
+	public JSONObject refreshnews() throws IOException, InterruptedException{
 		String stringArray[] = {"python3 /usr/local/scary_wawayu.py","python3 /usr/local/scary_xi1.py","python3 /usr/local/scary_rocen.py","python3 /usr/local/scary_chaoshen.py", 
 		"python3 /usr/local/scary_cgyear.py","python3 /usr/local/scary_haoliners.py","python3 /usr/local/scary_gamersky.py","python3 /usr/local/scary_qsmy.py"};
+		int addition=0;
+		JSONObject json=new JSONObject();
+		json.put("code",0);
+		json.put("msg","成功执行了自动抓取资讯任务，但没有新的资讯加入");
 		for(int i=0;i<stringArray.length;i++) {
 			System.out.println("开始执行"+stringArray[i]);
-			TimerTask.autoscarynews(stringArray[i]);
+			addition=addition+TimerTask.autoscarynews(stringArray[i]);
 		}
-		return "news";
+		if(addition>0){
+			json.put("code",1);
+			json.put("msg","成功执行了自动抓取资讯任务，添加了"+addition+"条资讯");
+		}
+		return json;
 	}
 	 @Scheduled(cron = "0 30 23 ? * *")//每天23点30启动自动抓取动漫视频任务
-		@RequestMapping("/reflashOperas")
-		public String reflashOperas() throws IOException, InterruptedException{
-			String str = "python G:\\cartoon.py";
+		@RequestMapping("/refreshOperas")
+		public JSONObject refreshOperas() throws IOException, InterruptedException{
+			String str = "python E:\\cartoon.py";
+			int addition=0;
+			JSONObject json=new JSONObject();
+			json.put("code",1);
+			json.put("msg","成功执行了自动抓取资讯任务，但没有新的资讯加入");
 			System.out.println("开始执行动漫视频抓取任务，后面说的是假的");
-			TimerTask.autoscarynews(str);
+			addition=TimerTask.autoscarynews(str);
 			
-			return "operas";
+			return json;
 		}
 	@RequestMapping("/add")
 	public String add(Model model,HttpServletRequest request,HttpServletResponse response){

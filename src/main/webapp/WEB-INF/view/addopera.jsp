@@ -136,6 +136,7 @@ layui.use(['form','layer','layedit','laydate','upload'],function(){
             'photourl' : $(".thumbImg").attr("src"),
             'type':type
         });
+	    console.log(param);
 	  	//弹出loading
 	  	var text=$(".layui-btn-fluid").text();
         var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});

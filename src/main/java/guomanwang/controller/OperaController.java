@@ -10,9 +10,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageHelper;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import guomanwang.domain.Information;
 import guomanwang.domain.Opera;
@@ -71,7 +77,31 @@ public class OperaController {
 		
 		return operas;
 	}
-	
+	@RequestMapping("/getDate")
+	public void getDate(HttpServletResponse response){
+		
+	    Date date = new Date();
+	    OutputStream bos = null;
+        try {
+        	String result = "data:"+date.getTime()+"\n\n";
+			bos = new BufferedOutputStream(response.getOutputStream());
+	        response.setContentType("text/event-stream");
+	        response.setStatus(HttpServletResponse.SC_OK);
+	        response.setCharacterEncoding(Charset.forName("UTF-8").name());
+	        response.addHeader("Connection", "close");
+	        bos.write(result.getBytes());
+	        bos.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				bos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+    
+	}
 	//模糊查询番剧  param可包含 name模糊查询的值，page 页码     看第二页时页码为2 name值也要有  name为空时显示所有的番剧
 	@ResponseBody()
 	@RequestMapping("/selectoperabyname")
