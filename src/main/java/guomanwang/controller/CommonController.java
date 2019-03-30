@@ -152,7 +152,7 @@ public class CommonController {
 		return json;
 	}
 	 @Scheduled(cron = "0 30 23 ? * *")//每天23点30启动自动抓取动漫视频任务
-		@RequestMapping("/refreshOperas")
+	@RequestMapping("/refreshOperas")
 		public JSONObject refreshOperas() throws IOException, InterruptedException{
 			String str = "python E:\\cartoon.py";
 			int addition=0;
