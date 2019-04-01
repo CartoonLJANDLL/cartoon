@@ -35,13 +35,15 @@
     <span>（该号已被封）</span>
     -->
   </h1>
-  <c:if test="${userinfo.getHonor()>=2}">
+  <c:if test="${userinfo.getHonor()>2}">
   	<p style="padding: 10px 0; color: #5FB878;">认证信息：管理员</p>
   </c:if>
-  <c:if test="${userinfo.getHonor()!=2}">
+  <c:if test="${userinfo.getHonor()<2 and userinfo.getHonor()>0}">
   	<p style="padding: 10px 0; color: #5FB878;">身份信息：注册用户</p>
   </c:if>
-
+  <c:if test="${userinfo.getHonor()==0}">
+  	<p style="padding: 10px 0; color: #5FB878;">该用户已被禁！</p>
+  </c:if>
   <p class="fly-home-info">
     <i class="iconfont icon-kiss" title="经验"></i><span style="color: #FF7200;">${userinfo.getGradeValue()} 点 经验</span>
     <i class="iconfont icon-shijian"></i><span>2018-12-16 加入</span>

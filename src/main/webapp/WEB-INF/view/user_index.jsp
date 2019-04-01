@@ -130,7 +130,6 @@
     <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
   </p>
 </div>
-<script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
 <script src='<c:url value="/resources/js/haha.js"></c:url>'></script>
 <script>
 layui.config({

@@ -69,7 +69,7 @@
         <ul class="mine-msg">
         <c:if test="${empty mymessages|| mymessages.size()==0}">
 			<li>
-	  			<p>暂无消息和通知！</p>
+	  			<p style="text-align:left;">暂无消息和通知！</p>
 	        </li>
 		</c:if>
         <c:forEach items="${mymessages }" var="item"  varStatus="status">
@@ -132,13 +132,6 @@
     <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
   </p>
 </div>
-<script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
-
-<script>
-layui.config({
-  base: '<c:url value="/resources/res/mods/"></c:url>' //你存放新模块的目录，注意，不是layui的模块目录
-}).use('<c:url value="index"></c:url>'); //加载入口
-</script>
 <script>
 layui.use(['element','form','layer'], function(){
 	var $ = layui.jquery,

@@ -47,7 +47,6 @@
 		<a class="layui-btn layui-btn-xs layui-btn-danger layui-btn-disabled" lay-event="del" disabled="disabled">删除</a>
 	</script>
 </form>
-<script type="text/javascript" src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
 <script>
 layui.use(['form','layer','table','laytpl'],function(){
     var form = layui.form,

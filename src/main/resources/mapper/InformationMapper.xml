@@ -47,6 +47,7 @@
 		select a.*,b.name
 		from infomation a,company b
 		where a.company=b.id and b.id=#{otherid}
+		order by a.time desc
 		limit #{start},#{rows}
 	</select>
 	<!-- 获得资讯总数目 -->

@@ -39,7 +39,6 @@
 		</div>
 	</div>
 </form>
-<script type="text/javascript" src='<c:url value="/resources/layuicms/layui/layui.js"></c:url>'></script>
 <script type="text/javascript">
 layui.use(['form','layer','laydate','table','laytpl'],function(){
     var form = layui.form,

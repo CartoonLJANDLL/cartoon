@@ -22,7 +22,7 @@
 			</div>
 			<!-- 搜索 -->
 			<div class="layui-form component">
-				<input type="text" name="serchnews" id="newskey" required lay-verify="required" placeholder="请输入资讯关键字" autocomplete="off" class="layui-input"> 
+				<input type="text" name="serchnews" id="newskey" required lay-verify="required" placeholder="请输入资讯关键字搜索" autocomplete="off" class="layui-input"> 
 				<button lay-submit lay-filter="searchnews">
 					<i class="layui-icon">&#xe615;</i>
 				</button>
@@ -30,7 +30,7 @@
 			<div class="navBar layui-side-scroll" id="navBar">
 				<ul class="layui-nav layui-nav-tree">
 					<li class="layui-nav-item layui-this">
-						<a href='<c:url value="/common/news"></c:url>'><cite>资讯首页</cite></a>
+						<a href='news'><cite>资讯首页</cite></a>
 					</li>
 					<c:forEach items="${companies }" var="item"  varStatus="status">
 						<li class="layui-nav-item">
@@ -55,7 +55,7 @@
 		<!-- 底部 -->
 		<div class="layui-footer footer">
 			<p><span>copyright @2018 纵横国漫网</span>　　
-			<a onclick="donation()" class="layui-btn layui-btn-danger layui-btn-sm">联系我们</a></p>
+			<a id="contectus" class="layui-btn layui-btn-danger layui-btn-sm">联系我们</a></p>
 		</div>
 	</div>
 
@@ -63,7 +63,6 @@
 	<div class="site-tree-mobile"><i class="layui-icon">&#xe602;</i></div>
 	<div class="site-mobile-shade"></div>
 	
-	<script type="text/javascript" src="<c:url value='/resources/layuicms/layui/layui.js'></c:url>"></script>
 	<script>
 	layui.use(['element','form','layer'], function(){
 		  var $ = layui.jquery,
@@ -71,6 +70,20 @@
 		  	form = layui.form,
 	        layer = parent.layer === undefined ? layui.layer : top.layer;
 		  
+		 	 //联系弹窗
+		 	 $("#contectus").click(function(){
+		 	 	layer.tab({
+		 	 		area : ['260px', '367px'],
+		 	 		tab : [{
+		 	 			title : "微信",
+		 	 			content : "<div style='padding:30px;overflow:hidden;background:#d2d0d0;'><img src='../images/wechat.jpg'></div>"
+		 	 		},{
+		 	 			title : "QQ",
+		 	 			content : "<div style='padding:30px;overflow:hidden;background:#d2d0d0;'><img src='../images/alipay.jpg'></div>"
+		 	 		}]
+		 	 	})
+		 	 }
+		 	 )
 		  var websocket = null;
 	      //判断当前浏览器是否支持WebSocket
 	      if ('WebSocket' in window) {
@@ -114,30 +127,35 @@
 				  		  key:$("#newskey").val()
 					    },
 					    success: function (res) {
-						  var lis=[];
-						  layui.each(res.data, function(index, item){
-							  if(item.company=='娃娃鱼动画'){
-								  lis.push('<li><div class="layui-col-sm9"><a href="'+item.url+'" target="_blank">'+item.title +
-										  '</a></div><div class="layui-col-sm3"><span style="text-align: right;">时间：'+item.time+'</span></div></li>');
-							  }
-							  else{
-								  lis.push('<li><div class="layui-col-sm9"><a href="'+item.url+'" target="newsbody">'+item.title +
-										  '</a></div><div class="layui-col-sm3"><span style="text-align: right;">时间：'+item.time+'</span></div></li>');
-							  }
-							}) 
-						    layer.open({
-						        type: 0
-						        ,title: '查询结果'
-						        ,area: '800px'
-						        ,shade: 0.8
-						        ,shadeClose: true
-						        ,content: ['<div class="layui-text" style="padding: 20px;">'
-						          ,'<blockquote class="layui-elem-quote">查询结果如下（'+res.msg+'）</blockquote>'
-						          ,'<ul class="searchreasult">'
-						          ,lis
-						          ,'</ul>'
-						        ,'</div>'].join('')
-						      });
+							if(res.code==1){
+								  var lis=[];
+								  layui.each(res.data, function(index, item){
+									  if(item.company=='娃娃鱼动画'){
+										  lis.push('<li><div class="layui-col-sm9"><a href="'+item.url+'" target="_blank">'+item.title +
+												  '</a></div><div class="layui-col-sm3"><span style="text-align: right;">时间：'+item.time+'</span></div></li>');
+									  }
+									  else{
+										  lis.push('<li><div class="layui-col-sm9"><a href="'+item.url+'" target="newsbody">'+item.title +
+												  '</a></div><div class="layui-col-sm3"><span style="text-align: right;">时间：'+item.time+'</span></div></li>');
+									  }
+									})
+								    layer.open({
+								        type: 0
+								        ,title: '查询结果'
+								        ,area: '800px'
+								        ,shade: 0.8
+								        ,shadeClose: true
+								        ,content: ['<div class="layui-text" style="padding: 20px;">'
+								          ,'<blockquote class="layui-elem-quote">查询结果如下（'+res.msg+'）</blockquote>'
+								          ,'<ul class="searchreasult">'
+								          ,lis
+								          ,'</ul>'
+								        ,'</div>'].join('')
+								      });
+							}
+							else{
+								layer.msg(res.msg);
+							}
 					    }
 					  });
 			        return false;

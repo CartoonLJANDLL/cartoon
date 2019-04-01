@@ -13,10 +13,9 @@
 <link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
 <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 <style type="text/css">
-			.fly-logo img{width:120px;height:40px;}
-			a:hover{ text-decoration:none;important!}
-			.layui-nav-child{top:60px;important!}
-			
+	.fly-logo img{width:120px;height:40px;}
+	a:hover{ text-decoration:none;important!}
+	.layui-nav-child{top:60px;important!}			
 </style>
 </head>
 <body>
@@ -79,20 +78,35 @@
 		  <dd><a href="/guomanwang/common/admin"><i class="layui-icon" style=" font-size: 22px;">&#xe857;</i>后台管理</a></dd>
           <%} %>
           <hr style="margin: 5px 0;">
-          <dd><a href="/guomanwang/user/logout/" onclick="if(confirm('确认退出吗？')==false)return false;" style="text-align: center;">退出</a></dd>
+          <dd><a href="javascript:;" class="loginout" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
       <%} %>
     </ul>
   </div>
   <script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
-	<script>
-		$(".fly-nav-avatar").hover(function(){
-			$(".layui-nav-child").fadeIn();	
-		});
-		$(".fly-nav-user").mouseleave(function(){
-			$(".layui-nav-child").fadeOut();	
-		});
-	</script>
+  <script>
+	layui.config({
+	  base: '<c:url value="/resources/res/mods/"></c:url>' //你存放新模块的目录，注意，不是layui的模块目录
+	}).use('<c:url value="index"></c:url>'); //加载入口
+	
+	layui.use(['element','form','layer'], function(){
+		var $ = layui.jquery,
+		element = layui.element,
+		form = layui.form,
+		layer = parent.layer === undefined ? layui.layer : top.layer;
+		
+		$(".loginout").click(function(){
+        	layer.confirm('确定退出登录？', {icon: 3, title: '提示信息'}, function (index) {
+                $.get('/guomanwang/user/logout/',function(data){
+                })
+                setTimeout(function(){
+                    location.reload();
+                },500);
+                return false;
+        	});
+		})
+	})
+  </script>
 </body>
 </html>

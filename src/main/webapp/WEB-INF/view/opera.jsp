@@ -10,7 +10,7 @@
 <meta name="keywords" content="纵横国漫网">
 <meta name="referrer" content="no-referrer"/>
 <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-<link rel="stylesheet" href="<c:url value='/resources/layuicms/layui/css/layui.css'></c:url>">
+<link rel="stylesheet" href="<c:url value='/resources/layui/css/layui.css'></c:url>">
 	</head>
 	<style type="text/css">
 		.layui-bg-green,.layui-bg-red{margin:10px auto;width: 100%;height: 50px;text-align: center;padding-top:5px ;}
@@ -91,7 +91,6 @@
 		    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
 		    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
 		</div>
-<script type="text/javascript" src="<c:url value='/resources/layui/layui.js'></c:url>"></script>
 	<script>
 	layui.use(['carousel','layer','element','form','flow','laypage'], function(){
 	  var carousel = layui.carousel,
@@ -101,7 +100,6 @@
       element = layui.element,
       laypage = layui.laypage,
       layer=layui.layer;
-
 	  //建造轮播图实例
 	  carousel.render({
 		elem: '#test1'
@@ -194,18 +192,6 @@
 		});
 
 	  });
-	  if(typeof(EventSource)!=="undefined")
-	  {
-			  var source=new EventSource("/guomanwang/opera/getDate");
-			  source.onopen = function(){
-				  
-			  }
-			  source.onmessage=function(event) {
-			    	console.log(event.data);
-			   };
-	  }else{
-		  layer.msg("Sorry, your browser does not support server-sent events...");
-	  }
 	  form.on('radio', function(data){
 		  var sort=$("input[name='sort']:checked").val(),
 		  	type=$("input[name='type']:checked").val(),
@@ -308,7 +294,7 @@
 	    		$.post('/guomanwang/opera/selectoperabyname',{
 	    			param :param
 	    		},function(res){
-	            	top.layer.msg(res.msg);
+	            	top.layer.msg(res.msg+res.count+"条");
 	            	setTimeout(function(){
 	    	            top.layer.close(index);
 	    	            //刷新当前页面

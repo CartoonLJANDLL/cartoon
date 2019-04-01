@@ -11,17 +11,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="keywords" content="纵横国漫网">
 <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-<link rel="stylesheet" href="<c:url value='/resources/layuicms/layui/css/layui.css'></c:url>">
+<link rel="stylesheet" href="<c:url value='/resources/layui/css/layui.css'></c:url>">
 <style type="text/css">
 	.layui-row{padding-left: 20px;margin-top: 20px;}
-	.layui-row li{line-height: 30px;list-style-type:circle;margin-left:16px;}
+	.layui-row .flow-default li{line-height: 30px;list-style-type:circle;margin-left:16px;}
 </style>
 </head>
 	<body>
-		<div class="layui-row">
+		<div class="layui-row layui-form">
 			<blockquote class="site-text layui-elem-quote">
-				<i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe60a;</i>
-				<label style="font-size: 20px;">来自${company.getName()}的资讯</label>
+				<span>
+					<i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe60a;</i>
+					<label style="font-size: 20px;">来自${company.getName()}的资讯</label>
+				</span>
+				<div style="float:right;margin-right:12%;">
+					<button class="layui-btn layui-btn-sm layui-btn-primary">升序 <i class="layui-icon layui-icon-up"></i></button>
+					<button class="layui-btn layui-btn-sm layui-btn-danger">降序 <i class="layui-icon layui-icon-down"></i></button>
+				</div>
 			</blockquote>
 			<ul class="flow-default" id="LAY_demo">
 				<!--<c:forEach items="${news }" var="item"  varStatus="status">
@@ -45,9 +51,15 @@
 		</div>
 		<script type="text/javascript" src="<c:url value='/resources/layui/layui.js'></c:url>"></script>
 		<script>
-		layui.use('flow', function(){
-			  var $ = layui.jquery; //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
-			  var flow = layui.flow;
+		layui.use(['flow','util'], function(){
+			  var $ = layui.jquery, //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
+			  	flow = layui.flow,
+			  	util = layui.util;
+			  
+			  //右下角小工具
+			  util.fixbar({
+				    css:{bottom: 50}
+				  });
 			  
 			  flow.load({
 				elem: '#LAY_demo', //指定列表容器
@@ -61,11 +73,11 @@
 					layui.each(res.data, function(index, item){
 					  if(item.company=='娃娃鱼动画'||item.company=='玄机科技'){
 						  lis.push('<li><div class="layui-col-md9"><a href="'+item.url+'" target="_blank">'+item.title +
-								  '</a></div><div class="layui-col-md3"><span style="text-align: right;">时间：'+item.time+'</span></div></li>');
+								  '</a></div><div class="layui-col-md3"><span style="text-align: right;">时间：'+item.time+'</span></div></li><hr/>');
 					  }
 					  else{
 						  lis.push('<li><div class="layui-col-md9"><a href="'+item.url+'" target="newsbody">'+item.title +
-								  '</a></div><div class="layui-col-md3"><span style="text-align: right;">时间：'+item.time+'</span></div></li>');
+								  '</a></div><div class="layui-col-md3"><span style="text-align: right;">时间：'+item.time+'</span></div></li><hr/>');
 					  }
 					}); 
 					//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页

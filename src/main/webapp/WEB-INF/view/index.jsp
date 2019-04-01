@@ -13,7 +13,7 @@
 
 <script type="text/javascript" src='<c:url value="/resources/js/jquery.min.js"></c:url>'></script>
 <script type="text/javascript" src='<c:url value="/resources/js/bootstrap.min.js"></c:url>'></script>
-<link href="/resources/css/layui.css" rel="stylesheet" />
+<link href="../resources/css/layui.css" rel="stylesheet" />
 <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 <link href='<c:url value="/resources/css/bootstrap.min.css"></c:url>' rel="stylesheet" />
 <style type="text/css">
@@ -121,7 +121,5 @@ $(document).ready(function(){
     <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
   </p>
 </div>
- 
-<script src='<c:url value="/resources/js/layui.js"></c:url>'></script>
 </body>
 </html>

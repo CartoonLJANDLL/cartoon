@@ -36,9 +36,10 @@
 						
 					</div>
 					<div class="layui-col-md3">
-						<span style="text-align: right;">>>${item.getCompanyname() }|</span>
+						<span style="text-align: right;">>>${item.getCompanyname() } |</span>
 						<span id="newstime">${item.getTime() }</span>
 					</div>
+					<hr/>
 				</li>
 				</c:forEach>
 			</ul>
