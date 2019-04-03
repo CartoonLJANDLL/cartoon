@@ -43,7 +43,7 @@
 		<param-value>classpath:spring-*.xml</param-value>
 		<!-- 将所有xml文件放到WEB-INF目录下 -->
 		<!-- <param-value>/WEB-INF/spring-*.xml</param-value> -->
-		</init-param>
+		</init-param>	
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>

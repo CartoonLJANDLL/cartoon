@@ -47,6 +47,7 @@
 		<a class="layui-btn layui-btn-xs layui-btn-danger layui-btn-disabled" lay-event="del" disabled="disabled">删除</a>
 	</script>
 </form>
+<script type="text/javascript" src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
 <script>
 layui.use(['form','layer','table','laytpl'],function(){
     var form = layui.form,
@@ -119,6 +120,7 @@ layui.use(['form','layer','table','laytpl'],function(){
                     body.find(".userSex input[value="+edit.userSex+"]").prop("checked","checked");  //性别
                     body.find(".gradeValue").val(edit.gradeValue);  //用户等级经验值
                     body.find("#userStatus select option[value="+edit.userStatus+"]").prop("selected","selected");//用户身份
+                    body.find(".gradeValue").text("确认修改");
                     if(edit.userStatus==2){
                     	body.find("#chargeblock").css("display","block");
                     }  

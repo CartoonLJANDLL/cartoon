@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="keywords" content="纵横国漫网">
 <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-    <link rel="stylesheet" href="<c:url value='/resources/layuicms/layui/css/layui.css'></c:url>">
+    <link rel="stylesheet" href="<c:url value='/resources/layui/css/layui.css'></c:url>">
     <link rel="stylesheet" href="<c:url value='/resources/layuicms/css/index.css'></c:url>">
 </head>
 <body class="main_body">
@@ -84,41 +84,6 @@
 		 	 	})
 		 	 }
 		 	 )
-		  var websocket = null;
-	      //判断当前浏览器是否支持WebSocket
-	      if ('WebSocket' in window) {
-	    //建立连接，这里的/websocket ，是ManagerServlet中开头注解中的那个值
-	          websocket = new WebSocket("ws://localhost:8080/guomanwang/common/refreshOperas");
-	      }
-	      else {
-	          layer.msg('当前浏览器 Not support websocket')
-	      }
-	      //连接发生错误的回调方法
-	      websocket.onerror = function () {
-	    	  layer.msg("WebSocket连接发生错误");
-	      };
-	      //连接成功建立的回调方法
-	      websocket.onopen = function () {
-	    	  layer.msg("WebSocket连接成功");
-	      }
-	      //接收到消息的回调方法
-	      websocket.onmessage = function (event) {
-	          if(event.code=="1"){
-	              location.reload();
-	          }
-	      }
-	      //连接关闭的回调方法
-	      websocket.onclose = function () {
-	    	  layer.msg("WebSocket连接关闭");
-	      }
-	      //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
-	      window.onbeforeunload = function () {
-	          closeWebSocket();
-	      }
-	      //关闭WebSocket连接
-	      function closeWebSocket() {
-	          websocket.close();
-	      }
 		  form.on('submit(searchnews)', function(data){
 				 $.ajax({
 					    url:'/guomanwang/common/searchnews',

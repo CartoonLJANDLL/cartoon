@@ -9,7 +9,6 @@
 <title>菜单导航栏</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
- <script type="text/javascript" src='<c:url value="/resources/js/jquery.min.js"></c:url>'></script>
 <link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
 <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 <style type="text/css">
@@ -66,13 +65,13 @@
       <li class="layui-nav-item" id="islogin">
         <a class="fly-nav-avatar" href="javascript:;">
           <cite class="layui-hide-xs" id="username"><%=user.getUsername() %></cite>
-          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+          <%if(user.getHonor()>=2){%><i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：管理员"></i><%}%>
           <i class="layui-badge fly-badge-vip layui-hide-xs">VIP${user.getGrade()}</i>
           <img src="<c:url value='${user.getHeadurl()}'></c:url>">
         </a>
         <dl class="layui-nav-child">
           <dd><a href="/guomanwang/user/user_setting"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-          <dd><a href="/guomanwang/user/user_message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="/guomanwang/user/user_message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息<span class="layui-badge-dot"></span></a></dd>
           <dd><a href="/guomanwang/user/user_home?userId=${user.getUserid() }"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <% if(user.getHonor()>=3){ %>
 		  <dd><a href="/guomanwang/common/admin"><i class="layui-icon" style=" font-size: 22px;">&#xe857;</i>后台管理</a></dd>
@@ -96,6 +95,41 @@
 		form = layui.form,
 		layer = parent.layer === undefined ? layui.layer : top.layer;
 		
+		 var websocket = null;
+	      //判断当前浏览器是否支持WebSocket
+	      if ('WebSocket' in window) {
+	    //建立连接，这里的/websocket ，是ManagerServlet中开头注解中的那个值
+	          websocket = new WebSocket("ws://localhost:8080/guomanwang/common/refreshOperas");
+	      }
+	      else {
+	          layer.msg('当前浏览器 Not support websocket')
+	      }
+	      //连接发生错误的回调方法
+	      websocket.onerror = function () {
+	    	  layer.msg("WebSocket连接发生错误");
+	      };
+	      //连接成功建立的回调方法
+	      websocket.onopen = function () {
+	    	  layer.msg("WebSocket连接成功");
+	      }
+	      //接收到消息的回调方法
+	      websocket.onmessage = function (event) {
+	          if(event.code=="1"){
+	              location.reload();
+	          }
+	      }
+	      //连接关闭的回调方法
+	      websocket.onclose = function () {
+	    	  layer.msg("WebSocket连接关闭");
+	      }
+	      //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+	      window.onbeforeunload = function () {
+	          closeWebSocket();
+	      }
+	      //关闭WebSocket连接
+	      function closeWebSocket() {
+	          websocket.close();
+	      }
 		$(".loginout").click(function(){
         	layer.confirm('确定退出登录？', {icon: 3, title: '提示信息'}, function (index) {
                 $.get('/guomanwang/user/logout/',function(data){

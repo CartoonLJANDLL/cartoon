@@ -13,6 +13,7 @@
 <style type="text/css">
 	.layui-row{padding-left: 20px;margin-top: 20px;}
 	.layui-row li{line-height: 30px;list-style-type:circle;margin-left:16px;}
+    .flow-default li:hover{box-shadow:0px 5px 3px #777;}
 </style>
 </head>
 	<body>

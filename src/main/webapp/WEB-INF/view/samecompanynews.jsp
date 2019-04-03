@@ -14,7 +14,8 @@
 <link rel="stylesheet" href="<c:url value='/resources/layui/css/layui.css'></c:url>">
 <style type="text/css">
 	.layui-row{padding-left: 20px;margin-top: 20px;}
-	.layui-row .flow-default li{line-height: 30px;list-style-type:circle;margin-left:16px;}
+	.layui-row li{line-height: 30px;list-style-type:circle;margin-left:16px;}
+    .flow-default li:hover{box-shadow:0px 5px 3px #777;}
 </style>
 </head>
 	<body>
@@ -29,25 +30,7 @@
 					<button class="layui-btn layui-btn-sm layui-btn-danger">降序 <i class="layui-icon layui-icon-down"></i></button>
 				</div>
 			</blockquote>
-			<ul class="flow-default" id="LAY_demo">
-				<!--<c:forEach items="${news }" var="item"  varStatus="status">
-					<li>
-						<div class="layui-col-md9">
-							<c:choose>
-								<c:when test="${item.getCompanyid()==4 }">
-									<a href="${item.getUrl() }" target="_blank">${item.getTitle() }</a>
-								</c:when>
-								<c:otherwise>
-									<a href="${item.getUrl() }" target="newsbody">${item.getTitle() }</a>
-								</c:otherwise>
-							</c:choose>
-						</div>
-						<div class="layui-col-md3">
-							<span style="text-align: right;">>${item.getTime() }</span>
-						</div>
-					</li>
-				</c:forEach>-->
-			</ul>
+			<ul class="flow-default" id="LAY_demo"></ul>
 		</div>
 		<script type="text/javascript" src="<c:url value='/resources/layui/layui.js'></c:url>"></script>
 		<script>
@@ -73,11 +56,11 @@
 					layui.each(res.data, function(index, item){
 					  if(item.company=='娃娃鱼动画'||item.company=='玄机科技'){
 						  lis.push('<li><div class="layui-col-md9"><a href="'+item.url+'" target="_blank">'+item.title +
-								  '</a></div><div class="layui-col-md3"><span style="text-align: right;">时间：'+item.time+'</span></div></li><hr/>');
+								  '</a></div><div class="layui-col-md3"><span style="text-align: right;">时间：'+item.time+'</span></div><hr/></li>');
 					  }
 					  else{
 						  lis.push('<li><div class="layui-col-md9"><a href="'+item.url+'" target="newsbody">'+item.title +
-								  '</a></div><div class="layui-col-md3"><span style="text-align: right;">时间：'+item.time+'</span></div></li><hr/>');
+								  '</a></div><div class="layui-col-md3"><span style="text-align: right;">时间：'+item.time+'</span></div><hr/></li>');
 					  }
 					}); 
 					//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页

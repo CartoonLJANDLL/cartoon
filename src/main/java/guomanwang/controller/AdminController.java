@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import guomanwang.domain.Block;
 import guomanwang.domain.Defaulthead;
 import guomanwang.domain.Information;
+import guomanwang.domain.MD5Cripy;
 import guomanwang.domain.Opera;
 import guomanwang.domain.Page;
 import guomanwang.domain.Thread;
@@ -180,7 +181,7 @@ public class AdminController {
 			}
 		}
 		else {
-			user.setPassword("123456");
+			user.setPassword(MD5Cripy.MD5("123456"));
 			user.setStatus(1);
 			user.setRegisterday(new Date());
 			int row=this.userService.register(user);

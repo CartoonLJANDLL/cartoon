@@ -11,9 +11,9 @@
 <meta name="referrer" content="no-referrer"/>
 <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
 <link rel="stylesheet" href="<c:url value='/resources/layui/css/layui.css'></c:url>">
-	</head>
+</head>
 	<style type="text/css">
-		.layui-bg-green,.layui-bg-red{margin:10px auto;width: 100%;height: 50px;text-align: center;padding-top:5px ;}
+		.layui-bg-green,.layui-bg-red{margin:10px auto;width: 100%;text-align: center;padding-top:5px ;}
 		.layui-row img{width: 100%;}
 		.layuui-nav .layui-icon{color:#999;}
 		.layui-col-md2{position:relative;height:370px;}
@@ -37,10 +37,15 @@
 	<jsp:include page="menu_header.jsp"/>
 		<div class="layui-carousel" id="test1">
 		  <div carousel-item>
-			<div class="layui-bg-green">宣传栏位1</div>
-			<div class="layui-bg-green">宣传栏位2</div>
-			<div class="layui-bg-green">宣传栏位3</div>
-			<div class="layui-bg-green">宣传栏位4</div>
+			<div>
+				<a href="https://v.qq.com/x/cover/hkpvlyfjca2v1rn.html"> <img src='<c:url value="/resources/img/tianyu.png"></c:url>'></a>
+			</div>
+			<div>
+				<a href="https://v.qq.com/x/cover/ipmc5u3dwb48mv2.html"><img src='<c:url value="/resources/img/xjkj.png"></c:url>'></a>
+			</div>
+			<div>
+				<a href="https://v.youku.com/v_show/id_XODU2MTEyNjI4.html?spm=a2h0k.11417342.soresults.dselectbutton&s=9a8e9ba0605611e2a19e"><img src='<c:url value="/resources/img/qsmy.png"></c:url>'></a>
+			</div>
 		  </div>
 		</div>
 <!-- 条目中可以是任意内容，如：<img src=""> -->
@@ -58,7 +63,6 @@
 							<input type="radio" name="type" value="" title="全部" checked>
 							<input type="radio" name="type" value="玄幻" title="玄幻">
 							<input type="radio" name="type" value="武侠" title="武侠">
-							<input type="radio" name="type" value="竞技" title="竞技">
 							<input type="radio" name="type" value="冒险" title="冒险">
 							<input type="radio" name="type" value="搞笑" title="搞笑">
 						</div>
@@ -79,7 +83,11 @@
 					</div>
 				</blockquote>
 		</div>
-		<div class="layui-bg-green"></div>
+		<div class="layui-bg-green">
+			<marquee class="noticeText ng-binding" direction="left" behavior="alternate" scrollamount="100" scrolldelay="1000" width="100%" onmouseover="this.stop();" onmouseout="this.start();"  style="width: 100%;">
+				<p>免责声明：本网站下所有的番剧皆来源优酷、爱奇艺和腾讯视频网站，仅做学习用途！</p>
+			</marquee>
+		</div>
 		<div class="layui-container" style="width:90%;height:100%;">
 			<div class="layui-row layui-col-space20 " id="result"></div>
 			<div id="pager"></div>
@@ -116,8 +124,8 @@
             }, function(res){
 		//从后端获得的列表返回在data集合中
 		layui.each(res.data, function(index, item){
-			var html='<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size: 30px;"></i>|</li>';
-			if(item.collecte==1){html='<li class="second"><i class="layui-icon layui-icon-rate-solid shoucang" style="font-size: 30px;color: #FF5722;"></i>|</li>';}
+			var html='<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size:20px;"></i>|</li>';
+			if(item.collecte==1){html='<li class="second"><i class="layui-icon layui-icon-rate-solid shoucang" style="font-size: 20px;color: #FF5722;"></i>|</li>';}
 			 $("#result").append(['<div class="layui-col-md2">'
 			 			,'<div style="position:relative;" class="list_item">'
 						,'<img src="'+item.opPhotourl+'" height="50%">'
@@ -130,7 +138,7 @@
 				  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
 				  			,html
 				  			,'<li class="thred">'
-								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+								,'<i class="layui-icon fenxiang" style="font-size: 20px;">&#xe641;</i>'
 				  			,'</li>'	
 				  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
 				  		,'</ul>'
@@ -160,6 +168,8 @@
 			  	  	}, function(result){
 			  		//从后端获得的列表返回在data集合中
 			  		layui.each(result.data, function(index, item){
+						var html='<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size:20px;"></i>|</li>';
+						if(item.collecte==1){html='<li class="second"><i class="layui-icon layui-icon-rate-solid shoucang" style="font-size: 20px;color: #FF5722;"></i>|</li>';}
 						 $("#result").append(['<div class="layui-col-md2">'
 					 			,'<div style="position:relative;" class="list_item">'
 								,'<img src="'+item.opPhotourl+'" height="50%">'
@@ -170,9 +180,9 @@
 						  		,'</div>'
 								,'<ul>'
 						  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
-						  			,'<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size: 30px;"></i>|</li>'
+						  			,html
 						  			,'<li class="thred">'
-										,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+										,'<i class="layui-icon fenxiang" style="font-size: 20px;">&#xe641;</i>'
 						  			,'</li>'	
 						  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
 						  		,'</ul>'
@@ -208,6 +218,8 @@
 	  	  	},function(res){
 			//从后端获得的列表返回在data集合中
 			layui.each(res.data, function(index, item){
+				var html='<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size:20px;"></i>|</li>';
+				if(item.collecte==1){html='<li class="second"><i class="layui-icon layui-icon-rate-solid shoucang" style="font-size: 20px;color: #FF5722;"></i>|</li>';}
 				 $("#result").append(['<div class="layui-col-md2">'
 			 			,'<div style="position:relative;" class="list_item">'
 						,'<img src="'+item.opPhotourl+'" height="50%">'
@@ -218,9 +230,9 @@
 				  		,'</div>'
 						,'<ul>'
 				  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
-				  			,'<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size: 30px;"></i>|</li>'
+				  			,html
 				  			,'<li class="thred">'
-								,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+								,'<i class="layui-icon fenxiang" style="font-size: 20px;">&#xe641;</i>'
 				  			,'</li>'	
 				  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
 				  		,'</ul>'
@@ -253,6 +265,8 @@
 				  	  	},function(res){
 				  		//从后端获得的列表返回在data集合中
 				  		layui.each(res.data, function(index, item){
+							var html='<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size:20px;"></i>|</li>';
+							if(item.collecte==1){html='<li class="second"><i class="layui-icon layui-icon-rate-solid shoucang" style="font-size: 20px;color: #FF5722;"></i>|</li>';}
 							 $("#result").append(['<div class="layui-col-md2">'
 						 			,'<div style="position:relative;" class="list_item">'
 									,'<img src="'+item.opPhotourl+'" height="50%">'
@@ -263,9 +277,9 @@
 							  		,'</div>'
 									,'<ul>'
 							  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
-							  			,'<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size: 30px;"></i>|</li>'
+							  			,html
 							  			,'<li class="thred">'
-											,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+											,'<i class="layui-icon fenxiang" style="font-size: 20px;">&#xe641;</i>'
 							  			,'</li>'	
 							  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
 							  		,'</ul>'
@@ -294,7 +308,7 @@
 	    		$.post('/guomanwang/opera/selectoperabyname',{
 	    			param :param
 	    		},function(res){
-	            	top.layer.msg(res.msg+res.count+"条");
+	            	top.layer.msg(res.msg);
 	            	setTimeout(function(){
 	    	            top.layer.close(index);
 	    	            //刷新当前页面
@@ -302,6 +316,8 @@
 	    	            	$("#result").empty();
 	    	            	$("#pager").fadeOut();
 					  		layui.each(res.data, function(index, item){
+								var html='<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size:20px;"></i>|</li>';
+								if(item.collecte==1){html='<li class="second"><i class="layui-icon layui-icon-rate-solid shoucang" style="font-size: 20px;color: #FF5722;"></i>|</li>';}
 								 $("#result").append(['<div class="layui-col-md2">'
 							 			,'<div style="position:relative;" class="list_item">'
 										,'<img src="'+item.opPhotourl+'" height="50%">'
@@ -312,9 +328,9 @@
 								  		,'</div>'
 										,'<ul>'
 								  			,'<li class="first"><h3 class="layui-elip">'+item.opName+'</h3></li>'
-								  			,'<li class="second"><i class="layui-icon layui-icon-rate shoucang" style="font-size: 30px;"></i>|</li>'
+								  			,html
 								  			,'<li class="thred">'
-												,'<i class="layui-icon fenxiang" style="font-size: 30px;">&#xe641;</i>'
+												,'<i class="layui-icon fenxiang" style="font-size: 20px;">&#xe641;</i>'
 								  			,'</li>'	
 								  			,'<li class="layui-word-aux layui-elip last">'+item.opDesc+'</li>'
 								  		,'</ul>'

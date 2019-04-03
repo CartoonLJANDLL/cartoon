@@ -46,7 +46,6 @@
 	</script>
 </form>
 <script type="text/javascript" src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
-<script type="text/javascript" src='<c:url value="/resources/layuicms/js/userList.js"></c:url>'></script>
 <script>
 layui.use(['form','layer','table','laytpl'],function(){
     var form = layui.form,
