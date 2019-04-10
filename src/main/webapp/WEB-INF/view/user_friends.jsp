@@ -91,7 +91,7 @@
               <img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
               </a>
               <span style="background-color:red;margin-left:5px;">${item.getUsername() }</span>
-              <a class="mine-edit" href="javascript:;" data-id="${item.getUserid() }" id="chat"><i class="layui-icon" style="color:white;">&#xe63a;</i>私信</a>
+              <a class="mine-edit" href="javascript:;" data-id="${item.getUserid() }" id="chat"><i class="layui-icon" style="color:white;">&#xe63a;</i>聊天</a>
               <a class="mine-edit" href="javascript:;" data-id="${item.getUserid() }" id="deletefriend"><i class="layui-icon" style="color:white;">&#xe640;</i>删除</a>
             </li>
 		</c:forEach>
@@ -150,13 +150,7 @@
     <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
   </p>
 </div>
-<script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
 <script src='<c:url value="/resources/js/haha.js"></c:url>'></script>
-<script>
-layui.config({
-  base: '<c:url value="/resources/res/mods/"></c:url>' //你存放新模块的目录，注意，不是layui的模块目录
-}).use('<c:url value="index"></c:url>'); //加载入口
-</script>
 <script>
 layui.use(['element','form','layer'], function(){
 	var $ = layui.jquery,
@@ -176,6 +170,35 @@ layui.use(['element','form','layer'], function(){
            }
          })
     });
+	//给好友发送私信
+    $(document).on('click', '#chat', function(data) {
+        var receiverid = $(this).attr('data-id');
+        var senderid=${user.getUserid()};
+        var index = layui.layer.open({
+            title : ["好友聊天界面",'text-align:center'],
+            type : 2,
+            content : 'chat',
+            success : function(layero, index){
+                var body = layui.layer.getChildFrame('body', index);
+                    body.find(".title").val(edit.title);
+                    body.find(".abstracts").val(edit.url);
+                    body.find(".thumbImg").attr("src",edit.newsImg);
+                    body.find("#content").val(edit.content);
+                    body.find(".status select").val(edit.status);
+                    form.render();
+                setTimeout(function(){
+                    layui.layer.tips('点击此处返回我的好友列表', '.layui-layer-setwin .layui-layer-close', {
+                        tips: 3
+                    });
+                },500)
+            }
+        })
+        layui.layer.full(index);
+        //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
+        $(window).on("resize",function(){
+            layui.layer.full(index);
+        })
+	})
 	 //删除好友与拒绝好友申请共用同一事件
     $(document).on('click', '#deletefriend,#refuse', function(data) {
         var friendid = $(this).attr('data-id');
@@ -202,34 +225,7 @@ layui.use(['element','form','layer'], function(){
             return false;
     	});
     })
-		//给好友发送私信
-	    $(document).on('click', '#chat', function(data) {
-	        var receiverid = $(this).attr('data-id');
-	        var senderid=${user.getUserid()};
-	        layer.prompt({
-	        	  formType: 2,
-	        	  value: '',
-	        	  title: '请输入私信内容',
-	        	  shadeClose:true,
-	        	  btn: ['发送', '取消'],
-	        	  btnAlign: 'c',
-	        	  area: ['300px', '200px'] //自定义文本域宽高
-	        	}, function(value, index, elem){
-	  			  $.ajax({
-					    url:'/guomanwang/message/postmessage',
-					    type: 'post',
-					    data: {
-						senderid:senderid,
-						receiverid:receiverid,
-						content:value,	
-				  		type:'私信',
-					    },
-					    success: function (info) {
-					       layer.msg(info.msg);
-					    }
-					  });
-	        	});
-    })
+
 });	
 </script>
 </body>

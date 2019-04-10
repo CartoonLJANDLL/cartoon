@@ -10,7 +10,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-<script type="text/javascript" src='<c:url value="/resources/js/jquery.min.js"></c:url>'></script>
 <link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
 <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 </head>
@@ -158,7 +157,7 @@ layui.use(['element','form','layer'], function(){
 		  return false;
         });
     })
-	//给好友回复私信
+	//给好友回复私信，进入聊天窗口
 	    $(document).on('click', '#reply', function(data) {
 	        var receiverid = $(this).attr('data-id');
 	        var senderid=${user.getUserid()};
@@ -171,19 +170,13 @@ layui.use(['element','form','layer'], function(){
 	        	  btnAlign: 'c',
 	        	  area: ['300px', '200px'] //自定义文本域宽高
 	        	}, function(value, index, elem){
-	  			  $.ajax({
-					    url:'/guomanwang/message/postmessage',
-					    type: 'post',
-					    data: {
-						senderid:senderid,
-						receiverid:receiverid,
-						content:value,	
-				  		type:'私信',
-					    },
-					    success: function (info) {
-					       layer.msg(info.msg);
-					    }
-					  });
+	        		if (websocket.readyState == websocket.OPEN) {  
+	                    websocket.send("嘻嘻侠"+"@"+value);//调用后台handleTextMessage方法  
+	                    layer.msg("发送成功!");  
+	                } else {  
+	                
+	                	layer.msg("连接失败!"+websocket.readyState);  
+	                }  
 	        	});
     })	
 });	

@@ -13,5 +13,6 @@ public interface MessageMapper {
 	public Message getmessagebyid(int id);
 	public List<Message> getmessagesbysenderid(int userid);
 	public List<Message> getmessagesbyreceiverid(int userid);
+	public List<Message> getfriendmsgsbyuserid(int userid);
 	public int deleteAllMessageByreceiverid(int userid);
 }

@@ -82,6 +82,7 @@ public class UserController {
 	@Qualifier("MessageServiceimpl")
 	private MessageService messageservice;
 	
+	//用户登录
 	@RequestMapping("/islogin")
 	@ResponseBody
 	public JSONObject isLogin(String telnumber, String password, Model model,
@@ -104,7 +105,7 @@ public class UserController {
 			else if(user.getStatus()==0)
 			{
 					json.put("code",0);
-					json.put("msg","该账号已禁用！请换一个账号！");
+					json.put("msg","该账号已禁用！请更换账号登录！");
 			}
 			else {
 				json.put("code",0);
@@ -113,6 +114,17 @@ public class UserController {
 		}			
 			return json;
 		}
+	//聊天界面
+	@RequestMapping("/chat")
+	public String chat(HttpSession session,HttpServletRequest request) {
+		User user=(User)session.getAttribute("user");
+		List<User> friends=this.friendrelationservice.getfriendsbyuserid(user.getUserid());
+		List<Message> friendmsgs=this.messageservice.getfriendmsgsbyuserid(user.getUserid());
+		request.setAttribute("friends", friends);
+		request.setAttribute("friendmsgs",friendmsgs);
+		return "chat";
+	}
+	//用户个人中心
 	@RequestMapping("/user_index")
 	public String user_index(Model model,HttpSession session,
 			HttpServletRequest request) {
@@ -126,6 +138,7 @@ public class UserController {
 				return "user_index";
 		}	
 	}
+	//用户主页
 	@RequestMapping("/user_home")
 	public String user_home(HttpSession session,HttpServletRequest request,int userId,Model model){
 			List<UserThread> mycommits=this.userthreadService.selectMyCommitThread(userId);
@@ -145,6 +158,7 @@ public class UserController {
 			return "user_home";
 		
 	}
+	//用户设置
 	@RequestMapping("/user_setting")
 	public String user_setting(HttpServletRequest request){
 		HttpSession session = request.getSession();
@@ -156,6 +170,7 @@ public class UserController {
 		}
 		return "redirect:/common/login";
 	}
+	//用户好友
 	@RequestMapping("/user_friends")
 	public String user_friends(HttpServletRequest request){
 		HttpSession session = request.getSession();		
@@ -171,19 +186,16 @@ public class UserController {
 		}
 		return "redirect:/common/login";
 	}
+	//用户消息
 	@RequestMapping("/user_message")
-	public String user_message(HttpServletRequest request){
-		HttpSession session = request.getSession();
+	public String user_message(HttpServletRequest request,HttpSession session){
 		User user=(User)session.getAttribute("user");
-		if(user==null) {
-			return "redirect:/common/login";
-		}
-		else {
-			List<Message> messages=this.messageservice.getmessagesbyreceiverid(user.getUserid());
-			request.setAttribute("mymessages", messages);
-		}
-		
+		if(user!=null) {
+		List<Message> messages=this.messageservice.getmessagesbyreceiverid(user.getUserid());
+		request.setAttribute("mymessages", messages);
 		return "user_message";
+		}
+		return "redirect:/common/login";
 	}
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) throws Exception {

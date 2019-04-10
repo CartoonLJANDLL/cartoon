@@ -54,4 +54,14 @@
 		where receiverid=#{receiverid} and receiver_status=1
 		and a.senderid=b.userid
 	</select>
+	<!-- 获得指定用户的所有好友消息-->
+	<select id="getfriendmsgsbyuserid" resultMap="resultMessage">
+		select a.*,b.username
+		from message a,user b
+		where (a.senderid=b.userid
+    	and senderid=#{receiverid})
+    	or (receiverid=#{receiverid} 
+    	and a.senderid=b.userid)
+		order BY a.senderid,time
+	</select>
 </mapper>

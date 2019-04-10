@@ -52,4 +52,12 @@ public class MessageServiceimpl implements MessageService{
 		return this.messagemapper.deleteAllMessageByreceiverid(userid);
 	}
 	
+	@Override
+	public List<Message> getfriendmsgsbyuserid(int userid) {
+		//根据用户id获得所有好友信息
+		List<Message> msgs=this.messagemapper.getfriendmsgsbyuserid(userid);
+		return msgs;
+	}
+
+	
 }

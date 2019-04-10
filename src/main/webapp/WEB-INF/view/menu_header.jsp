@@ -84,6 +84,7 @@
     </ul>
   </div>
   <script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
+  <script type="text/javascript" src="http://cdn.bootcss.com/sockjs-client/1.1.1/sockjs.js"></script> 
   <script>
 	layui.config({
 	  base: '<c:url value="/resources/res/mods/"></c:url>' //你存放新模块的目录，注意，不是layui的模块目录
@@ -95,41 +96,56 @@
 		form = layui.form,
 		layer = parent.layer === undefined ? layui.layer : top.layer;
 		
-		 var websocket = null;
-	      //判断当前浏览器是否支持WebSocket
-	      if ('WebSocket' in window) {
-	    //建立连接，这里的/websocket ，是ManagerServlet中开头注解中的那个值
-	          websocket = new WebSocket("ws://localhost:8080/guomanwang/common/refreshOperas");
-	      }
-	      else {
-	          layer.msg('当前浏览器 Not support websocket')
-	      }
-	      //连接发生错误的回调方法
-	      websocket.onerror = function () {
-	    	  layer.msg("WebSocket连接发生错误");
-	      };
-	      //连接成功建立的回调方法
-	      websocket.onopen = function () {
-	    	  layer.msg("WebSocket连接成功");
-	      }
-	      //接收到消息的回调方法
-	      websocket.onmessage = function (event) {
-	          if(event.code=="1"){
-	              location.reload();
-	          }
-	      }
-	      //连接关闭的回调方法
-	      websocket.onclose = function () {
-	    	  layer.msg("WebSocket连接关闭");
-	      }
-	      //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
-	      window.onbeforeunload = function () {
-	          closeWebSocket();
-	      }
-	      //关闭WebSocket连接
-	      function closeWebSocket() {
-	          websocket.close();
-	      }
+		var websocket = null;  
+	    if ('WebSocket' in window) {  
+	        //Websocket的连接  
+	        websocket = new WebSocket("ws://localhost:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
+	    }  
+	    else if ('MozWebSocket' in window) {  
+	        //Websocket的连接  
+	        websocket = new MozWebSocket("ws://localhost:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
+	    }  
+	    else {  
+	        //SockJS的连接  
+	        websocket = new SockJS("http://localhost:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
+	    }  
+	    websocket.onopen = onOpen;  
+	    websocket.onmessage = onMessage;  
+	    websocket.onerror = onError;  
+	    websocket.onclose = onClose;  
+	  
+	    function onOpen(openEvt) {  
+	        //alert(openEvt.Data);
+	        console.log(location.pathname);
+	    }  
+	    function onMessage(evt) {
+	    	if(location.pathname=="/guomanwang/user/chat"||location.pathname.equals=="/guomanwang/user/user_message"){
+	    		$(".chat").first().append('<div class="bubble you">'+evt.data+'</div>');	    		
+	    	}
+	    	else{
+	    		layer.open({
+		            type: 1
+		            ,offset: 'b'
+		            ,id: 'layerDemob'
+		            ,content: '<div style="padding: 20px 100px;">'+evt.data+'</div>'
+		            ,btn: '关闭'
+		            ,btnAlign: 'c' //按钮居中
+		            ,shade: 0 //不显示遮罩
+		            ,yes: function(){
+		              layer.closeAll("page");
+		            }
+		          }); 
+	    	}
+
+	    }  
+	    function onError() {  
+	    }  
+	    function onClose() {  
+	    }   
+	  
+	    window.close = function () {  
+	        websocket.onclose();  
+	    }
 		$(".loginout").click(function(){
         	layer.confirm('确定退出登录？', {icon: 3, title: '提示信息'}, function (index) {
                 $.get('/guomanwang/user/logout/',function(data){
