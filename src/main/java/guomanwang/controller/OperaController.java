@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import guomanwang.domain.Information;
 import guomanwang.domain.Opera;
+import guomanwang.exceptionHandle.CommonReturnType;
+import guomanwang.exceptionHandle.GlobalExceptionHandler;
 import guomanwang.interceptor.Operation;
 import guomanwang.service.OperaService;
 import net.sf.json.JSONArray;
@@ -59,20 +61,20 @@ public class OperaController {
 	/*@Operation(name="alloperas")*/
 	@ResponseBody()
 	@RequestMapping("/alloperas")
-	public JSONObject alloperas(String param) throws IOException {
+	public JSONObject alloperas(String param) throws Exception {
 		/*JSONObject param = new JSONObject(); 
 		Integer page = 1;
 		Integer status = null;
 		String type  = "";
         param.put("page", page);
-		//param.put("status", 1);
+		param.put("status", 1);
 		param.put("type", type);
 		param.put("sort", "op_time");
 		System.out.println(param.toString() + "OOOOO"); 
 		param.put("userId", 1);*/
 		JSONObject json = JSONObject.fromObject(param);   
 		JSONObject operas = operaService.selectAllOpera(json/*param*/);
-		//System.out.println("opera/alloperas");
+		/*int i = 1/0;*/
 		System.out.println("HHHHH" + operas.get("data").toString());
 		
 		return operas;

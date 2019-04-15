@@ -17,13 +17,16 @@ import guomanwang.domain.User;
 public class LoginFilter implements Filter {
 
 	/*
-	 * filteuris为需要登录后才能访问的页面，accessuris为需要登录且有权限才能访问的页面
+	 * right1为需要登录后才能访问的页面，right2为需要登录且有权限才能访问的页面
 	 * (non-Javadoc)
 	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
 	 */
 	//过滤的URI
-	String[] filteuris = new String[] { "/tiezi", "zan", "commit"}; 
-	String[] accessuris = new String[] {"/control"} ;
+	String[] right1 = new String[] { "/tiezi", "zan", "commit"}; 
+	String[] right2 = new String[] {"/control"} ;
+	String[] right3 = new String[] {};
+	String[] right4 = new String[] {};
+	
 	//被拒绝后去登录页面
 	String loginstr = "/common/login";
 	@Override
@@ -52,8 +55,8 @@ public class LoginFilter implements Filter {
 		//请求的uri
 		String uri = req.getRequestURI();
 		System.out.println( "Request URI " + uri);
-		boolean dofilter = doOrNotdoFilte( filteuris, uri);
-		boolean accessdofilter = doOrNotdoFilte( accessuris, uri);
+		boolean dofilter = doOrNotdoFilte( right1, uri);
+		boolean accessdofilter = doOrNotdoFilte( right2, uri);
 		if( dofilter) {
 			System.out.println("由于访问了要登录的内容,要进行过滤");
 			Object obj = req.getSession().getAttribute("user");

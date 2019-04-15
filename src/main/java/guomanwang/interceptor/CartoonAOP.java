@@ -2,11 +2,9 @@ package guomanwang.interceptor;
 
 import guomanwang.domain.Log;
 import guomanwang.domain.User;
-import guomanwang.interceptor.Operation;
 import guomanwang.service.LogService;
 import guomanwang.util.IPUtil;
 
-import java.lang.reflect.Method;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,6 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +53,9 @@ public class CartoonAOP {
 	@AfterThrowing(pointcut = "method()", throwing = "e")
 	public void afterThrowing( JoinPoint joinPoint, Exception e) {
 		String message = e.getMessage();
-		System.out.println("AOP捕获到异常了“" + message + "HHHHHHHHHH");
+		System.out.println("AOP捕获到异常了" + message + "HHHHHHHHHH");
 		log.setMessage(message);
+		log.setLevel("error");
 	}
 	/*
 	 * 获取uri,host,userid值存入log，并将log写入数据库
@@ -100,7 +98,6 @@ public class CartoonAOP {
 		log.setParams(paramsStr);
 		//执行方法，获取返回参数
 		Object result = pjd.proceed();
-		
 		long endTime = System.currentTimeMillis();
 		float excTime = (float)(endTime - startTime)/1000;
 		log.setEndtime(new Date());

@@ -2,18 +2,33 @@ package guomanwang.domain;
 
 import java.util.Date;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class User {
 	private int userId;
+	
+	
 	private int Grade;
-	//表示等级经验值
+	//表示等级经验值"
+	@NotNull(message="请输入等级经验")
+	@Max(value=99,message="输入的等级经验不合法")
+	@Min(value=0,message="输入的等级经验不合法")
 	private int gradeValue;
 	//表示用户身份，1为注册用户，2为版主，3为管理员，4为超级用户
 	private int Honor;
+	@NotBlank(message = "请输入性别")
 	private String Sex;
+	@NotBlank(message = "请输入用户名")
 	private String userName;
 	private String passWord;
+	
+	@NotBlank(message="请输入手机号")
 	private String telPhone;
 	private String headUrl;
+	@NotBlank(message="请输入Introduce")
 	private String Introduce;
 	//表示注册时间
 	private Date registerday;

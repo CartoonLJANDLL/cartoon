@@ -44,6 +44,8 @@
 	<!-- 4.扫描web相关的bean -->
 	<context:component-scan base-package="guomanwang.controller" />
 	<context:component-scan base-package="guomanwang.interceptor" />
+	<context:component-scan base-package="guomanwang.exceptionValidate" />
+	<context:component-scan base-package="guomanwang.exceptionHandle" />
 	<aop:aspectj-autoproxy/>
 	
 </beans>

@@ -17,6 +17,10 @@ import com.github.pagehelper.PageInfo;
 
 import guomanwang.domain.Opera;
 import guomanwang.domain.OperaExample;
+import guomanwang.exception.BusinessException;
+import guomanwang.exception.CommonError;
+import guomanwang.exception.ErrorType;
+import guomanwang.exceptionHandle.CommonReturnType;
 import guomanwang.domain.OpCollected;
 import guomanwang.domain.OpCollectedExample;
 import guomanwang.mapper.OperaMapper;
@@ -91,7 +95,7 @@ public class OperaServiceimpl implements OperaService {
 	
 	//查询所有Opera//根据传进来的JSON数据param所包含的信息 page页码 type番剧类型  status完结状态， sort排序类型
 	@Override
-	public JSONObject selectAllOpera(JSONObject param) {
+	public JSONObject selectAllOpera(JSONObject param) throws Exception {
 		JSONObject jsonobject = new JSONObject();
 		OperaExample operaExample = new OperaExample();
 		OperaExample.Criteria operacriteria = operaExample.createCriteria();
@@ -126,10 +130,15 @@ public class OperaServiceimpl implements OperaService {
 		}
 		if( param.has("status")) {
 			Integer op_status = param.getInt("status");
-			if( op_status == 1 || op_status == 0) {
-				operacriteria.andOpStatusEqualTo(op_status);
+			if( op_status == -1){
+				
 			}else {
-				System.out.println("STATUS状态值错误，其值仅为1或0");
+				if( op_status == 1 || op_status == 0) {
+					operacriteria.andOpStatusEqualTo(op_status);
+				}else {
+					System.out.println("STATUS状态值错误，其值仅为1或0");
+					throw new BusinessException(ErrorType.PARAMETER_VALUE_ERROR, "番剧status值异常");
+				}
 			}
 		}
 		operaExample.setDistinct(true);//设置去重
@@ -137,7 +146,6 @@ public class OperaServiceimpl implements OperaService {
 		PageHelper.startPage(op_page,getPageSize(param));//每页18条记录
 		List<Opera> operas = operaMapper.selectByExample(operaExample);
 		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
-		
 		if( param.has("userId")) {
 			int userId = param.getInt("userId");
 			List<OpCollected> opcollected = getAllOpCollectedOpera(userId);

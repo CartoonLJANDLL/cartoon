@@ -19,14 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.github.pagehelper.PageHelper;
 import com.google.gson.Gson;
 
 import guomanwang.domain.Block;
 import guomanwang.domain.Defaulthead;
 import guomanwang.domain.Information;
 import guomanwang.domain.MD5Cripy;
-import guomanwang.domain.Opera;
 import guomanwang.domain.Page;
 import guomanwang.domain.Thread;
 import guomanwang.domain.User;
@@ -231,7 +229,7 @@ public class AdminController {
 	//后端获得番剧分页信息
 	@ResponseBody
 	@RequestMapping("/getoperalist")
-	public JSONObject getoperalist(int page,@RequestParam("limit") int limit) {
+	public JSONObject getoperalist(int page,@RequestParam("limit") int limit) throws Exception {
 		JSONObject param=new JSONObject();
 		param.put("page",page);
 		param.put("limit",limit);

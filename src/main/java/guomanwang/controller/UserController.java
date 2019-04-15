@@ -3,16 +3,15 @@ package guomanwang.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,22 +23,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.mysql.fabric.Response;
-
-import guomanwang.domain.User;
-import guomanwang.domain.UserCommit;
-import guomanwang.domain.UserThread;
-import guomanwang.domain.Commit;
 import guomanwang.domain.Defaulthead;
 import guomanwang.domain.FriendRelation;
 import guomanwang.domain.MD5Cripy;
 import guomanwang.domain.Message;
 import guomanwang.domain.Sign;
-import guomanwang.domain.Thread;
 import guomanwang.domain.TimeTransformUtil;
+import guomanwang.domain.User;
+import guomanwang.domain.UserThread;
+import guomanwang.exception.BusinessException;
+import guomanwang.exception.ErrorType;
+import guomanwang.exceptionValidate.ValidateResult;
+import guomanwang.exceptionValidate.ValidationImpl;
 import guomanwang.service.CommitService;
 import guomanwang.service.DefaultheadService;
 import guomanwang.service.FriendRelationService;
@@ -81,6 +77,8 @@ public class UserController {
 	@Autowired
 	@Qualifier("MessageServiceimpl")
 	private MessageService messageservice;
+	@Autowired
+	private ValidationImpl validationImpl;
 	
 	//用户登录
 	@RequestMapping("/islogin")
@@ -361,8 +359,9 @@ public class UserController {
 	//更新个人资料
 	@RequestMapping("/updateuserinfo")
 	@ResponseBody
-	public JSONObject resetinfo(String cellphone,String username,String sex,String introduce, Model model,
-			HttpServletRequest request,HttpServletResponse response) throws IOException {
+	public JSONObject resetinfo(@Valid String cellphone,@Valid String username,@Valid String sex,@Valid String introduce, Model model,
+			HttpServletRequest request,HttpServletResponse response) throws Exception {
+		System.out.println("------------" + "usercontroller updateuserinfo");
 		HttpSession session = request.getSession();
 		JSONObject json= new JSONObject();
 		User userinfo=(User)session.getAttribute("user");
@@ -371,11 +370,22 @@ public class UserController {
 			user.setName(username);
 			user.setIntroduce(introduce);
 			user.setSex(sex);
-			user.setStatus(1);
+			System.out.println("VALIDATE-------" + user.getPhone() + user.toString() + user.getIntroduce() + user.getSex());
+			ValidateResult validateResult = validationImpl.validate(user);
+			System.out.println("------------5" + "usercontroller updateuserinfo");
+			if(validateResult.isHasError()==true) {
+				throw new BusinessException(ErrorType.PARAMETER_VALUE_ERROR,validateResult.getErrMsg());
+			}
+			System.out.println("------------" + "usercontroller updateuserinfo");
+			user.setUserid(20);
+			System.out.println("------------" + userinfo.getUserid() + "usercontroller updateuserinfo");
+			/*user.setStatus(1);
 			user.setUserid(userinfo.getUserid());
 			user.setGradeValue(userinfo.getGradeValue());
-			user.setHonor(userinfo.getHonor());
+			user.setHonor(userinfo.getHonor());*/
+			System.out.println("------------3" + "usercontroller updateuserinfo");
 			int change_row=this.userService.updateuserinfo(user);
+			System.out.println("------------4" + "usercontroller updateuserinfo");
 			if(change_row>0) {
 				List<User> userlist=this.userService.isLogin(cellphone);
 				for(User one:userlist) {
@@ -383,11 +393,13 @@ public class UserController {
 					}
 				json.put("code",1);
 				json.put("msg","个人资料更新成功！");
-			}
-			else {
+				System.out.println("------------1" + "usercontroller updateuserinfo");
+			}else {
 				json.put("code",0);
 				json.put("msg","个人资料更新失败！");
+				System.out.println("------------2" + "usercontroller updateuserinfo");
 				}
+			System.out.println("fsadkflj");
 			return json;
 		
 	}

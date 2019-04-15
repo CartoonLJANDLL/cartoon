@@ -19,7 +19,7 @@ public interface OperaService {
     //通过userid和Operaid找到userOpera
     public OpCollected getUserOpera(int userId,int operaId);
     //显示所有番剧
-    JSONObject selectAllOpera(JSONObject param);
+    JSONObject selectAllOpera (JSONObject param) throws Exception;
     //收藏番剧
     //取消收藏番剧
     public JSONObject nocollectOpera(JSONObject param);
