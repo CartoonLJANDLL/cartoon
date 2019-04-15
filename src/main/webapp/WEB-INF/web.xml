@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app>
+    <!-- <session-config>
+       <session-timeout>1</session-timeout>
+    </session-config> -->
 	<absolute-ordering/>
 	<display-name>Archetype Created Web Application</display-name>
 	<!-- 登录控制访问资源的过滤器 -->
