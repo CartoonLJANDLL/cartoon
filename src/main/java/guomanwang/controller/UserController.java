@@ -49,6 +49,7 @@ import guomanwang.service.ThreadService;
 import guomanwang.service.UserCommitService;
 import guomanwang.service.UserService;
 import guomanwang.service.UserThreadService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @RequestMapping("/user")
@@ -114,15 +115,13 @@ public class UserController {
 		}			
 			return json;
 		}
-	//聊天界面
-	@RequestMapping("/chat")
-	public String chat(HttpSession session,HttpServletRequest request) {
+	//获得好友聊天记录
+	@RequestMapping("/getfriendsmsgsbyuserid")
+	@ResponseBody
+	public JSONArray getfriendsmsgsbyuserid(HttpSession session,HttpServletRequest request) {
 		User user=(User)session.getAttribute("user");
-		List<User> friends=this.friendrelationservice.getfriendsbyuserid(user.getUserid());
-		List<Message> friendmsgs=this.messageservice.getfriendmsgsbyuserid(user.getUserid());
-		request.setAttribute("friends", friends);
-		request.setAttribute("friendmsgs",friendmsgs);
-		return "chat";
+		JSONArray friendmsgs=this.messageservice.getfriendmsgsbyuserid(user.getUserid());
+		return friendmsgs;
 	}
 	//用户个人中心
 	@RequestMapping("/user_index")
@@ -192,7 +191,21 @@ public class UserController {
 		User user=(User)session.getAttribute("user");
 		if(user!=null) {
 		List<Message> messages=this.messageservice.getmessagesbyreceiverid(user.getUserid());
-		request.setAttribute("mymessages", messages);
+		List<Message> systemmessages=new ArrayList<Message>();
+		List<Message> friendmessages=new ArrayList<Message>();
+		List<Message> othermessages=new ArrayList<Message>();
+		for(Message msg:messages) {
+			if(msg.getType().equals("私信")) {
+				friendmessages.add(msg);
+			}
+			else if(msg.getType().equals("帖子")) {
+				othermessages.add(msg);
+			}
+			else { systemmessages.add(msg);}
+		}
+		request.setAttribute("systemmessages", systemmessages);
+		request.setAttribute("friendmessages", friendmessages);
+		request.setAttribute("othermessages", othermessages);
 		return "user_message";
 		}
 		return "redirect:/common/login";

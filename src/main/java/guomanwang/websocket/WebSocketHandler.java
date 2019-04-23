@@ -49,7 +49,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 		msg.setType("私信");
 		// 分割成id和信息内容
 		String[] messageInfo = message.getPayload().split("@");
-		User reseiveruserinfo=userService.getuserbyid(userid);
+		System.out.println(messageInfo[0]);
 		if (messageInfo.length != 2) {
 			sendMessageToUser(userid, new TextMessage("服务器出错请稍后再发送吧"));
 		} else {
@@ -63,7 +63,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				if (user.getAttributes().get("WEBSOCKET_USERID").equals(target)) {
 					//遇到匹配用户 连接正常则发送消息
 					if (user.isOpen()) {
-						sendMessageToUser(target, new TextMessage("@"+reseiveruserinfo.getUsername()+"给你发来私信"));
+						sendMessageToUser(target, new TextMessage(userid+"@"+content));
 					}else{//若异常则发送失败
 						sendMessageToUser(userid, new TextMessage("对方在线异常,发送失败"));
 					}
@@ -71,7 +71,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 				}
 			}
 			//未找到匹配用户 发送失败
-			sendMessageToUser(userid, new TextMessage("对方暂时不在线,已发送离线消息"));
+			sendMessageToUser(userid, new TextMessage(target+"@0"));
 		}
 	}
  

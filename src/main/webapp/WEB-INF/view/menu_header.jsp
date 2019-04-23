@@ -83,10 +83,9 @@
       <%} %>
     </ul>
   </div>
-  <script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
-  <script type="text/javascript" src="http://cdn.bootcss.com/sockjs-client/1.1.1/sockjs.js"></script> 
+  <script src='<c:url value="/resources/layui/layui.js"></c:url>'></script> 
   <script>
-	layui.config({
+  layui.config({
 	  base: '<c:url value="/resources/res/mods/"></c:url>' //你存放新模块的目录，注意，不是layui的模块目录
 	}).use('<c:url value="index"></c:url>'); //加载入口
 	
@@ -96,56 +95,6 @@
 		form = layui.form,
 		layer = parent.layer === undefined ? layui.layer : top.layer;
 		
-		var websocket = null;  
-	    if ('WebSocket' in window) {  
-	        //Websocket的连接  
-	        websocket = new WebSocket("ws://localhost:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
-	    }  
-	    else if ('MozWebSocket' in window) {  
-	        //Websocket的连接  
-	        websocket = new MozWebSocket("ws://localhost:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
-	    }  
-	    else {  
-	        //SockJS的连接  
-	        websocket = new SockJS("http://localhost:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
-	    }  
-	    websocket.onopen = onOpen;  
-	    websocket.onmessage = onMessage;  
-	    websocket.onerror = onError;  
-	    websocket.onclose = onClose;  
-	  
-	    function onOpen(openEvt) {  
-	        //alert(openEvt.Data);
-	        console.log(location.pathname);
-	    }  
-	    function onMessage(evt) {
-	    	if(location.pathname=="/guomanwang/user/chat"||location.pathname.equals=="/guomanwang/user/user_message"){
-	    		$(".chat").first().append('<div class="bubble you">'+evt.data+'</div>');	    		
-	    	}
-	    	else{
-	    		layer.open({
-		            type: 1
-		            ,offset: 'b'
-		            ,id: 'layerDemob'
-		            ,content: '<div style="padding: 20px 100px;">'+evt.data+'</div>'
-		            ,btn: '关闭'
-		            ,btnAlign: 'c' //按钮居中
-		            ,shade: 0 //不显示遮罩
-		            ,yes: function(){
-		              layer.closeAll("page");
-		            }
-		          }); 
-	    	}
-
-	    }  
-	    function onError() {  
-	    }  
-	    function onClose() {  
-	    }   
-	  
-	    window.close = function () {  
-	        websocket.onclose();  
-	    }
 		$(".loginout").click(function(){
         	layer.confirm('确定退出登录？', {icon: 3, title: '提示信息'}, function (index) {
                 $.get('/guomanwang/user/logout/',function(data){

@@ -65,60 +65,104 @@
 	    <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
 	    <div  id="LAY_minemsg" style="margin-top: 10px;">
         <!--<div class="fly-none">您暂时没有最新消息</div>-->
-        <ul class="mine-msg">
-        <c:if test="${empty mymessages|| mymessages.size()==0}">
-			<li>
-	  			<p style="text-align:left;">暂无消息和通知！</p>
-	        </li>
-		</c:if>
-        <c:forEach items="${mymessages }" var="item"  varStatus="status">
-        <c:choose>
-        	<c:when test="${item.getType()=='帖子'}">
-        		<li data-id="123">
-		            <blockquote class="layui-elem-quote">
-		            	<div class="layui-row">
-		            	<div class="layui-col-md8">
-		            		<a href="user_home?userId=${item.getSenderid() }" target="_blank">
-				              	<cite>${item.getUsername() }</cite>
-				            </a>${item.getContent() } | 
-				            ${item.getTime() }
-		            	</div>
-		              	<div class="layui-col-md4" >
-		            		<a href="javascript:;" id="deletemessage" data-id="${item.getId() }" style="float:right;">
-				              	<cite>删除</cite>
-				              </a>
-		            	</div>
-		            	</div>
-		            </blockquote>
-		          </li>
-        	</c:when>
-        	<c:when test="${item.getType()=='私信'}">
-        		<li data-id="123">
-		            <blockquote class="layui-elem-quote">
-		            	<div class="layui-row">
-		            	<div class="layui-col-md8">
-		            		<a href="user_home?userId=${item.getSenderid() }" target="_blank">
-				              	<cite>${item.getUsername() }</cite>
-				            </a>给你发来私信 ：<cite>${item.getContent() }</cite>
-				            | ${item.getTime() }
-		            	</div>
-		              	<div class="layui-col-md4" >
-		            		<a href="javascript:;" id="deletemessage" data-id="${item.getId() }" style="float:right;">
-				              	<cite>删除</cite>
-				             </a>
-				             <a href="javascript:;" id="reply" data-id="${item.getSenderid() }" style="float:right;">
-				              	<cite>回复</cite>
-				             </a>
-		            	</div>
-		            	</div>
-		            </blockquote>
-		          </li>
-        	</c:when>
-
-        </c:choose>
-          
-          </c:forEach>
-        </ul>
+        <div class="layui-collapse">
+		  <div class="layui-colla-item">
+		    <h2 class="layui-colla-title">系统消息</h2>
+		    <div class="layui-colla-content">
+		    	<ul class="mine-msg">
+		    		<c:if test="${empty systemmessages }">
+		    			<li data-id="123">
+		    				<blockquote class="layui-elem-quote">暂无此类消息</blockquote>
+		    			</li>
+		    		</c:if>
+		    		 <c:forEach items="${systemmessages }" var="item"  varStatus="status">
+ 		 	        	<li data-id="123">
+				            <blockquote class="layui-elem-quote">
+				            	<div class="layui-row">
+				            	<div class="layui-col-md8">
+				            		<a href="user_home?userId=${item.getSenderid() }" target="_blank">
+						              	<cite>${item.getUsername() }</cite>
+						            </a>${item.getContent() } | 
+						            ${item.getTime() }
+				            	</div>
+				              	<div class="layui-col-md4" >
+				            		<a href="javascript:;" id="deletemessage" data-id="${item.getId() }" style="float:right;">
+						              	<cite>删除</cite>
+						              </a>
+				            	</div>
+				            	</div>
+				            </blockquote>
+				          </li>
+		    		 </c:forEach>
+		    	</ul>
+		    </div>
+		  </div>
+		  <div class="layui-colla-item">
+		    <h2 class="layui-colla-title">好友私信</h2>
+		    <div class="layui-colla-content">
+		    	<ul class="mine-msg">
+		    		<c:if test="${empty friendmessages }">
+		    			<li data-id="123">
+		    				<blockquote class="layui-elem-quote">暂无此类消息</blockquote>
+		    			</li>
+		    		</c:if>
+		    		 <c:forEach items="${friendmessages }" var="item"  varStatus="status">
+ 		 	        	<li data-id="123">
+				            <blockquote class="layui-elem-quote">
+				            	<div class="layui-row">
+				            	<div class="layui-col-md8">
+				            		<a href="user_home?userId=${item.getSenderid() }" target="_blank">
+						              	<cite>${item.getUsername() }</cite>
+						            </a>给你发来私信 ：<cite>${item.getContent() }</cite>
+						            | ${item.getTime() }
+				            	</div>
+				              	<div class="layui-col-md4" >
+				            		<a href="javascript:;" id="deletemessage" data-id="${item.getId() }" style="float:right;">
+						              	<cite>删除</cite>
+						             </a>
+						             <a href="javascript:;" id="reply" data-id="${item.getSenderid() }" style="float:right;">
+						              	<cite>回复</cite>
+						             </a>
+				            	</div>
+				            	</div>
+				            </blockquote>
+				          </li>
+		    		 </c:forEach>
+		    	</ul>
+		    </div>
+		  </div>
+		  <div class="layui-colla-item">
+		    <h2 class="layui-colla-title">其他消息</h2>
+		    <div class="layui-colla-content">
+				<ul class="mine-msg">
+		    		<c:if test="${empty othermessages }">
+		    			<li data-id="123">
+		    				<blockquote class="layui-elem-quote">暂无此类消息</blockquote>
+		    			</li>
+		    		</c:if>					
+		    		 <c:forEach items="${othermessages }" var="item"  varStatus="status">
+ 		 	        	<li data-id="123">
+				            <blockquote class="layui-elem-quote">
+				            	<div class="layui-row">
+				            	<div class="layui-col-md8">
+				            		<a href="user_home?userId=${item.getSenderid() }" target="_blank">
+						              	<cite>${item.getUsername() }</cite>
+						            </a>${item.getContent() } | 
+						            ${item.getTime() }
+				            	</div>
+				              	<div class="layui-col-md4" >
+				            		<a href="javascript:;" id="deletemessage" data-id="${item.getId() }" style="float:right;">
+						              	<cite>删除</cite>
+						              </a>
+				            	</div>
+				            	</div>
+				            </blockquote>
+				          </li>
+		    		 </c:forEach>
+		    	</ul>
+			</div>
+		  </div>
+		</div>
       </div>
 	  </div>
 	</div>

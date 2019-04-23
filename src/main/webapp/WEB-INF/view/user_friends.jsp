@@ -10,15 +10,121 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-<script type="text/javascript" src='<c:url value="/resources/js/jquery.min.js"></c:url>'></script>
 <link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
 <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 <style type="text/css">
 	.avatar img{display: block; width: 45px; height: 45px; margin-left:20px;padding:0; border-radius: 2px;}
+	.person img{width: 40px; height: 40px; margin-left:20px;padding:0; border-radius: 10px;}
+	.person .name{color:red;}
+	.right{ display: inline-block;padding-left:20px;}
+	.right .chat::-webkit-scrollbar {
+        display: none;
+    }
+	.right .chat{height:500px;width:850px;overflow:scroll;}
+	:root {
+	  --white: #fff;
+	  --black: #000;
+	  --bg: #f8f8f8;
+	  --grey: #999;
+	  --dark: #1a1a1a;
+	  --light: #e6e6e6;
+	  --wrapper: 1000px;
+	  --blue: #00b0ff;
+	}
+	.right .bubble {
+	  position: relative;
+	  font-size: 16px;
+	  display: inline-block;
+	  clear: both;
+	  margin-bottom: 8px;
+	  padding: 13px 14px;
+	  vertical-align: top;
+	  border-radius: 5px;
+	}
+.right .bubble:before {
+    position: absolute;
+    top: 19px;
+    display: block;
+    width: 8px;
+    height: 6px;
+    content: '\00a0';
+    -webkit-transform: rotate(29deg) skew(-35deg);
+    transform: rotate(29deg) skew(-35deg);
+}
+.right .bubble.you {
+  float: left;
+  color: var(--white);
+  background-color: var(--blue);
+  align-self: flex-start;
+  -webkit-animation-name: slideFromLeft;
+          animation-name: slideFromLeft;
+}
+.right .bubble.you:before {
+    left: -3px;
+    background-color: var(--blue);
+}
+.right .bubble.me {
+  float: right;
+  color: var(--dark);
+  background-color: #eceff1;
+  align-self: flex-end;
+  -webkit-animation-name: slideFromRight;
+          animation-name: slideFromRight;
+}
+.right .bubble.me:before {
+  right: -3px;
+  background-color: #eceff1;
+}
+.right .write {
+	display:inline-block;
+    bottom: 29px;
+    left: 30px;
+    height: 42px;
+    padding-left: 8px;
+    border: 1px solid var(--light);
+    background-color: #eceff1;
+    width: calc(100% - 58px);
+    border-radius: 5px;
+}
+.right .write .write-link.smiley:before {
+  display: inline-block;
+  float: left;
+  width: 20px;
+  height: 42px;
+  content: '';
+  background-image: url("../resources/img/smiley.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.right .write .write-link.send:before {
+  display: inline-block;
+  float: right;
+  width: 20px;
+  height: 42px;
+  margin-right: 11px;
+  content: '';
+  background-image: url("../resources/img/send.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.right .write input {
+  font-size: 16px;
+  float: left;
+  width: 560px;
+  height: 40px;
+  padding: 0 10px;
+  color: var(--dark);
+  border: 0;
+  outline: none;
+  background-color: #eceff1;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 400;
+}
 </style>
 </head>
 <body>
 	<jsp:include page="menu_header.jsp"/>
+	<input type="hidden" value="${user.getUserid() }" class="loginid">
 	<div class="layui-container fly-marginTop fly-user-main">
   <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
     <li class="layui-nav-item">
@@ -65,80 +171,33 @@
   
   
   <div class="fly-panel fly-panel-user" pad20>
-    <!--
-    <div class="fly-msg" style="margin-top: 15px;">
-      您的邮箱尚未验证，这比较影响您的帐号安全，<a href="activate.html">立即去激活？</a>
-    </div>
-    -->
-    <div class="layui-tab layui-tab-brief" lay-filter="user">
-      <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="mine-jie" lay-id="index" class="layui-this">我的好友</li>
-        <li data-type="dianzan" data-url="/collection/find/" lay-id="dianzan">申请列表
-        <c:if test="${!empty askrequests and !empty requestfriends}"><span class="layui-badge">${askrequests.size()+requestfriends.size()}</span></c:if>
-        </li>
-      </ul>
-      <div class="layui-tab-content" style="padding: 20px 0;">
-        <div class="layui-tab-item layui-show">
-          <ul class="mine-view jie-row">    
-			<c:if test="${empty friends|| friends.size()==0}">
-				<li>
-	  				<p>你还没有添加任何人为好友哦！</p>
-	            </li>
-			</c:if>
-          <c:forEach items="${friends }" var="item"  varStatus="status">
-		    <li>
-              <a href="/guomanwang/user/user_home?userId=${item.getUserid() }" class="avatar">
-              <img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
-              </a>
-              <span style="background-color:red;margin-left:5px;">${item.getUsername() }</span>
-              <a class="mine-edit" href="javascript:;" data-id="${item.getUserid() }" id="chat"><i class="layui-icon" style="color:white;">&#xe63a;</i>聊天</a>
-              <a class="mine-edit" href="javascript:;" data-id="${item.getUserid() }" id="deletefriend"><i class="layui-icon" style="color:white;">&#xe640;</i>删除</a>
-            </li>
-		</c:forEach>
-          </ul>
-          <div id="LAY_page"></div>
-        </div>
-        <div class="layui-tab-item">
-        <button class="layui-btn layui-btn-sm layui-btn-danger">我发送的好友申请</button>
-          <ul class="mine-view jie-row" style="margin-top:20px;">
-          	<c:if test="${empty requestfriends|| requestfriends.size()==0}">
-				<li>
-	  				<p>你还未向任何用户发送好友申请！或申请已被处理了</p>
-	            </li>
-			</c:if>
-	        <c:forEach items="${requestfriends }" var="item"  varStatus="status">
-			    <li>
-	              <a href="/guomanwang/user/user_home?userId=${item.getUserid() }" class="avatar">
-	              <img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
-	              </a>
-	              <a class="mine-edit" href="javascript:;" style="background-color:red;margin-left:5px;">${item.getUsername() }</a>
-	              <i class="mine-edit">对方还未通过</i>
-	            </li>
-			</c:forEach>
-          </ul>
-          <button class="layui-btn layui-btn-sm layui-btn-danger">我接收的好友申请</button>
-          <ul class="mine-view jie-row" style="margin-top:20px;">
-            <c:if test="${empty askrequests|| askrequests.size()==0}">
-				<li>
-	  				<p>暂无用户给你发送好友申请！</p>
-	            </li>
-			</c:if>
-          
-	        <c:forEach items="${askrequests }" var="item"  varStatus="status">
-			    <li>
-	              <a href="/guomanwang/user/user_home?userId=${item.getUserid() }" class="avatar">
-	              	<img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
-	              </a>
-	              <a class="mine-edit" href="javascript:;" style="background-color:red;margin-left:5px;">${item.getUsername() }</a>
-	              <a class="mine-edit" href="javascript:;" data-method="agree" data-id="${item.getUserid() }" id="agree"><i class="layui-icon" style="color:white;">&#xe605;</i>同意</a>
-              	  <a class="mine-edit" href="javascript:;" data-method="offset" data-id="${item.getUserid() }" id="refuse"><i class="layui-icon" style="color:white;">&#x1006;</i>拒绝</a>
-	            </li>
-			</c:forEach>
-          </ul>
-          <div id="LAY_page1"></div>
-        </div>
-      </div>
-    </div>
+		<div class="layui-tab layui-tab-card">
+			<ul class="layui-tab-title" id="friends">
+ 
+				<c:if test="${empty friends|| friends.size()==0}">
+					<li class="layui-this">
+		  				<p>你还没有添加任何人为好友哦！</p>
+		            </li>
+				</c:if>
+            	<c:forEach items="${friends }" var="item"  varStatus="status">
+	                <c:if test="${status.count==1 }">
+		                <li class="person layui-this">
+		                    <img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
+		                    <span class="name">${item.getUsername() }</span>
+		                </li>
+	                </c:if>
+					<c:if test="${status.count!=1 }">
+		                <li class="person">
+		                    <img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
+		                    <span class="name">${item.getUsername() }</span>
+		                </li>
+	                </c:if>
+	            </c:forEach>
+			</ul>
+			<div class="layui-tab-content">
+
+			</div>
+		</div>
   </div>
 </div>
 
@@ -150,83 +209,6 @@
     <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
   </p>
 </div>
-<script src='<c:url value="/resources/js/haha.js"></c:url>'></script>
-<script>
-layui.use(['element','form','layer'], function(){
-	var $ = layui.jquery,
-	element = layui.element,
-	form = layui.form,
-	layer = parent.layer === undefined ? layui.layer : top.layer;
-	
-	$(document).on('click', '#agree', function(data) {
-        var friendid = $(this).attr('data-id');
-            $.get('<c:url value="/user/passfriend"></c:url>',{
-            	friendid:friendid
-            },function(data){
-           layer.msg(data.msg);
-           if(data.code==1){
-        	  $(this).parents("li").hide(1000);
-        	  $(this).parents("li").remove();
-           }
-         })
-    });
-	//给好友发送私信
-    $(document).on('click', '#chat', function(data) {
-        var receiverid = $(this).attr('data-id');
-        var senderid=${user.getUserid()};
-        var index = layui.layer.open({
-            title : ["好友聊天界面",'text-align:center'],
-            type : 2,
-            content : 'chat',
-            success : function(layero, index){
-                var body = layui.layer.getChildFrame('body', index);
-                    body.find(".title").val(edit.title);
-                    body.find(".abstracts").val(edit.url);
-                    body.find(".thumbImg").attr("src",edit.newsImg);
-                    body.find("#content").val(edit.content);
-                    body.find(".status select").val(edit.status);
-                    form.render();
-                setTimeout(function(){
-                    layui.layer.tips('点击此处返回我的好友列表', '.layui-layer-setwin .layui-layer-close', {
-                        tips: 3
-                    });
-                },500)
-            }
-        })
-        layui.layer.full(index);
-        //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
-        $(window).on("resize",function(){
-            layui.layer.full(index);
-        })
-	})
-	 //删除好友与拒绝好友申请共用同一事件
-    $(document).on('click', '#deletefriend,#refuse', function(data) {
-        var friendid = $(this).attr('data-id');
-        var link=$(this).attr('id');
-        if(link=='deletefriend'){
-        	message='确定与该用户解除好友关系吗？该操作是双向的！';
-        }
-        else{
-        	message='确认拒绝该好友请求吗？'
-        }
-		layer.confirm(message, {icon: 3, title: '提示信息'}, function (index) {
-            $.get('<c:url value="/user/deletefriend"></c:url>',{
-            	friendid:friendid
-            },function(data){
-           layer.msg(data.msg);
-           setTimeout(function(){
-               top.layer.close(index);
-               if(data.code==1){
-            	   location.reload();
-               }
-           },1500);
-            })
-           
-            return false;
-    	});
-    })
-
-});	
-</script>
+<script  src="../resources/js/chatindex.js"></script>
 </body>
 </html>
