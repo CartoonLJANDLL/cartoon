@@ -131,10 +131,5 @@
   </p>
 </div>
 <script src='<c:url value="/resources/js/haha.js"></c:url>'></script>
-<script>
-layui.config({
-  base: '<c:url value="/resources/res/mods/"></c:url>' //你存放新模块的目录，注意，不是layui的模块目录
-}).use('<c:url value="index"></c:url>'); //加载入口
-</script>
 </body>
 </html>

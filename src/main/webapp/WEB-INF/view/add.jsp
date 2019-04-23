@@ -103,23 +103,6 @@
     <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
   </p>
 </div>
-<script type="text/javascript" src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
-<script>
-layui.cache.page="user";
-layui.cache.user = {
-  username: '游客'
-  ,uid: -1
-  ,avatar: '<c:url value="/resources/res/images/avatar/00.jpg"></c:url>'
-  ,experience: 83
-  ,sex: '男'
-};
-layui.config({
-  version: "3.0.0"
-  ,base: '<c:url value="/resources/res/mods/"></c:url>'
-}).extend({
-  fly: '<c:url value="index"></c:url>'
-}).use('<c:url value="fly"></c:url>');
-</script>
 <script>
 layui.use(['upload','layer','form'], function(){
 	  var $ = layui.jquery

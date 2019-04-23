@@ -59,9 +59,9 @@
 		select a.*,b.username
 		from message a,user b
 		where (a.senderid=b.userid
-    	and senderid=#{receiverid})
+    	and senderid=#{receiverid} and a.type="私信")
     	or (receiverid=#{receiverid} 
-    	and a.senderid=b.userid)
-		order BY a.senderid,time
+    	and a.senderid=b.userid and a.type="私信")
+		order BY time
 	</select>
 </mapper>

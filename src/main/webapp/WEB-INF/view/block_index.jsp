@@ -9,7 +9,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-  <link rel="stylesheet" href='<c:url value="/resources/layui/css/layui.css"></c:url>'>
 </head>
 <body>
 <jsp:include page="menu_header.jsp"/>
