@@ -3,7 +3,13 @@ layui.use(['element','form','layer'], function(){
 		element = layui.element,
 		form = layui.form,
 		layer =layui.layer;
-
+		
+		var layid = location.hash.replace(/^#myfriend=/, '');
+		element.tabChange('myfriends', layid);
+		  //监听Tab切换，以改变地址hash值
+		  element.on('tab(myfriends)', function(){
+		    location.hash = 'myfriend='+ this.getAttribute('lay-id');
+		  });
 		var user=$(".loginid").val();
 		var websocket = null;  
 		if ('WebSocket' in window) {  
@@ -28,28 +34,12 @@ layui.use(['element','form','layer'], function(){
 		}  
 		function onMessage(evt) {
 			var message=evt.data.split("@");
-			if(location.pathname=="/guomanwang/user/user_friends"||location.pathname=="/guomanwang/user/user_message"){
 			if(message[1]==0){
 				$('.chat[data-chat=person'+message[0]+']').find("div").last().innerHTML+='[对方已离线]';
 				}
 			else{
 				$('.chat[data-chat=person'+message[0]+']').append('<div class="bubble you">'+message[1]+'</div>');
 				}
-			}
-			else{
-	    		layer.open({
-		            type: 1
-		            ,offset: 'b'
-		            ,id: 'layerDemob'
-		            ,content: '<div style="padding: 20px 100px;">您有新的好友消息</div>'
-		            ,btn: '关闭'
-		            ,btnAlign: 'c' //按钮居中
-		            ,shade: 0 //不显示遮罩
-		            ,yes: function(){
-		              layer.closeAll("page");
-		            }
-		          }); 
-	    	}
 		}  
 		function onError() {  
 		}  
@@ -86,6 +76,7 @@ layui.use(['element','form','layer'], function(){
 				}
 				}
 			});
+		//发送消息
 		$(document).on('click','.send',function(){
 			var content=$(this).parent().find(".messages").val(),
 				fid=$(this).attr("data-id");
@@ -98,42 +89,29 @@ layui.use(['element','form','layer'], function(){
 		    	alert("连接失败!"+websocket.readyState);  
 		    } 
 		})
-		$(document).on('click', '#agree', function(data) {
-        var friendid = $(this).attr('data-id');
-            $.post("../user/passfriend",{
-            	friendid:friendid
-            },function(data){
-           layer.msg(data.msg);
-           if(data.code==1){
-        	  location.reload();
-           }
-         })
-    });
-	 //删除好友与拒绝好友申请共用同一事件
-    $(document).on('click', '#deletefriend,#refuse', function(data) {
-        var friendid = $(this).attr('data-id');
-        var link=$(this).attr('id');
-        if(link=='deletefriend'){
-        	message='确定与该用户解除好友关系吗？该操作是双向的！';
-        }
-        else{
-        	message='确认拒绝该好友请求吗？'
-        }
-		layer.confirm(message, {icon: 3, title: '提示信息'}, function (index) {
-            $.get('<c:url value="/user/deletefriend"></c:url>',{
-            	friendid:friendid
-            },function(data){
-           layer.msg(data.msg);
-           setTimeout(function(){
-               top.layer.close(index);
-               if(data.code==1){
-            	   location.reload();
-               }
-           },1500);
-            })
-           
-            return false;
-    	});
-    })
-
+		//鼠标悬浮在好友上方显示相关操作
+		$(".person").hover(function(){
+			$(this).find(".layui-nav-child").show(); 		
+	  	},function(){
+			$(this).find(".layui-nav-child").hide(); 
+	  	});
+		 //删除好友与拒绝好友申请共用同一事件
+	    $(document).on('click', '#deletefriend', function(data) {
+	        var friendid = $(this).attr('data-id');
+			layer.confirm('确定与该用户解除好友关系吗？该操作是双向的！', {icon: 3, title: '提示信息'}, function (index) {
+	            $.get("../user/deletefriend",{
+	            	friendid:friendid
+	            },function(data){
+	           layer.msg(data.msg);
+	           setTimeout(function(){
+	               top.layer.close(index);
+	               if(data.code==1){
+	            	   location.reload();
+	               }
+	           },1000);
+	            })
+	           
+	            return false;
+	    	});
+	    })
 })

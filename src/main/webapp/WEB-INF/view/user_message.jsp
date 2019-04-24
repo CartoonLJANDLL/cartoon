@@ -12,6 +12,9 @@
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
 <link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
 <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
+<style type="text/css">
+	.avatar img{width: 45px; height: 45px; margin-left:20px;padding:0; border-radius: 2px;}
+</style>
 </head>
 <body>
 	<jsp:include page="menu_header.jsp"/>
@@ -107,7 +110,7 @@
 		    			</li>
 		    		</c:if>
 		    		 <c:forEach items="${friendmessages }" var="item"  varStatus="status">
- 		 	        	<li data-id="123">
+ 		 	        	<li data-id="${status.count }">
 				            <blockquote class="layui-elem-quote">
 				            	<div class="layui-row">
 				            	<div class="layui-col-md8">
@@ -132,7 +135,38 @@
 		    </div>
 		  </div>
 		  <div class="layui-colla-item">
-		    <h2 class="layui-colla-title">其他消息</h2>
+		    <h2 class="layui-colla-title">好友申请</h2>
+		    <div class="layui-colla-content">
+				<ul class="mine-msg">
+		    		<c:if test="${empty requestfriends and  empty askrequests}">
+		    			<li data-id="123">
+		    				<blockquote class="layui-elem-quote">暂无此类消息</blockquote>
+		    			</li>
+		    		</c:if>					
+		    		 <c:forEach items="${requestfriends }" var="item"  varStatus="status">
+ 		 	        	<li data-id="${status.count }">
+				            <a href="/guomanwang/user/user_home?userId=${item.getUserid() }" class="avatar">
+			                	<img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
+			                </a>
+			              	<a class="mine-edit" href="javascript:;" style="background-color:#009688;padding：5px;color:white;margin-left:5px;">${item.getUsername() }</a>
+			              	<i class="mine-edit">对方还未处理你的好友申请</i>
+				        </li>
+		    		 </c:forEach>
+		    		 <c:forEach items="${askrequests }" var="item"  varStatus="status">
+					    <li data-id="${status.count }">
+			              <a href="/guomanwang/user/user_home?userId=${item.getUserid() }" class="avatar">
+			              	<img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
+			              </a>
+			              <a class="mine-edit" href="javascript:;" style="background-color:#009688;padding：5px;color:white;margin-left:5px;">${item.getUsername() }</a>
+			              <button class="layui-btn layui-btn-xs" id="agree" data-id="${item.getUserid() }">同意</button>
+		              	  <button class="layui-btn layui-btn-danger layui-btn-xs" id="refuse" data-id="${item.getUserid() }">拒绝</button>
+			            </li>
+					</c:forEach>
+		    	</ul>
+			</div>
+		  </div>		  
+		  <div class="layui-colla-item">
+		    <h2 class="layui-colla-title">论坛消息</h2>
 		    <div class="layui-colla-content">
 				<ul class="mine-msg">
 		    		<c:if test="${empty othermessages }">
@@ -168,7 +202,7 @@
 	</div>
 </div>
 <div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
+  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2019 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
   <p>
     <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
     <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
@@ -201,28 +235,49 @@ layui.use(['element','form','layer'], function(){
 		  return false;
         });
     })
-	//给好友回复私信，进入聊天窗口
+	//给好友回复私信，点击进入相应好友聊天窗口
 	    $(document).on('click', '#reply', function(data) {
 	        var receiverid = $(this).attr('data-id');
-	        var senderid=${user.getUserid()};
-	        layer.prompt({
-	        	  formType: 2,
-	        	  value: '',
-	        	  title: '请输入回复内容',
-	        	  shadeClose:true,
-	        	  btn: ['发送', '取消'],
-	        	  btnAlign: 'c',
-	        	  area: ['300px', '200px'] //自定义文本域宽高
-	        	}, function(value, index, elem){
-	        		if (websocket.readyState == websocket.OPEN) {  
-	                    websocket.send("嘻嘻侠"+"@"+value);//调用后台handleTextMessage方法  
-	                    layer.msg("发送成功!");  
-	                } else {  
-	                
-	                	layer.msg("连接失败!"+websocket.readyState);  
-	                }  
-	        	});
-    })	
+	        location.href="user_friends#myfriend="+receiverid;
+	        
+    })
+    $(document).on('click', '#agree', function(data) {
+        var friendid = $(this).attr('data-id');
+            $.post("../user/passfriend",{
+            	friendid:friendid
+            },function(data){
+           layer.msg(data.msg);
+           if(data.code==1){
+        	  location.reload();
+           }
+         })
+    });
+	 //删除好友与拒绝好友申请共用同一事件
+    $(document).on('click', '#deletefriend,#refuse', function(data) {
+        var friendid = $(this).attr('data-id');
+        var link=$(this).attr('id');
+        if(link=='deletefriend'){
+        	message='确定与该用户解除好友关系吗？该操作是双向的！';
+        }
+        else{
+        	message='确认拒绝该好友请求吗？'
+        }
+		layer.confirm(message, {icon: 3, title: '提示信息'}, function (index) {
+            $.get('<c:url value="/user/deletefriend"></c:url>',{
+            	friendid:friendid
+            },function(data){
+           layer.msg(data.msg);
+           setTimeout(function(){
+               top.layer.close(index);
+               if(data.code==1){
+            	   location.reload();
+               }
+           },1000);
+            })
+           
+            return false;
+    	});
+    })
 });	
 </script>	
 </body>

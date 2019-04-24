@@ -13,8 +13,7 @@
 <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 <style type="text/css">
 	.fly-logo img{width:120px;height:40px;}
-	a:hover{ text-decoration:none;important!}
-	.layui-nav-child{top:60px;important!}			
+	a:hover{ text-decoration:none;important!}		
 </style>
 </head>
 <body>
@@ -71,7 +70,7 @@
         </a>
         <dl class="layui-nav-child">
           <dd><a href="/guomanwang/user/user_setting"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-          <dd><a href="/guomanwang/user/user_message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息<span class="layui-badge-dot"></span></a></dd>
+          <dd><a href="/guomanwang/user/user_message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="/guomanwang/user/user_home?userId=${user.getUserid() }"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <% if(user.getHonor()>=3){ %>
 		  <dd><a href="/guomanwang/common/admin"><i class="layui-icon" style=" font-size: 22px;">&#xe857;</i>后台管理</a></dd>
@@ -95,6 +94,38 @@
 		form = layui.form,
 		layer = parent.layer === undefined ? layui.layer : top.layer;
 		
+		var websocket = null;  
+		if ('WebSocket' in window) {  
+		    //Websocket的连接  
+		    websocket = new WebSocket("ws://localhost:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
+		}  
+		else if ('MozWebSocket' in window) {  
+		    //Websocket的连接  
+		    websocket = new MozWebSocket("ws://localhost:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
+		}  
+		else {  
+		    //SockJS的连接  
+		    websocket = new SockJS("http://localhost:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
+		}    
+		websocket.onmessage = onMessage;  
+ 
+		function onMessage(evt) {
+			if(location.pathname!="/guomanwang/user/user_friends"){
+	    		layer.open({
+		            type: 1
+		            ,offset: 'b'
+		            ,id: 'layerDemob'
+		            ,content: '<div style="padding: 20px 100px;">您有新的好友消息</div>'
+		            ,btn: '关闭'
+		            ,btnAlign: 'c' //按钮居中
+		            ,shade: 0 //不显示遮罩
+		            ,yes: function(){
+		              layer.closeAll("page");
+		            }
+		          });
+	    		$(".icon-tongzhi").append('<span class="layui-badge-dot"></span>');
+	    	}
+		}  
 		$(".loginout").click(function(){
         	layer.confirm('确定退出登录？', {icon: 3, title: '提示信息'}, function (index) {
                 $.get('/guomanwang/user/logout/',function(data){

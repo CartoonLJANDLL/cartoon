@@ -16,6 +16,7 @@
 	.avatar img{display: block; width: 45px; height: 45px; margin-left:20px;padding:0; border-radius: 2px;}
 	.person img{width: 40px; height: 40px; margin-left:20px;padding:0; border-radius: 10px;}
 	.person .name{color:red;}
+	.person .layui-nav-child{top:42px;}
 	.right{ display: inline-block;padding-left:20px;}
 	.right .chat::-webkit-scrollbar {
         display: none;
@@ -168,12 +169,9 @@
     <i class="layui-icon">&#xe602;</i>
   </div>
   <div class="site-mobile-shade"></div>
-  
-  
   <div class="fly-panel fly-panel-user" pad20>
-		<div class="layui-tab layui-tab-card">
+		<div class="layui-tab layui-tab-card" lay-filter="myfriends">
 			<ul class="layui-tab-title" id="friends">
- 
 				<c:if test="${empty friends|| friends.size()==0}">
 					<li class="layui-this">
 		  				<p>你还没有添加任何人为好友哦！</p>
@@ -181,15 +179,21 @@
 				</c:if>
             	<c:forEach items="${friends }" var="item"  varStatus="status">
 	                <c:if test="${status.count==1 }">
-		                <li class="person layui-this">
+		                <li class="person layui-this" lay-id="${item.getUserid() }">
 		                    <img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
 		                    <span class="name">${item.getUsername() }</span>
+		                     <dl class="layui-nav-child">
+						      <dd><button id="deletefriend" class="layui-btn layui-btn-sm layui-btn-danger" data-id="${item.getUserid() }">删除好友</button></dd>
+						    </dl>
 		                </li>
 	                </c:if>
 					<c:if test="${status.count!=1 }">
-		                <li class="person">
+		                <li class="person" lay-id="${item.getUserid() }">
 		                    <img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
 		                    <span class="name">${item.getUsername() }</span>
+		                    <dl class="layui-nav-child">
+						      <dd><button id="deletefriend" class="layui-btn layui-btn-sm layui-btn-danger" data-id="${item.getUserid() }">删除好友</button></dd>
+						    </dl>
 		                </li>
 	                </c:if>
 	            </c:forEach>
@@ -202,7 +206,7 @@
 </div>
 
 <div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
+  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2019 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
   <p>
     <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
     <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>

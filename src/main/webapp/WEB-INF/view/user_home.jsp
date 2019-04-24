@@ -65,7 +65,7 @@
   		<a href="javascript:;" class="layui-btn layui-btn-primary fly-imActive" data-id="${userinfo.getUserid() }" id="addfriend">加为好友</a>
   	</c:when>
   	<c:when test="${friendstatus==1 and userinfo.getUserid()!=user.getUserid()}">
-  		<a href="javascript:;" class="layui-btn layui-btn-normal fly-imActive" data-id="${userinfo.getUserid() }" id="addchat">发起会话</a>
+  		<a href="user_friends#myfriend=${userinfo.getUserid() }" class="layui-btn layui-btn-normal fly-imActive" data-id="${userinfo.getUserid() }" id="addchat">发起会话</a>
   	</c:when>
   </c:choose>    
     
@@ -137,7 +137,7 @@
   </div>
 </div>
 <div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
+  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2019 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
   <p>
     <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
     <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
@@ -165,7 +165,7 @@ layui.use(['element','form','layer'], function(){
             },function(data){
            layer.msg(data.msg);
            if(data.code==1){
-         	  $(this).remove();
+         	  $(this).hide();
             }
          })
          return false;

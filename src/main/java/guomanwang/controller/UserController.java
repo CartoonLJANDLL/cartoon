@@ -176,11 +176,7 @@ public class UserController {
 		User user=(User)session.getAttribute("user");
 		if(user!=null) {
 			List<User> friends=this.friendrelationservice.getfriendsbyuserid(user.getUserid());
-			List<User> requestfriends=this.friendrelationservice.getrequestsbyuserid(user.getUserid());
-			List<User> askrequests=this.friendrelationservice.getasksbyuserid(user.getUserid());
 			request.setAttribute("friends", friends);
-			request.setAttribute("requestfriends", requestfriends);
-			request.setAttribute("askrequests", askrequests);
 			return "user_friends";
 		}
 		return "redirect:/common/login";
@@ -191,12 +187,19 @@ public class UserController {
 		User user=(User)session.getAttribute("user");
 		if(user!=null) {
 		List<Message> messages=this.messageservice.getmessagesbyreceiverid(user.getUserid());
+		List<User> requestfriends=this.friendrelationservice.getrequestsbyuserid(user.getUserid());
+		List<User> askrequests=this.friendrelationservice.getasksbyuserid(user.getUserid());
 		List<Message> systemmessages=new ArrayList<Message>();
 		List<Message> friendmessages=new ArrayList<Message>();
 		List<Message> othermessages=new ArrayList<Message>();
+		List<User> friends=this.friendrelationservice.getfriendsbyuserid(user.getUserid());
 		for(Message msg:messages) {
 			if(msg.getType().equals("私信")) {
-				friendmessages.add(msg);
+				for(User friend:friends) {
+					if(msg.getReceiverid()==friend.getUserid()||msg.getSenderid()==friend.getUserid()) {
+						friendmessages.add(msg);
+					}
+				}
 			}
 			else if(msg.getType().equals("帖子")) {
 				othermessages.add(msg);
@@ -206,6 +209,8 @@ public class UserController {
 		request.setAttribute("systemmessages", systemmessages);
 		request.setAttribute("friendmessages", friendmessages);
 		request.setAttribute("othermessages", othermessages);
+		request.setAttribute("requestfriends", requestfriends);
+		request.setAttribute("askrequests", askrequests);
 		return "user_message";
 		}
 		return "redirect:/common/login";
