@@ -17,11 +17,11 @@
 	.person img{width: 40px; height: 40px; margin-left:20px;padding:0; border-radius: 10px;}
 	.person .name{color:red;}
 	.person .layui-nav-child{top:42px;}
-	.right{ display: inline-block;padding-left:20px;}
+	.right{padding-left:20px;}
 	.right .chat::-webkit-scrollbar {
         display: none;
     }
-	.right .chat{height:500px;width:850px;overflow:scroll;}
+	.right .chat{height:500px;overflow:scroll;}
 	:root {
 	  --white: #fff;
 	  --black: #000;
@@ -111,7 +111,6 @@
 .right .write input {
   font-size: 16px;
   float: left;
-  width: 560px;
   height: 40px;
   padding: 0 10px;
   color: var(--dark);
@@ -199,7 +198,6 @@
 	            </c:forEach>
 			</ul>
 			<div class="layui-tab-content">
-
 			</div>
 		</div>
   </div>

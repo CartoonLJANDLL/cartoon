@@ -110,18 +110,22 @@
 		websocket.onmessage = onMessage;  
  
 		function onMessage(evt) {
+			var message=evt.data.split("@");
 			if(location.pathname!="/guomanwang/user/user_friends"){
 	    		layer.open({
 		            type: 1
 		            ,offset: 'b'
 		            ,id: 'layerDemob'
 		            ,content: '<div style="padding: 20px 100px;">您有新的好友消息</div>'
-		            ,btn: '关闭'
+		            ,btn: ['查看','关闭']
 		            ,btnAlign: 'c' //按钮居中
 		            ,shade: 0 //不显示遮罩
 		            ,yes: function(){
-		              layer.closeAll("page");
+		            	location.href="../user/user_friends#myfriend="+message[0];
 		            }
+		    		,btn2: function(index, layero){
+		    			layer.closeAll("page");
+		    		  }
 		          });
 	    		$(".icon-tongzhi").append('<span class="layui-badge-dot"></span>');
 	    	}

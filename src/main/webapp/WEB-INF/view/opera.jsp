@@ -74,7 +74,7 @@
 						</div>
 						<div class="layui-col-lg2 layui-form">
 							<div class="layui-inline">
-								<input placeholder="请输入番剧名称关键字搜索" required lay-verify="required" name="keywords" autocomplete="off" id="searchinput" class="layui-input">
+								<input placeholder="输入番剧关键字搜索" required lay-verify="required" name="keywords" autocomplete="off" id="searchinput" class="layui-input">
 							</div>
 							<button class="layui-btn" lay-submit lay-filter="search">
 								<i class="layui-icon layui-icon-search"></i>
@@ -85,7 +85,7 @@
 		</div>
 		<div class="layui-bg-green">
 			<marquee class="noticeText ng-binding" direction="left" behavior="alternate" scrollamount="100" scrolldelay="1000" width="100%" onmouseover="this.stop();" onmouseout="this.start();"  style="width: 100%;">
-				<p>免责声明：本网站下所有的番剧皆来源优酷、爱奇艺和腾讯视频网站，仅做学习用途！</p>
+				<p>本站声明：本网站下所有的番剧皆来源网络，仅作学习用途。</p>
 			</marquee>
 		</div>
 		<div class="layui-container" style="width:90%;height:100%;">
@@ -357,7 +357,7 @@
 			  opvideourl=opurl;
 		  }
 		  var string=opvideourl.replace("id_","");
-		    layer.open({
+		    var index=layer.open({
 		        type: 2
 		        ,title: '视频播放界面'
 		        ,area: ['600px','280px']
@@ -366,6 +366,7 @@
 		        ,shadeClose: true
 		        ,content: [string,'no']
 		      });
+		    layui.layer.full(index);
 	  });
       //收藏
        $(".layui-row").on('click','.shoucang',function(){

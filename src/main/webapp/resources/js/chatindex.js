@@ -9,6 +9,8 @@ layui.use(['element','form','layer'], function(){
 		  //监听Tab切换，以改变地址hash值
 		  element.on('tab(myfriends)', function(){
 		    location.hash = 'myfriend='+ this.getAttribute('lay-id');
+		    var scrollHeight = $('.chat[data-chat=person'+this.getAttribute('lay-id')+']').prop("scrollHeight");
+		    $('.chat[data-chat=person'+this.getAttribute('lay-id')+']').animate({scrollTop:scrollHeight}, 400);
 		  });
 		var user=$(".loginid").val();
 		var websocket = null;  
@@ -39,6 +41,8 @@ layui.use(['element','form','layer'], function(){
 				}
 			else{
 				$('.chat[data-chat=person'+message[0]+']').append('<div class="bubble you">'+message[1]+'</div>');
+				var scrollHeight = $('.chat[data-chat=person'+message[0]+']').prop("scrollHeight");
+				$('.chat[data-chat=person'+message[0]+']').animate({scrollTop:scrollHeight}, 400);
 				}
 		}  
 		function onError() {  
@@ -62,8 +66,8 @@ layui.use(['element','form','layer'], function(){
 					if(res[i].data[j].senderid==user){string='bubble me';}
 					html+='<div class="'+string+'">'+res[i].data[j].content+'</div>';
 				}
-				if(i==0){show="layui-show";}
-				$(".layui-tab-content").append(['<div class="layui-tab-item '+show+'"><div class="right"><div class="chat" data-chat="person'+res[i].fid+'">'
+				if(layid==res[i].fid||(i==0&layid=='')){show="layui-show";}
+				$(".layui-tab-content").append(['<div class="layui-tab-item '+show+'" data-chat="person'+res[i].fid+'"><div class="right"><div class="chat" data-chat="person'+res[i].fid+'">'
 					,html
 					,'</div>'
 					,'<hr>'
@@ -84,7 +88,6 @@ layui.use(['element','form','layer'], function(){
 			if (websocket.readyState == websocket.OPEN) {  
 		        websocket.send(fid+"@"+content);//调用后台handleTextMessage方法  
 		        $(this).parent().parent().find(".chat").append('<div class="bubble me">'+content+'</div>');
-		        $(".bubble me").last().focus();
 		    } else {  
 		    	alert("连接失败!"+websocket.readyState);  
 		    } 

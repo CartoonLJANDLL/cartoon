@@ -79,7 +79,7 @@
 		    			</li>
 		    		</c:if>
 		    		 <c:forEach items="${systemmessages }" var="item"  varStatus="status">
- 		 	        	<li data-id="123">
+ 		 	        	<li data-id="${item.getId() }">
 				            <blockquote class="layui-elem-quote">
 				            	<div class="layui-row">
 				            	<div class="layui-col-md8">
@@ -110,7 +110,7 @@
 		    			</li>
 		    		</c:if>
 		    		 <c:forEach items="${friendmessages }" var="item"  varStatus="status">
- 		 	        	<li data-id="${status.count }">
+ 		 	        	<li data-id="${item.getId() }">
 				            <blockquote class="layui-elem-quote">
 				            	<div class="layui-row">
 				            	<div class="layui-col-md8">
@@ -175,7 +175,7 @@
 		    			</li>
 		    		</c:if>					
 		    		 <c:forEach items="${othermessages }" var="item"  varStatus="status">
- 		 	        	<li data-id="123">
+ 		 	        	<li data-id="${item.getId() }">
 				            <blockquote class="layui-elem-quote">
 				            	<div class="layui-row">
 				            	<div class="layui-col-md8">
@@ -248,7 +248,7 @@ layui.use(['element','form','layer'], function(){
             },function(data){
            layer.msg(data.msg);
            if(data.code==1){
-        	  location.reload();
+        	   location.reload();
            }
          })
     });

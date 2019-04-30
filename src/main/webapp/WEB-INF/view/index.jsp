@@ -109,12 +109,12 @@
 	  	$(".layui-row div").hover(function(){
 	  		$(this).find("#textlayer").stop().animate({height:"100%"},400);
 	  		$(this).find("#textlayer h3").stop().animate({paddingTop:"65px"},400);
-	  		$(this).find("#textlayer p").show();
+	  		$(this).find("#textlayer p").fadeIn();
 	  		
 	  	},function(){
 	  		$(this).find("#textlayer").stop().animate({height:"45px"},400);
 	  		$(this).find("#textlayer h3").stop().animate({paddingTop:"5px"},400);
-	  		$(this).find("#textlayer p").hide();
+	  		$(this).find("#textlayer p").fadeOut();
 	  	});
 	  });
 	});
