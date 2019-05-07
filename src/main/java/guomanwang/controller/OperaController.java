@@ -200,5 +200,10 @@ public class OperaController {
 		return jsonobject;
 		
 	}
-	
+	//前端播放了相关番剧，后台对数据库进行更新操作(测试）
+		@ResponseBody()
+		@RequestMapping("/playcount")
+		public void playcount( int operaid) {
+			System.out.println(operaid);
+		}
 }

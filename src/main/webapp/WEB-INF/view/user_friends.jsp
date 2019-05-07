@@ -10,13 +10,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-<link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
-<link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 <style type="text/css">
 	.avatar img{display: block; width: 45px; height: 45px; margin-left:20px;padding:0; border-radius: 2px;}
 	.person img{width: 40px; height: 40px; margin-left:20px;padding:0; border-radius: 10px;}
 	.person .name{color:red;}
 	.person .layui-nav-child{top:42px;}
+	.person .layui-icon{font-size:15px;}
 	.right{padding-left:20px;}
 	.right .chat::-webkit-scrollbar {
         display: none;
@@ -181,6 +180,7 @@
 		                <li class="person layui-this" lay-id="${item.getUserid() }">
 		                    <img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
 		                    <span class="name">${item.getUsername() }</span>
+		                    <i class="layui-icon layui-icon-set" ></i>  
 		                     <dl class="layui-nav-child">
 						      <dd><button id="deletefriend" class="layui-btn layui-btn-sm layui-btn-danger" data-id="${item.getUserid() }">删除好友</button></dd>
 						    </dl>

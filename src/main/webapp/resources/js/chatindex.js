@@ -93,10 +93,8 @@ layui.use(['element','form','layer'], function(){
 		    } 
 		})
 		//鼠标悬浮在好友上方显示相关操作
-		$(".person").hover(function(){
-			$(this).find(".layui-nav-child").show(); 		
-	  	},function(){
-			$(this).find(".layui-nav-child").hide(); 
+		$(".person .layui-icon").click(function(){
+			$(this).parent().find(".layui-nav-child").slideToggle("slow");
 	  	});
 		 //删除好友与拒绝好友申请共用同一事件
 	    $(document).on('click', '#deletefriend', function(data) {

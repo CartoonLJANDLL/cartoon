@@ -25,7 +25,7 @@
 		.layui-carousel img{width:100%;height:100%;}
 		h3{margin-top: 5px;}
 		.layui-row .shoucang:hover,.layui-row .fenxiang:hover{color: #FF5722;}
-		ul li{float:left;line-height:25px;overflow:clear;}
+		.layui-col-md2 ul li{float:left;line-height:25px;overflow:clear;}
 		ul .first{width:72%;}
 		ul .second{width:10%;}
 		ul .thred{width:15%;}
@@ -353,6 +353,7 @@
 	  $(".layui-row").on('click','.list_item',function(){
 		  var opvideourl=$(this).find(".opvideourl").val().replace("==.html",""),
 		  	  opurl=$(this).find(".opurl").val();
+		      opid=$(this).find(".operaid").val();
 		  if(opvideourl==null||opvideourl==""){
 			  opvideourl=opurl;
 		  }
@@ -367,6 +368,12 @@
 		        ,content: [string,'no']
 		      });
 		    layui.layer.full(index);
+		    console.log(opid);
+		    $.post('/guomanwang/opera/playcount',{//后台对指定番剧id进行播放量的增加等操作
+    			operaid:opid //传给后台的番剧id
+    		},function(res){//回调函数
+    			
+    		});
 	  });
       //收藏
        $(".layui-row").on('click','.shoucang',function(){
