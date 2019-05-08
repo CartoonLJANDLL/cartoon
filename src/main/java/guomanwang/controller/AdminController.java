@@ -81,7 +81,12 @@ public class AdminController {
 		System.out.println("经过newslist");
 		return "newsList";
 	}
-	//打印番剧列表
+	//返回用户数据展示页面
+	@RequestMapping("/userdata")
+	public String userdata() {
+		return "userdata";
+	}
+	//返回后台番剧管理页面
 	@RequestMapping("/operaList")
 	public String operalist(Model model) {
 		System.out.println("经过operalist");

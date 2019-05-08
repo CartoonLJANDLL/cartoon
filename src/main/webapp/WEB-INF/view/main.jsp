@@ -27,8 +27,8 @@
 					<i class="layui-anim seraph icon-look"></i>
 				</div>
 				<div class="panel_word">
-					<span>66666</span>
-					<cite>网站流量</cite>
+					<span class="onlinenumber"></span>
+					<cite>实时在线人数</cite>
 				</div>
 			</a>
 		</div>
@@ -171,6 +171,9 @@
 	        layer = parent.layer === undefined ? layui.layer : top.layer,
 	        element = layui.element;
 	        $ = layui.jquery;
+	        
+	   	setInterval(function(){ 
+	   		$(".onlinenumber").text('${onlinecount}'); }, 1000);
 	    //上次登录时间【此处应该从接口获取，实际使用中请自行更换】
 	    $(".loginTime").html(newDate.split("日")[0]+"日</br>"+newDate.split("日")[1]);
 	    //icon动画

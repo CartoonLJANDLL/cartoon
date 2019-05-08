@@ -72,10 +72,25 @@
 			"href": "../admin/logs",
 			"spread": false
 		},{
-			"title": "系统数据",
-			"icon": "&#xe64c;",
+			"title": "网站数据",
+			"icon": "&#xe629;",
 			"href": "../admin/linkList",
-			"spread": false
+			"spread": false,
+			"children": [
+			{
+				"title": "用户数据",
+				"icon": "&#xe770;",
+				"href": "../admin/userdata",
+				"spread": false
+			},
+			{
+				"title": "资讯数据",
+				"icon": "&#xe609;",
+				"href": "../admin/newsdata",
+				"spread": false,
+				"target": "_blank"
+			}
+		   ]
 		},{
 			"title": "图标管理",
 			"icon": "&#xe857;",
