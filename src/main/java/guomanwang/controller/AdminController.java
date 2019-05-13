@@ -152,6 +152,28 @@ public class AdminController {
 			model.addAttribute("defaultheadlist",defaultheadlist);
 			return "images";
 		}
+	//获得每日新增注册用户数据
+	@ResponseBody
+	@RequestMapping("/getregisterdata")
+	public JSONObject getregisterdata(@RequestParam(value="startdate",defaultValue="2019-04-01")String startdate,@RequestParam(value="enddate",defaultValue="2019-04-25")String enddate) {
+		JSONArray jsonarray=new JSONArray();
+		JSONArray jsonarray1=new JSONArray();
+		JSONObject json=new JSONObject();
+		List<User> counters= this.userService.getregistercount(startdate,enddate);
+		for(User user:counters) {
+			jsonarray.add(user.getRegisterday().substring(0,10));
+			jsonarray1.add(user.getSignDays());
+		}
+		json.put("x",jsonarray);
+		json.put("y",jsonarray1);
+		return json;
+	}
+	//获得近一个月的网站pv和uv数据
+	@ResponseBody
+	@RequestMapping("/getmonthpvuv")
+	public JSONObject getmonthpvuv() {
+		return this.userService.getmonthpvuv();
+	}
 	//更新设置用户权限或者增加一个新用户
 	@ResponseBody
 	@RequestMapping("/resetUser")

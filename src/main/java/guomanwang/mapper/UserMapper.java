@@ -2,6 +2,7 @@ package guomanwang.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import guomanwang.domain.Page;
@@ -36,4 +37,8 @@ public interface UserMapper {
 	public List<User> getSignTop20Users();
 	//获得所有用户，包括管理员
 	public List<User> getallusers();
+	//获得近一个月的pv和uv数据返回的参数分别为日期、每日pv、每日uv
+	public List<User> getmonthpvuv();
+	//根据输入的日期范围获得该时间段内每日新增用户
+	public List<User> getregistercount(@Param("startdate")String startdate, @Param("enddate")String enddate);
 }

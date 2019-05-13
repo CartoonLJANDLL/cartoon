@@ -293,6 +293,7 @@ public class UserController {
 			user.setGradeValue(0);
 			user.setHonor(1);
 			user.setStatus(1);
+			user.setRegisterday(new Date());
 			user.setName(username);
 			user.setHeadurl(defaultheadlist.get(defaultheadid).getUrl());
 			user.setPassword(MD5Cripy.MD5(password));

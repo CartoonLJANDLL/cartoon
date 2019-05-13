@@ -10,6 +10,8 @@ import guomanwang.domain.User;
 import guomanwang.domain.ValiMsgUtils;
 import guomanwang.mapper.UserMapper;
 import guomanwang.service.UserService;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 @Service("UserServiceimpl")
 public class UserServiceimpl implements UserService {
 	@Autowired
@@ -83,5 +85,27 @@ public class UserServiceimpl implements UserService {
 	@Override
 	public List<User> getallusers() {
 		return this.userMapper.getallusers();
+	}
+	@Override
+	public List<User> getregistercount(String startdate, String enddate) {
+		System.out.println("开始日期："+startdate+"，结束日期："+enddate);  
+		return this.userMapper.getregistercount(startdate,enddate);
+	}
+	@Override
+	public JSONObject getmonthpvuv() {
+		JSONArray jsonarray=new JSONArray();
+		JSONArray jsonarray1=new JSONArray();
+		JSONArray jsonarray2=new JSONArray();
+		JSONObject json=new JSONObject();
+		List<User> monthpvuv=this.userMapper.getmonthpvuv();
+		for(User user:monthpvuv) {
+			jsonarray.add(user.getRegisterday().substring(0,10));
+			jsonarray1.add(user.getSignDays());
+			jsonarray2.add(user.getUserid());
+		}
+		json.put("date",jsonarray);
+		json.put("pv",jsonarray1);
+		json.put("uv",jsonarray2);
+		return json;
 	}
 }

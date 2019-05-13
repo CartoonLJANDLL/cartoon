@@ -130,4 +130,39 @@
 		from user
 		where user.honor &lt; 3 and status=1
 	</select>
+	<!-- 根据输入的日期范围获得该时间段内每日新增用户 -->
+	<select id="getregistercount" resultMap="resultUser">
+		select b.date registerday,IFNULL(a.number,0) signdays
+		from (
+		select ADDDATE(#{startdate},numlist.id)as date
+		from (
+		select n1.i+n10.i*10+n100.i*100 as id 
+		from num n1 cross join num as n10 cross join num as n100)as numlist 
+		where ADDDATE(#{startdate},numlist.id) &lt;= #{enddate})b LEFT JOIN 
+		(SELECT registerday,count(*) number
+		from user
+		where registerday BETWEEN #{startdate} and #{enddate}
+		GROUP BY registerday)a on a.registerday=b.date
+		order by b.date
+	</select>
+	<!-- 获得近一个月的pv和uv数据返回的参数分别为日期、每日pv、每日uv -->
+	<select id="getmonthpvuv" resultMap="resultUser">
+		select b.date registerday,IFNULL(a.pv,0) signdays,IFNULL(c.uv,0) userid
+		from(
+		select ADDDATE(DATE_SUB(curdate(), INTERVAL 30 DAY),numlist.id)as date
+		from (
+		select n1.i+n10.i*10+n100.i*100 as id 
+		from num n1 cross join num as n10 cross join num as n100)as numlist 
+		where ADDDATE(DATE_SUB(curdate(), INTERVAL 30 DAY),numlist.id) &lt;= curdate()-1) b LEFT JOIN
+		(select ctime,count(logid) pv
+		FROM log
+		where ctime &gt;= DATE_SUB(curdate(), INTERVAL 29 DAY)
+		GROUP BY DATE_FORMAT(ctime,'%Y-%m-%d'))a on DATE_FORMAT(a.ctime,'%Y-%m-%d')=b.date
+		LEFT JOIN(
+		select ctime,count(DISTINCT(userid))uv
+		FROM log
+		where ctime &gt;= DATE_SUB(curdate(), INTERVAL 29 DAY)
+		GROUP BY DATE_FORMAT(ctime,'%Y-%m-%d'))c on DATE_FORMAT(c.ctime,'%Y-%m-%d')=b.date
+		order by b.date
+	</select>
 </mapper>

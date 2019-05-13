@@ -22,7 +22,7 @@
 	</blockquote>
 	<div class="layui-row layui-col-space10 panel_box">
 		<div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-			<a href="javascript:;" data-url="http://fly.layui.com/case/u/3198216" target="_blank">
+			<a href="javascript:;">
 				<div class="panel_icon layui-bg-green">
 					<i class="layui-anim seraph icon-look"></i>
 				</div>
@@ -33,7 +33,7 @@
 			</a>
 		</div>
 		<div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-			<a href="javascript:;" data-url="https://github.com/BrotherMa/layuicms2.0" target="_blank">
+			<a href="javascript:;">
 				<div class="panel_icon layui-bg-black">
 					<i class="layui-anim seraph icon-good"></i>
 				</div>
@@ -44,7 +44,7 @@
 			</a>
 		</div>
 		<div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-			<a href="javascript:;" data-url="https://gitee.com/layuicms/layuicms2.0" target="_blank">
+			<a href="javascript:;">
 				<div class="panel_icon layui-bg-red">
 					<i class="layui-anim seraph icon-liulanqi"></i>
 				</div>
@@ -55,7 +55,7 @@
 			</a>
 		</div>
 		<div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-			<a href="javascript:;" data-url="page/user/userList.html">
+			<a href="javascript:;">
 				<div class="panel_icon layui-bg-orange">
 					<i class="layui-anim seraph icon-icon10" data-icon="icon-icon10"></i>
 				</div>
@@ -66,7 +66,7 @@
 			</a>
 		</div>
 		<div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
-			<a href="javascript:;" data-url="page/systemSetting/icons.html">
+			<a href="javascript:;">
 				<div class="panel_icon layui-bg-cyan">
 					<i class="layui-anim layui-icon" data-icon="&#xe655;">&#xe655;</i>
 				</div>
@@ -162,7 +162,7 @@
 	    var second = dateObj.getSeconds(); //当前系统时间的秒钟值
 	    var timeValue = "" +((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午" ); //当前时间属于上午、晚上还是下午
 	    newDate = dateFilter(year)+"年"+dateFilter(month)+"月"+dateFilter(date)+"日 "+" "+dateFilter(hour)+":"+dateFilter(minute)+":"+dateFilter(second);
-	    document.getElementById("nowTime").innerHTML = "亲爱的刘江，"+timeValue+"好！ 欢迎登录纵横国漫网后台管理系统。当前时间为： "+newDate+"　"+week;
+	    document.getElementById("nowTime").innerHTML = "${user.getUserid()}"+timeValue+"好！ 欢迎登录纵横国漫网后台管理系统。当前时间为： "+newDate+"　"+week;
 	    setTimeout("getLangDate()",1000);
 	}
 

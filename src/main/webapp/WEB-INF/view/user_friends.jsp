@@ -190,6 +190,7 @@
 		                <li class="person" lay-id="${item.getUserid() }">
 		                    <img src='<c:url value="${item.getHeadurl() }"></c:url>' alt="${item.getUsername() }">
 		                    <span class="name">${item.getUsername() }</span>
+		                    <i class="layui-icon layui-icon-set" ></i>
 		                    <dl class="layui-nav-child">
 						      <dd><button id="deletefriend" class="layui-btn layui-btn-sm layui-btn-danger" data-id="${item.getUserid() }">删除好友</button></dd>
 						    </dl>
