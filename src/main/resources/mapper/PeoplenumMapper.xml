@@ -148,6 +148,12 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  <select id="getuseractive" resultType="guomanwang.domain.Peoplenum" >
+      select lefttime,holdtime
+	  from peoplenum
+	  ORDER BY lefttime
+  </select>
+
   <update id="updateByExampleSelective" parameterType="map" >
     update peoplenum
     <set >

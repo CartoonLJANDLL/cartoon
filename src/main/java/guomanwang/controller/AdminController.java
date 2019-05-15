@@ -26,6 +26,7 @@ import guomanwang.domain.Defaulthead;
 import guomanwang.domain.Information;
 import guomanwang.domain.MD5Cripy;
 import guomanwang.domain.Page;
+import guomanwang.domain.PeoplenumExample;
 import guomanwang.domain.Thread;
 import guomanwang.domain.User;
 import guomanwang.domain.UserGrade;
@@ -33,6 +34,7 @@ import guomanwang.service.BlockService;
 import guomanwang.service.DefaultheadService;
 import guomanwang.service.InformationService;
 import guomanwang.service.OperaService;
+import guomanwang.service.PeoplenumService;
 import guomanwang.service.ThreadService;
 import guomanwang.service.UserGradeService;
 import guomanwang.service.UserService;
@@ -63,6 +65,9 @@ public class AdminController {
 	@Autowired
 	@Qualifier("UserGradeServiceimpl")
 	private UserGradeService usergradeService;
+	@Autowired
+	@Qualifier("PeoplenumServiceimpl")
+	private PeoplenumService peoplenumService;
 	
 	@RequestMapping("/main")
 	public String main(Model model) {
@@ -173,6 +178,19 @@ public class AdminController {
 	@RequestMapping("/getmonthpvuv")
 	public JSONObject getmonthpvuv() {
 		return this.userService.getmonthpvuv();
+	}
+	//获得用户活跃时间和停留时间数据
+	@ResponseBody
+	@RequestMapping("/getuseractive")
+	public JSONArray getuseractive() throws Exception {
+		PeoplenumExample example=new PeoplenumExample();
+		return this.peoplenumService.selectuseractive(example);
+	}
+	//获得注册用户的性别比例
+	@ResponseBody
+	@RequestMapping("/getsexcount")
+	public JSONObject getsexcount(){
+		return this.userService.getsexcount();
 	}
 	//更新设置用户权限或者增加一个新用户
 	@ResponseBody

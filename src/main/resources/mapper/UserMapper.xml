@@ -53,8 +53,7 @@
 		from user a
 		LEFT OUTER JOIN grade b on a.gradevalue>=b.gradeValue and b.gradeStatus=1
 		where phone=#{telPhone}
-		ORDER BY grade DESC
-		LIMIT 1
+		ORDER BY grade
 	</select>
 	<select id="getuserlist" parameterType="guomanwang.domain.Page" resultMap="resultUser">
 		SELECT *
@@ -164,5 +163,11 @@
 		where ctime &gt;= DATE_SUB(curdate(), INTERVAL 29 DAY)
 		GROUP BY DATE_FORMAT(ctime,'%Y-%m-%d'))c on DATE_FORMAT(c.ctime,'%Y-%m-%d')=b.date
 		order by b.date
+	</select>
+		<!-- 获得近一个月的pv和uv数据返回的参数分别为日期、每日pv、每日uv -->
+	<select id="getsexcount" resultMap="resultUser">
+		select sex,count(sex)signdays
+		from user
+		GROUP BY sex
 	</select>
 </mapper>

@@ -18,7 +18,9 @@ public interface PeoplenumMapper {
     int insertSelective(Peoplenum record);
 
     List<Peoplenum> selectByExample(PeoplenumExample example);
-
+    
+    List<Peoplenum> getuseractive();
+    
     Peoplenum selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Peoplenum record, @Param("example") PeoplenumExample example);

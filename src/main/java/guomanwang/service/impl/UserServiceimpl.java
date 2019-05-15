@@ -108,4 +108,21 @@ public class UserServiceimpl implements UserService {
 		json.put("uv",jsonarray2);
 		return json;
 	}
+	@Override
+	public JSONObject getsexcount(){
+		JSONObject json=new JSONObject();
+		List<User> sexcount=this.userMapper.getsexcount();
+		for(User user:sexcount) {
+			if(user.getSex().equals("男")) {
+				json.put("male",user.getSignDays());
+			}
+			else if(user.getSex().equals("女")) {
+				json.put("female",user.getSignDays());
+			}
+			else {
+				json.put("others",user.getSignDays());
+			}
+		}
+		return json;
+	}
 }

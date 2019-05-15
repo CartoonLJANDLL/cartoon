@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
- 
 <!DOCTYPE html>
 <html>
 <head>
@@ -144,13 +143,6 @@
     <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
   </p>
 </div>
-<script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
-
-<script>
-layui.config({
-  base: '<c:url value="/resources/res/mods/"></c:url>' //你存放新模块的目录，注意，不是layui的模块目录
-}).use('<c:url value="index"></c:url>'); //加载入口
-</script>
 <script>
 layui.use(['element','form','layer'], function(){
 	var $ = layui.jquery,

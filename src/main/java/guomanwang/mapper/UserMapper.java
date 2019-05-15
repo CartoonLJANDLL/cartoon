@@ -39,6 +39,8 @@ public interface UserMapper {
 	public List<User> getallusers();
 	//获得近一个月的pv和uv数据返回的参数分别为日期、每日pv、每日uv
 	public List<User> getmonthpvuv();
+	//获得注册用户性别比例
+	public List<User> getsexcount();
 	//根据输入的日期范围获得该时间段内每日新增用户
 	public List<User> getregistercount(@Param("startdate")String startdate, @Param("enddate")String enddate);
 }
