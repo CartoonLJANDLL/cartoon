@@ -5,12 +5,14 @@ layui.use(['element','form','layer'], function(){
 		layer =layui.layer;
 		
 		var layid = location.hash.replace(/^#myfriend=/, '');
+		if(layid!=''){$('.send').attr('data-id',layid);}
 		element.tabChange('myfriends', layid);
 		  //监听Tab切换，以改变地址hash值
 		  element.on('tab(myfriends)', function(){
 		    location.hash = 'myfriend='+ this.getAttribute('lay-id');
 		    var scrollHeight = $('.chat[data-chat=person'+this.getAttribute('lay-id')+']').prop("scrollHeight");
 		    $('.chat[data-chat=person'+this.getAttribute('lay-id')+']').animate({scrollTop:scrollHeight}, 400);
+		    $('.send').attr('data-id',this.getAttribute('lay-id'));
 		  });
 		var user=$(".loginid").val();
 		var websocket = null;  
@@ -70,34 +72,45 @@ layui.use(['element','form','layer'], function(){
 				$(".layui-tab-content").append(['<div class="layui-tab-item '+show+'" data-chat="person'+res[i].fid+'"><div class="right"><div class="chat" data-chat="person'+res[i].fid+'">'
 					,html
 					,'</div>'
-					,'<hr>'
-					,'<div class="write">'
-					,'<a href="javascript:;" class="write-link smiley"></a>'
-					,'<input type="text" class="messages"/>'
-					,'<a href="javascript:;" data-id="'+res[i].fid+'" class="write-link send"></a>'
-					,'</div>'
 					,'</div></div>'].join(''));
 				}
+			    var fid=$('.send').attr("data-id");
+				var scrollHeight = $('.chat[data-chat=person'+fid+']').prop("scrollHeight");
+				$('.chat[data-chat=person'+fid+']').animate({scrollTop:scrollHeight}, 400);
 				}
 			});
 		//发送消息
 		$(document).on('click','.send',function(){
-			var content=$(this).parent().find(".messages").val(),
-				fid=$(this).attr("data-id");
-			$(this).parent().find(".messages").val("");
+			var content=$(".messages").html(),
+			fid=$('.send').attr("data-id");
 			if (websocket.readyState == websocket.OPEN) {  
 		        websocket.send(fid+"@"+content);//调用后台handleTextMessage方法  
-		        $(this).parent().parent().find(".chat").append('<div class="bubble me">'+content+'</div>');
-		    } else {  
+		        $('.chat[data-chat=person'+fid+']').append('<div class="bubble me">'+content+'</div>');
+		        var scrollHeight = $('.chat[data-chat=person'+fid+']').prop("scrollHeight");
+				$('.chat[data-chat=person'+fid+']').animate({scrollTop:scrollHeight}, 400);
+		        $(".messages").empty();
+			} else {  
 		    	alert("连接失败!"+websocket.readyState);  
 		    } 
+		})
+	    //回车键发送消息
+		$(document).on('keyup','.messages',function(){
+			var content=$(".messages").html(),
+			fid=$('.send').attr("data-id");
+			 if (event.keyCode == 13) {
+			 websocket.send(fid+"@"+content.replace('<br>',''));//调用后台handleTextMessage方法  
+		     $('.chat[data-chat=person'+fid+']').append('<div class="bubble me">'+content.replace('<br>','')+'</div>');
+	        var scrollHeight = $('.chat[data-chat=person'+fid+']').prop("scrollHeight");
+			$('.chat[data-chat=person'+fid+']').animate({scrollTop:scrollHeight}, 400);
+		     $(".messages").empty();
+			 }
 		})
 		//鼠标悬浮在好友上方显示相关操作
 		$(".person .layui-icon").click(function(){
 			$(this).parent().find(".layui-nav-child").slideToggle("slow");
 	  	});
 		 //删除好友与拒绝好友申请共用同一事件
-	    $(document).on('click', '#deletefriend', function(data) {
+	    $(document).on('click', '#deletefriend', function(data){
 	        var friendid = $(this).attr('data-id');
 			layer.confirm('确定与该用户解除好友关系吗？该操作是双向的！', {icon: 3, title: '提示信息'}, function (index) {
 	            $.get("../user/deletefriend",{
@@ -111,7 +124,6 @@ layui.use(['element','form','layer'], function(){
 	               }
 	           },1000);
 	            })
-	           
 	            return false;
 	    	});
 	    })

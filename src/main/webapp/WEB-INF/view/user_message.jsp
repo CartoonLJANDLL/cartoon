@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
- 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -116,8 +116,7 @@
 				            	<div class="layui-col-md8">
 				            		<a href="user_home?userId=${item.getSenderid() }" target="_blank">
 						              	<cite>${item.getUsername() }</cite>
-						            </a>给你发来私信 ：<cite>${item.getContent() }</cite>
-						            | ${item.getTime() }
+						            </a>给你发来私信 ：<cite>${item.getContent() }</cite> | ${item.getTime() }
 				            	</div>
 				              	<div class="layui-col-md4" >
 				            		<a href="javascript:;" id="deletemessage" data-id="${item.getId() }" style="float:right;">

@@ -4,6 +4,7 @@ import java.util.List;
 
 import guomanwang.domain.Information;
 import guomanwang.domain.Page;
+import net.sf.json.JSONObject;
 
 public interface InformationService {
 	int getinformationnum();
@@ -27,4 +28,6 @@ public interface InformationService {
 	public List<Information> searchinformationbytitle(String key);
 	//资讯分页
 	List<Information> getinformation(Page page);
+	//通过所有资讯的标题
+	public JSONObject getinformationtitle();
 }

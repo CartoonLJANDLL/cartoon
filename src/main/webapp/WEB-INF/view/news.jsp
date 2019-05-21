@@ -34,7 +34,7 @@
 					</li>
 					<c:forEach items="${companies }" var="item"  varStatus="status">
 						<li class="layui-nav-item">
-							<a href="<c:url value='/common/samecompany?companyid=${item.getId()}'></c:url>" target="newsbody">
+							<a href="../common/samecompany?companyid=${item.getId()}" target="newsbody">
 								<cite>${item.getName()}</cite>
 							</a>
 						</li>   
@@ -47,7 +47,7 @@
 			<div class="layui-tab mag0" lay-filter="bodyTab" id="top_tabs_box">
 				<div class="layui-tab-content clildFrame">
 					<div class="layui-tab-item layui-show">
-						<iframe name="newsbody" src='<c:url value="/common/shownews"></c:url>'></iframe>
+						<iframe name="newsbody" src="../common/shownews"></iframe>
 					</div>
 				</div>
 			</div>
@@ -62,7 +62,6 @@
 	<!-- 移动导航 -->
 	<div class="site-tree-mobile"><i class="layui-icon">&#xe602;</i></div>
 	<div class="site-mobile-shade"></div>
-	
 	<script>
 	layui.use(['element','form','layer'], function(){
 		  var $ = layui.jquery,

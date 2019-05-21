@@ -318,7 +318,7 @@ layui.use('laydate',function(){
 	    	            },
 	    	            tooltip: {
 	    	                headerFormat: '<b>{series.name}</b><br>',
-	    	                pointFormat: '停留时长：{point.y}'
+	    	                pointFormat: '停留时长：{point.y}s'
 	    	            }
 	    	        }
 	    	    },

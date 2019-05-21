@@ -10,13 +10,22 @@ public class Information {
 	private String status;
 	private Date time;
 	private int collectnum;
-	private int companyid;
+	private int company;
 	private String companyname;
-	public int getCompanyid() {
-		return companyid;
+	private int viewcount;
+	
+	public int getViewcount() {
+		return viewcount;
 	}
-	public void setCompanyid(int companyid) {
-		this.companyid = companyid;
+	public void setViewcount(int viewcount) {
+		this.viewcount = viewcount;
+	}
+
+	public int getCompany() {
+		return company;
+	}
+	public void setCompany(int company) {
+		this.company = company;
 	}
 	public String getCompanyname() {
 		return companyname;

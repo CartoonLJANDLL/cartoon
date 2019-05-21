@@ -353,7 +353,7 @@ public class UserController {
 		User user=new User();
 		String pass=MD5Cripy.MD5(password);
 		String newpass=MD5Cripy.MD5(newpassword);
-		if(pass.equals(newpass)) {
+		if(pass.equals(userinfo.getPassword())) {
 			user.setPassword(newpass);
 			user.setPhone(userinfo.getPhone());
 			user.setGradeValue(userinfo.getGradeValue());

@@ -23,6 +23,8 @@ public interface InformationMapper {
 	public Information getinformationbyid(int id);
 	//通过资讯的发布者即所属公司找到相关资讯
 	public List<Information> selectinformationbycompanyid(Page page);
+	//通过所有资讯的标题
+	public List<Information> getinformationtitle();
 	//通过资讯id删除相关资讯
 	public int deleteInformationById(int id);
 	//通过资讯id数组实现批量删除资讯

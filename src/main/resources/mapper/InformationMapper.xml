@@ -10,20 +10,20 @@
 		<result column="url" property="url" />
 		<result column="status" property="status" />
 		<result column="time" property="time" />
-		<result column="collectnum" property="collectnum" />
-		<result column="company" property="companyid" />
+		<result column="company" property="company" />
 		<result column="name" property="companyname" />
+		<result column="viewcount" property="viewcount" />
 	</resultMap>
 	
 	<update id="update" parameterType="guomanwang.domain.Information">
 		update infomation 
 		<set>
-			<if test="userid!=null">title = #{title},</if>
-			<if test="blockid!=null ">content = #{content},</if>
-			<if test="blockid!=null ">url = #{url},</if>
-			<if test="number!=null ">time = #{time},</if>
-			<if test="status!=null">collectnum = #{collectnum},</if>
-			<if test="title!=null ">company = #{companyid},</if>
+			<if test="title!=null">title = #{title},</if>
+			<if test="content!=null ">content = #{content},</if>
+			<if test="url!=null ">url = #{url},</if>
+			<if test="time!=null ">time = #{time},</if>
+			<if test="company!=null ">company = #{company},</if>
+			<if test="viewcount!=null ">viewcount = #{viewcount},</if>
 		</set>
 		where id = #{id}
 	</update>
@@ -73,6 +73,10 @@
 		from infomation a,company b
 		where a.company=b.id
 		limit #{start},#{rows}
+	</select>
+	<select id="getinformationtitle" resultMap="resultInformation">
+		select title
+		from infomation
 	</select>
 	<delete id="deleteInformationById" parameterType="int">
          delete from infomation 

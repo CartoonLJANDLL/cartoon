@@ -28,10 +28,10 @@
 					<div class="layui-col-md9">
 					<c:choose>
 						<c:when test="${item.getCompanyname()=='玄机科技' or item.getCompanyname()=='娃娃鱼动画' }">
-							<a href="${item.getUrl() }" target="_blank">${item.getTitle() }</a>
+							<a class="newslink" data-id="${item.getId()}" href="${item.getUrl() }" target="_blank">${item.getTitle() }</a>
 						</c:when>
 						<c:otherwise>
-							<a href="${item.getUrl() }" target="newsbody">${item.getTitle() }</a>
+							<a class="newslink" data-id="${item.getId()}" href="${item.getUrl() }" target="newsbody" data-id="${item.getId()}">${item.getTitle() }</a>
 						</c:otherwise>
 					</c:choose>
 						
@@ -47,12 +47,5 @@
 		</div>
 	</body>
 	<script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
-	<script>
-	layui.use(['util', 'laydate', 'layer'], function(){
-	  var util = layui.util
-	  ,laydate = layui.laydate
-	  ,layer = layui.layer;
-	  
-	})
-	</script>
+	<script src='<c:url value="/resources/js/shownews.js"></c:url>'></script>
 </html>

@@ -19,6 +19,12 @@
 			"spread": false
 		},
 		{
+			"title": "主题版块管理",
+			"icon": "&#xe656;",
+			"href": "../admin/blockList",
+			"spread": false
+		},
+		{
 			"title": "其他页面",
 			"icon": "&#xe630;",
 			"href": "",
@@ -87,8 +93,7 @@
 				"title": "资讯数据",
 				"icon": "&#xe609;",
 				"href": "../admin/newsdata",
-				"spread": false,
-				"target": "_blank"
+				"spread": false
 			}
 		   ]
 		},{

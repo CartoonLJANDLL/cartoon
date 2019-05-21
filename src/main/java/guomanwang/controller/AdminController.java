@@ -9,6 +9,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.ansj.domain.Result;
+import org.ansj.splitWord.analysis.ToAnalysis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,7 @@ import guomanwang.service.PeoplenumService;
 import guomanwang.service.ThreadService;
 import guomanwang.service.UserGradeService;
 import guomanwang.service.UserService;
+import guomanwang.service.CompanyService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -68,6 +71,9 @@ public class AdminController {
 	@Autowired
 	@Qualifier("PeoplenumServiceimpl")
 	private PeoplenumService peoplenumService;
+	@Autowired
+	@Qualifier("CompanyServiceimpl")
+	private CompanyService companyService;
 	
 	@RequestMapping("/main")
 	public String main(Model model) {
@@ -90,6 +96,11 @@ public class AdminController {
 	@RequestMapping("/userdata")
 	public String userdata() {
 		return "userdata";
+	}
+	//返回用户数据展示页面
+	@RequestMapping("/newsdata")
+	public String newsdata() {
+		return "newsdata";
 	}
 	//返回后台番剧管理页面
 	@RequestMapping("/operaList")
@@ -185,6 +196,18 @@ public class AdminController {
 	public JSONArray getuseractive() throws Exception {
 		PeoplenumExample example=new PeoplenumExample();
 		return this.peoplenumService.selectuseractive(example);
+	}
+	//获得资讯来源网站或公司的分组数据
+	@ResponseBody
+	@RequestMapping("/getcompanycount")
+	public JSONArray getcompanycount() throws Exception {
+		return this.companyService.getcompanycount();
+	}
+	//获得所有资讯的标题
+	@ResponseBody
+	@RequestMapping("/getinformationtitle")
+	public JSONObject getinformationtitle() throws Exception {
+		return this.informationService.getinformationtitle();
 	}
 	//获得注册用户的性别比例
 	@ResponseBody
@@ -584,7 +607,7 @@ public class AdminController {
 		news.setStatus(status);
 		news.setTime(new Date());
 		news.setCollectinum(0);
-		news.setCompanyid(50);
+		news.setCompany(50);
 		int change_row=informationService.addinformation(news);
 		if(change_row>0) {
 			json.put("code", 1);

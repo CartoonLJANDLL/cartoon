@@ -5,7 +5,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>注册</title>
+  <title>忘记密码</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
@@ -83,7 +83,6 @@
   </p>
 </div>
 
-<script src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
 <script>
 layui.cache.page = '<c:url value="user"></c:url>';
 layui.cache.user = {
@@ -107,12 +106,12 @@ layui.config({
 				var reg=/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
 				if(reg.test(cellphone)){
 					$.ajax({
-						    url:'/guomanwang/user/sendcode',
-						    type: 'post',
-						    data: {
+						    url:'/guomanwang/user/sendcode',
+						    type: 'post',
+						    data: {
 							cellphone:$("#L_phone").val(),
 						    },
-						    success: function (info) {
+						    success: function (info) {
 							  setTimeout(function () {
 								  if(info.code==2){
 								location.href = "login";
@@ -129,21 +128,21 @@ layui.config({
 		 });
 		 form.on('submit(resetpassword)', function(data){
 			  $.ajax({
-				    url:'/guomanwang/user/resetpassword',
-				    type: 'post',
-				    data: {
+				    url:'/guomanwang/user/resetpassword',
+				    type: 'post',
+				    data: {
 					cellphone:$("#L_phone").val(),
 					vali:$("#L_code").val(),	
 			  		password:$("#L_pass").val(),
 				    },
-				    success: function (info) {
-				    if (info.code === 1) {
-				         setTimeout(function () {
-				         location.href = "login";
-				         }, 2000);
-				        }
-				       layer.msg(info.msg);
-				    }
+				    success: function (info) {
+				    if (info.code === 1) {
+				         setTimeout(function () {
+				         location.href = "login";
+				         }, 2000);
+				        }
+				       layer.msg(info.msg);
+				    }
 				  });
 				 return false;
 				});

@@ -24,4 +24,10 @@
 		from company
 		where id = #{id}
 	</select>
+	<select id="getcompanycount" resultMap="resultCompany">
+		select b.name,count(a.id) id
+		from infomation a,company b
+		where a.company=b.id
+		GROUP BY a.company
+	</select>
 </mapper>

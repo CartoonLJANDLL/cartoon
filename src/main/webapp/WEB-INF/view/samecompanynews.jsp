@@ -33,6 +33,7 @@
 			<ul class="flow-default" id="LAY_demo"></ul>
 		</div>
 		<script type="text/javascript" src="<c:url value='/resources/layui/layui.js'></c:url>"></script>
+		<script src='<c:url value="/resources/js/shownews.js"></c:url>'></script>
 		<script>
 		layui.use(['flow','util'], function(){
 			  var $ = layui.jquery, //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
@@ -55,11 +56,11 @@
 					//假设你的列表返回在data集合中
 					layui.each(res.data, function(index, item){
 					  if(item.company=='娃娃鱼动画'||item.company=='玄机科技'){
-						  lis.push('<li><div class="layui-col-md9"><a href="'+item.url+'" target="_blank">'+item.title +
+						  lis.push('<li><div class="layui-col-md9"><a class="newslink" data-id="'+item.id+'" href="'+item.url+'" target="_blank">'+item.title +
 								  '</a></div><div class="layui-col-md3"><span style="text-align: right;">时间：'+item.time+'</span></div><hr/></li>');
 					  }
 					  else{
-						  lis.push('<li><div class="layui-col-md9"><a href="'+item.url+'" target="newsbody">'+item.title +
+						  lis.push('<li><div class="layui-col-md9"><a class="newslink" data-id="'+item.id+'" href="'+item.url+'" target="newsbody">'+item.title +
 								  '</a></div><div class="layui-col-md3"><span style="text-align: right;">时间：'+item.time+'</span></div><hr/></li>');
 					  }
 					}); 

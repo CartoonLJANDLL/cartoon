@@ -17,9 +17,17 @@
 		.layui-row img{width: 100%;}
 		.layuui-nav .layui-icon{color:#999;}
 		.layui-col-md2{position:relative;height:370px;}
+		.layui-col-md2 .list_item{overflow: hidden;}
 		.layui-row .layui-col-md2:hover{box-shadow:0px 8px 6px #888888;}
 		.layui-col-md2 .jishu{position:absolute;z-indent:2;left:5px;bottom:5px;color:white;}
-		.layui-col-md2 img{height:300px;}
+		.layui-col-md2 img{height:300px;transition-duration:0.6s;}
+		.layui-col-md2 img:hover {
+             transform: scale(1.1);
+             -webkit-transform: scale(1.1); /*Safari 和 Chrome*/
+             -moz-transform: scale(1.1); /*Firefox*/
+             -ms-transform: scale(1.1); /*IE9*/
+             -o-transform: scale(1.1); /*Opera*/
+         }
 		.layui-row{margin-top: 20px;}
 		.layui-row .layui-btn{box-shadow:0px 3px 0px #888888;}
 		.layui-carousel img{width:100%;height:100%;}
@@ -362,7 +370,7 @@
 		        type: 2
 		        ,title: '视频播放界面'
 		        ,area: ['600px','280px']
-		        ,shade: 0.8
+		        ,shade: 0
 		        ,maxmin:true
 		        ,shadeClose: true
 		        ,content: [string,'no']

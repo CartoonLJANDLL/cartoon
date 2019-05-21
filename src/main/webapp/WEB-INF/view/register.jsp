@@ -5,7 +5,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>注册</title>
+  <title>用户注册</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">

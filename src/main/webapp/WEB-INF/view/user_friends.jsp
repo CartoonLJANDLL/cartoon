@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
- 
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
+  <link rel="stylesheet" type="text/css" href="../resources/css/emotion.css"/>
 <style type="text/css">
 	.avatar img{display: block; width: 45px; height: 45px; margin-left:20px;padding:0; border-radius: 2px;}
 	.person img{width: 40px; height: 40px; margin-left:20px;padding:0; border-radius: 10px;}
@@ -75,9 +75,10 @@
   right: -3px;
   background-color: #eceff1;
 }
-.right .write {
+.write {
 	display:inline-block;
     bottom: 29px;
+    margin: 0px 10px 5px;
     left: 30px;
     height: 42px;
     padding-left: 8px;
@@ -86,17 +87,18 @@
     width: calc(100% - 58px);
     border-radius: 5px;
 }
-.right .write .write-link.smiley:before {
+.write .write-link.smiley:before {
   display: inline-block;
   float: left;
   width: 20px;
+  position:relative;
   height: 42px;
   content: '';
   background-image: url("../resources/img/smiley.png");
   background-repeat: no-repeat;
   background-position: center;
 }
-.right .write .write-link.send:before {
+.write .write-link.send:before {
   display: inline-block;
   float: right;
   width: 20px;
@@ -107,10 +109,12 @@
   background-repeat: no-repeat;
   background-position: center;
 }
-.right .write input {
+.write .messages {
+  margin-top: 10px;
   font-size: 16px;
   float: left;
-  height: 40px;
+  min-width: 200px;
+  max-width:680px;
   padding: 0 10px;
   color: var(--dark);
   border: 0;
@@ -198,7 +202,12 @@
 	                </c:if>
 	            </c:forEach>
 			</ul>
-			<div class="layui-tab-content">
+			<div class="layui-tab-content"></div>
+			<hr>
+			<div class="write">
+				<a href="javascript:void(0)" class="write-link smiley"></a>
+				<div class="messages" contenteditable/></div>
+				<a href="javascript:;" data-id="${ friends[0].getUserid()}" class="write-link send"></a>
 			</div>
 		</div>
   </div>
@@ -212,6 +221,16 @@
     <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
   </p>
 </div>
-<script  src="../resources/js/chatindex.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+<script type="text/javascript" src="../resources/js/chatindex.js"></script>
+<script type="text/javascript" src="../resources/js/emotion.js"></script>
+<script type="text/javascript">
+        $('a.smiley').emotion(); 
+        $('.messages').focus();
+		//鼠标点击输入框空白处获得焦点
+		$('.write').click(function(){
+			$('.messages').focus(); 
+		})
+</script>
 </body>
 </html>

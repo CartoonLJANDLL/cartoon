@@ -111,6 +111,7 @@ public class CommonController {
 		List<Information> newslist=informationService.selectinformationbycompany(one);
 		for(Information information:newslist) {
 			JSONObject json= new JSONObject();
+			json.put("id", information.getId());
 			json.put("title",information.getTitle());
 			json.put("time",information.getTime());
 			json.put("url",information.getUrl());
@@ -154,7 +155,7 @@ public class CommonController {
 	 @Scheduled(cron = "0 30 23 ? * *")//每天23点30启动自动抓取动漫视频任务
 	@RequestMapping("/refreshOperas")
 		public JSONObject refreshOperas() throws IOException, InterruptedException{
-			String str = "python E:\\cartoon.py";
+			String str = "python3 /usr/local/cartoon.py";
 			int addition=0;
 			JSONObject json=new JSONObject();
 			json.put("code",1);
@@ -229,6 +230,19 @@ public class CommonController {
 			return "redirect:index";
 		}
 		return "admin_index";
+	}
+	//点击一下资讯超链接对应得资讯点击量+1
+	@RequestMapping("/addviewcount")
+	@ResponseBody
+	public JSONObject addviewcount(int newsid){
+		JSONObject json=new JSONObject();
+		Information news=this.informationService.getinformationbyid(newsid);
+		news.setViewcount(news.getViewcount()+1);
+		json.put("msg","点击量更新失败！");
+		if(this.informationService.update(news)>0) {
+			json.put("msg","点击量更新成功！");
+		}
+		return json;
 	}
 	@RequestMapping("/jump/{path}")
 	public String jump(@PathVariable("path") String path){

@@ -132,7 +132,7 @@
 		}  
 		$(".loginout").click(function(){
         	layer.confirm('确定退出登录？', {icon: 3, title: '提示信息'}, function (index) {
-                $.get('/guomanwang/user/logout/',function(data){
+                $.post('/guomanwang/user/logout/',function(data){
                 })
                 setTimeout(function(){
                     location.reload();

@@ -2,6 +2,9 @@ package guomanwang.service.impl;
 
 import java.util.List;
 
+import org.ansj.domain.Result;
+import org.ansj.domain.Term;
+import org.ansj.splitWord.analysis.ToAnalysis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import guomanwang.domain.Information;
 import guomanwang.domain.Page;
 import guomanwang.mapper.InformationMapper;
 import guomanwang.service.InformationService;
+import net.sf.json.JSONObject;
 
 @Service("InformationServiceimpl")
 public class InformationServiceimpl implements InformationService{
@@ -69,5 +73,23 @@ public class InformationServiceimpl implements InformationService{
 	public int getnumberbycompany(int companyid) {
 		return this.informationMapper.getnumberbycompany(companyid);
 	}
-	
+	@Override
+	public JSONObject getinformationtitle() {
+		String text="";
+		String word="";
+		JSONObject json=new JSONObject();
+		List<Information> titles=this.informationMapper.getinformationtitle();
+		for(Information title:titles) {
+			text+=title.getTitle();
+		}
+		Result parse = ToAnalysis.parse(text);
+
+        List<Term> terms = parse.getTerms(); //拿到terms
+        for(int i=0; i<terms.size(); i++) {
+        	 word= word+","+terms.get(i).getName(); //拿到词
+        }
+        System.out.println(word);
+		json.put("data",word);
+		return json;
+	}
 }
