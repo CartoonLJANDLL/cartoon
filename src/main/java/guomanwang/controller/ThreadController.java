@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,25 @@ public class ThreadController {
 	@Qualifier("UserServiceimpl")
 	private UserService userService;
 	
-	//发帖模块
+	//帖子详情页
+	@RequestMapping("/tiezi")
+	public String tiezi(){
+		return "thread/tiezi";
+	}
+	//映射发帖页面
+	@RequestMapping("/add")
+	public String add(Model model,HttpServletRequest request,HttpServletResponse response){
+		HttpSession session = request.getSession();
+		System.out.println("经过发帖页面");
+		User userinfo=(User)session.getAttribute("user");
+		List<Block> blocks=this.blockService.selectAllBlock();
+		if(userinfo==null) {
+			return "common/login";
+		}
+		model.addAttribute("blocks",blocks);
+		return "thread/add";
+	}
+	//点击确认发帖
 	@ResponseBody
 	@RequestMapping("/pushthread")
 	public JSONObject addthread(int userid,int blockid,String title,String content,@RequestParam(value="status",defaultValue="0") int status,Model model,
@@ -118,9 +137,9 @@ public class ThreadController {
 				session.setAttribute("users",topusers);
 				session.setAttribute("notices", notices);
 				model.addAttribute("hotThreads",hotThreads);
-				return "block_index";
+				return "thread/block_index";
 			}
-			return "redirect:/common/login";
+			return "redirect:/login";
 		}
 		//获得用户连续签到排名前20
 		@ResponseBody
@@ -179,7 +198,7 @@ public class ThreadController {
 			}
 			model.addAttribute("map",2);
 			session.setAttribute("Block",blockService.findblockbyid(blockId));
-			return "block_index";
+			return "thread/block_index";
 		}
 		
 		//精华帖子
@@ -193,7 +212,7 @@ public class ThreadController {
 				session.setAttribute("userThreads",userThreads);
 			model.addAttribute("map",1);
 			session.setAttribute("Block",blockService.findblockbyid(blockId));
-			return "block_index";
+			return "thread/block_indexx";
 		}
 		
 		//按最新(时间倒序）
@@ -207,7 +226,7 @@ public class ThreadController {
 					session.setAttribute("userThreads",userThreads);
 				model.addAttribute("map",3);
 				session.setAttribute("Block",blockService.findblockbyid(blockId));
-				return "block_index";
+				return "thread/block_index";
 		}
 		//帖子页面根据帖子id删除帖子
 		@ResponseBody
@@ -262,7 +281,7 @@ public class ThreadController {
 			hotThreads = userThreadService.selectHotThread(blockId);
 			System.out.println("hotThreads"+hotThreads.get(0).getContent());
 			model.addAttribute("hotThreads",hotThreads);
-			return "block_index";
+			return "thread/block_index";
 		}
 		
 		//我发表的帖子
@@ -273,7 +292,7 @@ public class ThreadController {
 			
 			model.addAttribute("userThreads",myThreads);
 			
-			return "block_index";
+			return "thread/block_index";
 		}
 		
 		

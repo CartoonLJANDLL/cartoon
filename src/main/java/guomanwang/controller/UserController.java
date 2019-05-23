@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -83,38 +84,6 @@ public class UserController {
 	@Qualifier("MessageServiceimpl")
 	private MessageService messageservice;
 	
-	//用户登录
-	@RequestMapping("/islogin")
-	@ResponseBody
-	public JSONObject isLogin(String telnumber, String password, Model model,
-			HttpServletRequest request) {
-		JSONObject json= new JSONObject();
-		List<User> userlist=this.userService.isLogin(telnumber);
-		HttpSession session = request.getSession();
-		for(User user:userlist) {
-			String passwordByMd5 = MD5Cripy.MD5(password);
-			if(user.getPassword().equals(passwordByMd5)&&user.getStatus()==1) {
-				json.put("code",1);
-				json.put("msg","登录成功！");
-				session.setAttribute("user", user);
-				Sign sign=signservice.isSign(user.getUserid());
-				if(sign!=null) {
-					session.setAttribute("signstatus",1);
-					System.out.println(sign);
-				}
-			}
-			else if(user.getStatus()==0)
-			{
-					json.put("code",0);
-					json.put("msg","该账号已禁用！请更换账号登录！");
-			}
-			else {
-				json.put("code",0);
-				json.put("msg","账号或密码输入错误，请重试！");
-			}
-		}			
-			return json;
-		}
 	//获得好友聊天记录
 	@RequestMapping("/getfriendsmsgsbyuserid")
 	@ResponseBody
@@ -129,12 +98,12 @@ public class UserController {
 			HttpServletRequest request) {
 		User userinfo=(User)session.getAttribute("user");
 		if(userinfo==null) {
-			return "redirect:/common/login";
+			return "redirect:/login";
 		}
 		else {
 			List<UserThread> threadlist=this.userthreadService.selectMyPushedThread(userinfo.getUserid());
 			if(threadlist!=null) {model.addAttribute("threadlist", threadlist);}
-				return "user_index";
+				return "user/user_index";
 		}	
 	}
 	//用户主页
@@ -154,7 +123,7 @@ public class UserController {
 			request.setAttribute("mycommits",mycommits);
 			request.setAttribute("threadlist",threadlist);
 			request.setAttribute("userinfo",userinfo);
-			return "user_home";
+			return "user/user_home";
 		
 	}
 	//用户设置
@@ -165,9 +134,9 @@ public class UserController {
 		User user=(User)session.getAttribute("user");
 		if(user!=null) {
 			request.setAttribute("defaultheadlist", defaultheadlist);
-			return "user_setting";
+			return "user/user_setting";
 		}
-		return "redirect:/common/login";
+		return "redirect:/login";
 	}
 	//用户好友
 	@RequestMapping("/user_friends")
@@ -177,9 +146,9 @@ public class UserController {
 		if(user!=null) {
 			List<User> friends=this.friendrelationservice.getfriendsbyuserid(user.getUserid());
 			request.setAttribute("friends", friends);
-			return "user_friends";
+			return "user/user_friends";
 		}
-		return "redirect:/common/login";
+		return "redirect:/login";
 	}
 	//用户消息
 	@RequestMapping("/user_message")
@@ -211,9 +180,9 @@ public class UserController {
 		request.setAttribute("othermessages", othermessages);
 		request.setAttribute("requestfriends", requestfriends);
 		request.setAttribute("askrequests", askrequests);
-		return "user_message";
+		return "user/user_message";
 		}
-		return "redirect:/common/login";
+		return "redirect:/login";
 	}
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) throws Exception {
@@ -221,127 +190,7 @@ public class UserController {
 	       session.invalidate();
 	       return "redirect:/common/index";
 	   }
-	//注册时发送验证码
-	@RequestMapping("/sendmsg")
-	@ResponseBody
-	public JSONObject sendmsg(String cellphone, Model model,
-			HttpServletRequest request,HttpServletResponse response) throws IOException {
-		System.out.println("电话号码为:"+cellphone);
-		JSONObject json= new JSONObject();
-		List<User> one=this.userService.selectuserinfo(cellphone);
-		if(one.size()>0) {
-			json.put("code",2);
-			json.put("msg","该号码已注册请登录！");
-		}
-		else {
-			String code = this.userService.sendMsg(cellphone);
-			System.out.println("验证码为:"+code);
-			if (code!="") {
-				request.getSession().setAttribute("valiNum",code);
-				json.put("code",1);
-				json.put("msg","验证码发送成功！");
-			} else {
-				json.put("code",0);
-				json.put("msg","验证码发送失败！请重试！");
-			}
-		}
-		return json;
-	}
-	//找回密码时发送验证码
-		@RequestMapping("/sendcode")
-		@ResponseBody
-		public JSONObject sendcode(String cellphone, Model model,
-				HttpServletRequest request,HttpServletResponse response) throws IOException {
-			System.out.println("电话号码为:"+cellphone);
-			JSONObject json= new JSONObject();
-			List<User> one=this.userService.selectuserinfo(cellphone);
-			if(one.size()>0) {
-				String code = this.userService.sendMsg(cellphone);
-				System.out.println("验证码为:"+code);
-				if (code!="") {
-					request.getSession().setAttribute("code",code);
-					json.put("code",1);
-					json.put("msg","验证码发送成功！");
-				} else {
-					json.put("code",0);
-					json.put("msg","验证码发送失败！请重试！");
-				}
-			}
-			else {
-				json.put("code",2);
-				json.put("msg","你还未注册！");
-			}
-			return json;
-		}
-	//用户注册
-	@RequestMapping("/register")
-	@ResponseBody
-	public JSONObject register(String username,String password,String cellphone,String vali,HttpServletRequest request) {
-			User user=new User();
-			JSONObject json= new JSONObject();
-			List<Defaulthead> defaultheadlist=this.defaultheadService.getallDefaulthead();
-		if(vali.equals(request.getSession().getAttribute("valiNum"))) {
-			//验证码正确后的操作		
-			try {
-				username = URLDecoder.decode(username,"UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			int defaultheadid=(int)(Math.random()*(defaultheadlist.size()));
-			System.out.println(defaultheadlist.get(defaultheadid).getUrl());
-			user.setPhone(cellphone);
-			user.setGradeValue(0);
-			user.setHonor(1);
-			user.setStatus(1);
-			user.setRegisterday(new Date());
-			user.setName(username);
-			user.setHeadurl(defaultheadlist.get(defaultheadid).getUrl());
-			user.setPassword(MD5Cripy.MD5(password));
-			int change_row=this.userService.register(user);
-			if(change_row>0) {
-				json.put("code",1);
-				json.put("msg","注册成功！");
-			}
-			else {
-				json.put("code",0);
-				json.put("msg","注册失败！请重试！");
-			}
-		}
-		else {
-			json.put("code", 0);
-			json.put("msg","注册失败！验证码有误！");
-		}
-			return json;
-		
-	}
-	@RequestMapping("/resetpassword")
-	@ResponseBody
-	public JSONObject resetpassword(String cellphone,String password,String vali, Model model,
-			HttpServletRequest request,HttpServletResponse response) throws IOException {
-		System.out.println("填写电话号码为:"+cellphone);
-		System.out.println("填写的验证码为:"+vali);
-		JSONObject json= new JSONObject();
-		User user=new User();
-		if(vali.equals(request.getSession().getAttribute("code"))) {
-			user.setPhone(cellphone);
-			user.setPassword(MD5Cripy.MD5(password));
-			int change_row=this.userService.resetpassbyphone(user);
-			if(change_row>0) {
-				json.put("code",1);
-				json.put("msg","密码重置成功！可以登录啦！");
-			}
-			else {
-				json.put("code",0);
-				json.put("msg","密码重置失败！请重试！");
-			}
-		}
-		else {
-			json.put("code",0);
-			json.put("msg","密码重置失败！验证码有误！");
-		}
-		return json;
-		
-	}
+	
 	@RequestMapping("/changepassword")
 	@ResponseBody
 	public JSONObject changepassword(String password,String newpassword, Model model,

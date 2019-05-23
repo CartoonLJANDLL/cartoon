@@ -9,8 +9,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="keywords" content="纵横国漫网">
 <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-    <link rel="stylesheet" href="<c:url value='/resources/layui/css/layui.css'></c:url>">
-    <link rel="stylesheet" href="<c:url value='/resources/layuicms/css/index.css'></c:url>">
+    <link rel="stylesheet" href="resources/layui/css/layui.css">
+    <link rel="stylesheet" href="resources/layuicms/css/index.css">
 </head>
 <body class="main_body">
 <jsp:include page="menu_header.jsp"/>
@@ -34,7 +34,7 @@
 					</li>
 					<c:forEach items="${companies }" var="item"  varStatus="status">
 						<li class="layui-nav-item">
-							<a href="../common/samecompany?companyid=${item.getId()}" target="newsbody">
+							<a href="samecompany?companyid=${item.getId()}" target="newsbody">
 								<cite>${item.getName()}</cite>
 							</a>
 						</li>   
@@ -47,7 +47,7 @@
 			<div class="layui-tab mag0" lay-filter="bodyTab" id="top_tabs_box">
 				<div class="layui-tab-content clildFrame">
 					<div class="layui-tab-item layui-show">
-						<iframe name="newsbody" src="../common/shownews"></iframe>
+						<iframe name="newsbody" src="shownews"></iframe>
 					</div>
 				</div>
 			</div>
@@ -85,7 +85,7 @@
 		 	 )
 		  form.on('submit(searchnews)', function(data){
 				 $.ajax({
-					    url:'/guomanwang/common/searchnews',
+					    url:'/guomanwang/searchnews',
 					    type: 'post',
 					    data: {
 				  		  key:$("#newskey").val()

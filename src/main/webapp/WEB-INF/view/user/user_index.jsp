@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" isELIgnored="false"%>
+    pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
- 
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,57 +9,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-<script type="text/javascript" src='<c:url value="/resources/js/jquery.min.js"></c:url>'></script>
-<link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
-<link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
+  <script type="text/javascript" src='<c:url value="/resources/js/jquery.min.js"></c:url>'></script>
+  <link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
+  <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 </head>
 <body>
-	<jsp:include page="menu_header.jsp"/>
-	<div class="layui-container fly-marginTop fly-user-main">
-  <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
-    <li class="layui-nav-item">
-      <a href="user_home?userId=${user.getUserid() }">
-        <i class="layui-icon">&#xe609;</i>
-       	 我的主页
-      </a>
-    </li>
-    <li class="layui-nav-item layui-this">
-      <a href="user_index">
-        <i class="layui-icon">&#xe857;</i>
-        	用户中心
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="user_setting">
-        <i class="layui-icon">&#xe620;</i>
-       	 基本设置
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="user_friends">
-        <i class="layui-icon">&#xe770;</i>
-       	我的好友
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="user_message">
-        <i class="layui-icon">&#xe611;</i>
-        	我的消息
-      </a>
-    </li>
-  </ul>
-
-  <div class="site-tree-mobile layui-hide">
-    <i class="layui-icon">&#xe602;</i>
-  </div>
-  <div class="site-mobile-shade"></div>
-  
-  <div class="site-tree-mobile layui-hide">
-    <i class="layui-icon">&#xe602;</i>
-  </div>
-  <div class="site-mobile-shade"></div>
-  
-  
+	<jsp:include page="../common/menu_header.jsp"/>
+	<div class="layui-container fly-marginTop fly-user-main">  
+  	  <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+	    <li class="layui-nav-item">
+	      <a href="user_home?userId=${user.getUserid() }">
+	        <i class="layui-icon">&#xe609;</i>
+	       	 我的主页
+	      </a>
+	    </li>
+	    <li class="layui-nav-item layui-this">
+	      <a href="user_index">
+	        <i class="layui-icon">&#xe857;</i>
+	        	用户中心
+	      </a>
+	    </li>
+	    <li class="layui-nav-item">
+	      <a href="user_setting">
+	        <i class="layui-icon">&#xe620;</i>
+	       	 基本设置
+	      </a>
+	    </li>
+	    <li class="layui-nav-item">
+	      <a href="user_friends">
+	        <i class="layui-icon">&#xe770;</i>
+	       	我的好友
+	      </a>
+	    </li>
+	    <li class="layui-nav-item">
+	      <a href="user_message">
+	        <i class="layui-icon">&#xe611;</i>
+	        	我的消息
+	      </a>
+	    </li>
+	  </ul>
+	  <div class="site-tree-mobile layui-hide">
+	    <i class="layui-icon">&#xe602;</i>
+	  </div>
+	  <div class="site-mobile-shade"></div>
+	  <div class="site-tree-mobile layui-hide">
+	    <i class="layui-icon">&#xe602;</i>
+	  </div>
+	  <div class="site-mobile-shade"></div>
   <div class="fly-panel fly-panel-user" pad20>
     <!--
     <div class="fly-msg" style="margin-top: 15px;">
@@ -121,15 +116,7 @@
     </div>
   </div>
 </div>
-
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
+<%@ include file="../common/footer.html"%>
 <script src='<c:url value="/resources/js/haha.js"></c:url>'></script>
 </body>
 </html>

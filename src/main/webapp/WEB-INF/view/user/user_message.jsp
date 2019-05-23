@@ -17,52 +17,48 @@
 </style>
 </head>
 <body>
-	<jsp:include page="menu_header.jsp"/>
+	<jsp:include page="../common/menu_header.jsp"/>
 	<div class="layui-container fly-marginTop fly-user-main">
-  <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
-    <li class="layui-nav-item">
-      <a href="user_home?userId=${user.getUserid() }">
-        <i class="layui-icon">&#xe609;</i>
-       	 我的主页
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="user_index">
-        <i class="layui-icon">&#xe857;</i>
-        	用户中心
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="user_setting">
-        <i class="layui-icon">&#xe620;</i>
-       	 基本设置
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="user_friends">
-        <i class="layui-icon">&#xe770;</i>
-       	我的好友
-      </a>
-    </li>
-    <li class="layui-nav-item layui-this">
-      <a href="user_message">
-        <i class="layui-icon">&#xe611;</i>
-        我的消息
-      </a>
-    </li>
-  </ul>
-
+ 	<ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+	    <li class="layui-nav-item">
+	      <a href="user_home?userId=${user.getUserid() }">
+	        <i class="layui-icon">&#xe609;</i>
+	       	 我的主页
+	      </a>
+	    </li>
+	    <li class="layui-nav-item">
+	      <a href="user_index">
+	        <i class="layui-icon">&#xe857;</i>
+	        	用户中心
+	      </a>
+	    </li>
+	    <li class="layui-nav-item">
+	      <a href="user_setting">
+	        <i class="layui-icon">&#xe620;</i>
+	       	 基本设置
+	      </a>
+	    </li>
+	    <li class="layui-nav-item">
+	      <a href="user_friends">
+	        <i class="layui-icon">&#xe770;</i>
+	       	我的好友
+	      </a>
+	    </li>
+	    <li class="layui-nav-item layui-this">
+	      <a href="user_message">
+	        <i class="layui-icon">&#xe611;</i>
+	        	我的消息
+	      </a>
+	    </li>
+  	</ul>
   <div class="site-tree-mobile layui-hide">
     <i class="layui-icon">&#xe602;</i>
   </div>
   <div class="site-mobile-shade"></div>
-  
   <div class="site-tree-mobile layui-hide">
     <i class="layui-icon">&#xe602;</i>
   </div>
   <div class="site-mobile-shade"></div>
-  
-  
   <div class="fly-panel fly-panel-user" pad20>
 	  <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
 	    <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
@@ -200,14 +196,7 @@
 	  </div>
 	</div>
 </div>
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2019 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
+<%@ include file="../common/footer.html"%>
 <script>
 layui.use(['element','form','layer'], function(){
 	var $ = layui.jquery,

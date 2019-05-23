@@ -13,6 +13,7 @@ import guomanwang.domain.Information;
 import guomanwang.domain.Page;
 import guomanwang.mapper.InformationMapper;
 import guomanwang.service.InformationService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Service("InformationServiceimpl")
@@ -90,6 +91,20 @@ public class InformationServiceimpl implements InformationService{
         }
         System.out.println(word);
 		json.put("data",word);
+		return json;
+	}
+	@Override
+	public JSONObject gettopviewnews(int limitsize){
+		JSONArray jsonarray=new JSONArray();
+		JSONArray jsonarray1=new JSONArray();
+		JSONObject json=new JSONObject();
+		List<Information> topnews=this.informationMapper.gettopviewnews(limitsize);
+		for(Information news:topnews) {
+			jsonarray.add(news.getTitle());
+			jsonarray1.add(news.getViewcount());
+		}
+		json.put("x",jsonarray);
+		json.put("y",jsonarray1);
 		return json;
 	}
 }

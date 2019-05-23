@@ -32,7 +32,7 @@
 		<input type="checkbox" name="gradeStatus" value='{{d.id}}' lay-filter="gradeStatus" lay-event="edit" lay-skin="switch" lay-text="启用|禁用">
 		{{#  }}}
 	</script>
-	<div class="layui-form-item layui-row layui-col-xs12" style="margin-top:20px;">
+	<div class="layui-form-item layui-row layui-col-xs12" id="addbutton" style="margin-top:20px;display:none;">
 		<div class="layui-input-block layui-center">
 			<button class="layui-btn layui-btn-sm" id="addUserGrade">确认增加</button>
 			<button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">取消</button>
@@ -108,6 +108,7 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
         }else{
             layer.alert("添加的等级数量已到顶！",{maxWidth:300});
         }
+        $("#addbutton").fadeIn();
     });
     $("#addUserGrade").click(function(){
     	var GradeStatus=0;
@@ -133,6 +134,10 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
     	}
     	
     });
+    $("button[type=reset]").on('click',function(){
+    	$(".layui-table-body.layui-table-main tbody tr:last").remove();
+    	$("#addbutton").fadeOut();
+    })
     //控制表格编辑时文本的位置【跟随渲染时的位置】
     $("body").on("click",".layui-table-body.layui-table-main tbody tr td",function(){
         $(this).find(".layui-table-edit").addClass("layui-"+$(this).attr("align"));

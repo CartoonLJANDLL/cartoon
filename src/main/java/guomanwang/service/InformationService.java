@@ -2,6 +2,8 @@ package guomanwang.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import guomanwang.domain.Information;
 import guomanwang.domain.Page;
 import net.sf.json.JSONObject;
@@ -30,4 +32,6 @@ public interface InformationService {
 	List<Information> getinformation(Page page);
 	//通过所有资讯的标题
 	public JSONObject getinformationtitle();
+	//获得资讯点击量的前几名
+	public JSONObject gettopviewnews(int limitsize);
 }

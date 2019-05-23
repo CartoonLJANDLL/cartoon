@@ -1,3 +1,5 @@
+$(".fly-nav li.layui-this").removeClass("layui-this");
+$(".fly-nav li.user").addClass("layui-this");
 function deletethread(id){
 	layer.confirm('确认删除?此操作无法撤销', {icon: 3, title:'提示'}, function(index){
 		$.ajax({

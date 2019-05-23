@@ -100,13 +100,7 @@
 			<div class="layui-row layui-col-space20 " id="result"></div>
 			<div id="pager"></div>
 		</div>
-		<div class="fly-footer" style="text-align:center;width:100%;height:70px;margin-top:20px;">
-			<p style="margin:10px auto; "><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a></p> 
-			<a href="javascript:;" target="_blank">2018 &copy;刘江 and 李林</a>
-		    <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
-		    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
-		    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-		</div>
+		<%@ include file="../common/footer.html"%>
 	<script>
 	layui.use(['carousel','layer','element','form','flow','laypage'], function(){
 	  var carousel = layui.carousel,

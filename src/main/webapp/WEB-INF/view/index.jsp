@@ -9,25 +9,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-<script type="text/javascript" src='<c:url value="/resources/js/jquery.min.js"></c:url>'></script>
-<script type="text/javascript" src='<c:url value="/resources/js/bootstrap.min.js"></c:url>'></script>
-<link href="../resources/css/layui.css" rel="stylesheet" />
-<link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 <style type="text/css">
 			.fly-logo img{width:120px;height:40px;}
-			.layui-row img{width: 100%;height: 100%;}
-			#pirture{position:relative;cursor:pointer;}
+			.layui-row img{width: 100%;height: 100%;position:relative;}
 /* 			li:focus{background-color: #00CCFF;} */
 			#textlayer{width:95%;height:18%;background:rgba(0,150,136,1);position:absolute;left:10;bottom:0;color:#fff;font-family:"微软雅黑";}
 			#textlayer h3{font-size:20px;font-weight:100;padding-top:3px;height:40px;text-align:center;line-height:40x;}
 			#textlayer p{font-size:14px;text-align:center;display:none;}
 			blockquote p{font-size:15px;}
-			.container{margin-top:15px;padding-left:220px;}
+			.container{margin-top:15px;padding-left:5%;}
 </style>
 </head>
 <body>
-
-	<jsp:include page="menu_header.jsp"/>
+	<jsp:include page="common/menu_header.jsp"/>
 	<!--图片轮播 -->
 	<div class="layui-carousel" id="test1">
 	  <div carousel-item>
@@ -102,7 +96,8 @@
 		,arrow: 'always' //始终显示箭头
 		//,anim: 'fade' //切换动画方式
 	  });
-	  
+	  $(".fly-nav li.layui-this").removeClass("layui-this");
+	  $(".fly-nav li:first").addClass("layui-this");
 	  $(document).ready(function(){
 	  	$(".layui-row div").hover(function(){
 	  		$(this).find("#textlayer").stop().animate({height:"100%"},400);

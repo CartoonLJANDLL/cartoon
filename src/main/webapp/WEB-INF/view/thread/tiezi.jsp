@@ -10,15 +10,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-<link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
-<link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 <style type="text/css">
 	.photos img{width:50%;}
 </style>
 </head>
 <body>
-<jsp:include page="menu_header.jsp"/>
-
+<jsp:include page="../common/menu_header.jsp"/>
 <div class="fly-panel fly-column">
   <div class="layui-container">
     <ul class="layui-clear">
@@ -227,22 +224,13 @@
         </div>
       </div>
       <div class="fly-panel" style="padding: 20px 0; text-align: center;">
-        <img src="../../res/images/weixin.jpg" style="max-width: 100%;" alt="站长联系方式">
+        <img src="guomanwang/resources/wechat.jpg" style="max-width: 100%;" alt="站长联系方式">
         <p style="position: relative; color: #666;">微信扫码添加站长</p>
       </div>
-
     </div>
   </div>
 </div>
-
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
+<%@ include file="../common/footer.html"%>
 <script>
 layui.use(['upload','layer','form'], function(){
 	  var $ = layui.jquery

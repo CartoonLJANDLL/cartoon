@@ -78,6 +78,12 @@
 		select title
 		from infomation
 	</select>
+	<select id="gettopviewnews" resultMap="resultInformation">
+		select id,title,viewcount
+		from infomation
+		ORDER BY viewcount DESC
+		limit #{limitsize}
+	</select>
 	<delete id="deleteInformationById" parameterType="int">
          delete from infomation 
          where id=#{id}

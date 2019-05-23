@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,11 +9,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-  <link rel="stylesheet" href='<c:url value="/resources/layui/css/layui.css"></c:url>'>
-  <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 </head>
 <body>
-<jsp:include page="menu_header.jsp"/>
+<jsp:include page="../common/menu_header.jsp"/>
 <div class="layui-container fly-marginTop">
   <div class="fly-panel" pad20 style="padding-top: 5px;">
     <!--<div class="fly-none">没有权限</div>-->
@@ -94,15 +91,7 @@
     </div>
   </div>
 </div>
-
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
+<%@ include file="../common/footer.html"%>
 <script>
 layui.use(['upload','layer','form'], function(){
 	  var $ = layui.jquery

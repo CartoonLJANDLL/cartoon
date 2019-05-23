@@ -11,7 +11,7 @@
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
 </head>
 <body>
-<jsp:include page="menu_header.jsp"/>
+<jsp:include page="../common/menu_header.jsp"/>
 <div class="fly-panel fly-column">
   <div class="layui-container">
     <ul class="layui-clear">
@@ -27,12 +27,12 @@
 				<i class="layui-icon layui-icon-search">
 				</i>
 			</button>
-			 <a href="/guomanwang/common/add" class="layui-btn">发表新帖</a> 
+			 <a href="/guomanwang/thread/add" class="layui-btn">发表新帖</a> 
 	</div>
     </form> 
     </div> 
     <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;"> 
-      <a href="/guomanwang/common/add" class="layui-btn">发表新帖</a> 
+      <a href="/guomanwang/thread/add" class="layui-btn">发表新帖</a> 
     </div> 
   </div>
 </div>
@@ -221,15 +221,7 @@
     </div>
   </div>
 </div>
-
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
+<%@ include file="../common/footer.html"%>
 <script type="text/javascript">
 layui.use(['form','layer','laydate','table','laytpl'],function(){
     var form = layui.form,

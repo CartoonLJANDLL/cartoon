@@ -99,10 +99,10 @@ layui.use('laydate',function(){
 	   		     enabled: false // 禁用版权信息
 	    		},
 	    		chart: {
-	    		    zoomType: 'x'
+	    		    zoomType: 'xy'
 	    		},
 	    	    tooltip: {
-	    	        pointFormat: '频率: <b>{point.y:.1f} 次</b>'
+	    	        pointFormat: '频率: <b>{point.weight} 次</b>'
 	    	    },
 	    		series: [{
 	    			name: '频率',
@@ -145,41 +145,30 @@ layui.use('laydate',function(){
 	        enabled: false
 	    },
 	    tooltip: {
-	        pointFormat: '点击量: <b>{point.y:.1f} 次点击</b>'
+	        pointFormat: '点击量: <b>{point.y} 次点击</b>'
 	    },
 	    series: [{
 	        name: '点击量',
-	        data: [
-	            ['上海', 24.25],
-	            ['卡拉奇', 23.50],
-	            ['北京', 21.51],
-	            ['德里', 16.78],
-	            ['拉各斯', 16.06],
-	            ['天津', 15.20],
-	            ['伊斯坦布尔', 14.16],
-	            ['东京', 13.51],
-	            ['广州', 13.08],
-	            ['孟买', 12.44],
-	            ['莫斯科', 12.19],
-	            ['圣保罗', 12.03],
-	            ['深圳', 10.46],
-	            ['雅加达', 10.07],
-	            ['拉合尔', 10.05],
-	            ['首尔', 9.99],
-	            ['武汉', 9.78],
-	            ['金沙萨', 9.73],
-	            ['开罗', 9.27],
-	            ['墨西哥', 8.87]
-	        ],
+	        data: [],
 	        dataLabels: {
 	            enabled: true,
 	            rotation: -90,
 	            color: '#FFFFFF',
 	            align: 'right',
-	            format: '{point.y:.1f}', // :.1f 为保留 1 位小数
+	            format: '{point.y}', // :.1f 为保留 1 位小数
 	            y: 10
 	        }
 	    }]
 	});
+	//获得点击量前10的资讯
+  $.ajax({
+	    url: '../admin/gettopviewnews',
+	    type:"post",
+	    success: function(data) {
+	    	chart1.xAxis[0].setCategories(data.x);
+	    	chart1.series[0].setData(data.y);
+	    },
+	    cache: false
+	  });
 	
 });

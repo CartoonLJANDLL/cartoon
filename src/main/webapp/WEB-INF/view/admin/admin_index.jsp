@@ -8,15 +8,15 @@
   	<meta name="keywords" content="纵横国漫网">
     <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
     <title>纵横国漫网后台管理页面</title>
-    <link rel="stylesheet" href="<c:url value='/resources/layuicms/layui/css/layui.css'></c:url>">
-    <link rel="stylesheet" href="<c:url value='/resources/layuicms/css/index.css'></c:url>">
+    <link rel="stylesheet" href="../resources/layuicms/layui/css/layui.css">
+    <link rel="stylesheet" href="../resources/layuicms/css/index.css">
 </head>
 <body class="main_body">
 	<div class="layui-layout layui-layout-admin">
 		<!-- 顶部 -->
 		<div class="layui-header header">
 			<div class="layui-main mag0">
-				<a href="/guomanwang/common/index" class="logo">纵横国漫网</a>
+				<a href="/guomanwang/index" class="logo">纵横国漫网</a>
 				<!-- 显示/隐藏菜单 -->
 				<a href="javascript:;" class="seraph hideMenu icon-caidan"></a>
 				<!-- 顶级菜单 -->
@@ -66,15 +66,6 @@
 			<div class="user-photo">
 				<a class="img" title="我的头像" ><img src="<c:url value='${user.getHeadurl()}'></c:url>" class="userAvatar"></a>
 				<p>你好！<span class="userName">${user.getUsername()}</span>, 欢迎登录</p>
-			</div>
-			<!-- 搜索 -->
-			<div class="layui-form component">
-				<select name="search" id="search" lay-search lay-filter="searchPage">
-					<option value="">搜索页面或功能</option>
-					<option value="1">资讯</option>
-					<option value="2">番剧</option>
-				</select>
-				<i class="layui-icon">&#xe615;</i>
 			</div>
 			<div class="navBar layui-side-scroll" id="navBar">
 				<ul class="layui-nav layui-nav-tree">
@@ -148,14 +139,14 @@
 	<div class="site-tree-mobile"><i class="layui-icon">&#xe602;</i></div>
 	<div class="site-mobile-shade"></div>
 	
-	<script type="text/javascript" src="<c:url value='/resources/layuicms/layui/layui.js'></c:url>"></script>
-	<script type="text/javascript" src="<c:url value='/resources/layuicms/js/cache.js'></c:url>"></script>
+	<script type="text/javascript" src="../resources/layuicms/layui/layui.js"></script>
+	<script type="text/javascript" src="../resources/layuicms/js/cache.js"></script>
 	<script>
 	 var $,tab,dataStr,layer;
 	 layui.config({
-	 	base : '<c:url value="/resources/layuicms/js/"></c:url>'
+	 	base : "../resources/layuicms/js/"
 	 }).extend({
-	 	"bodyTab" : '<c:url value="bodyTab"></c:url>'
+	 	"bodyTab" : "bodyTab"
 	 });
 	 layui.use(['bodyTab','form','element','layer','jquery'],function(){
 	 	var form = layui.form,
@@ -164,7 +155,7 @@
 	     	layer = parent.layer === undefined ? layui.layer : top.layer;
 	 		tab = layui.bodyTab({
 	 			openTabNum : "50",  //最大可打开窗口数量
-	 			url :"<c:url value='/resources/layuicms/json/navs.json'></c:url>" //获取菜单json地址
+	 			url :"../resources/layuicms/json/navs.json" //获取菜单json地址
 	 		});
 
 	 	//通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据

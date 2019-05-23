@@ -29,15 +29,16 @@ layui.use(['element','form','layer'], function(){
 		    websocket = new SockJS("http://localhost:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
 		}  
 		websocket.onopen = onOpen;  
-		websocket.onmessage = onMessage;  
+		websocket.onmessage = onMessage1;  
 		websocket.onerror = onError;  
 		websocket.onclose = onClose;  
 
 		function onOpen(openEvt) {  
 		    //alert(openEvt.Data);   
 		}  
-		function onMessage(evt) {
+		function onMessage1(evt) {
 			var message=evt.data.split("@");
+			console.log(message[1]);
 			if(message[1]==0){
 				$('.chat[data-chat=person'+message[0]+']').find("div").last().innerHTML+='[对方已离线]';
 				}
@@ -51,7 +52,6 @@ layui.use(['element','form','layer'], function(){
 		}  
 		function onClose() {  
 		}   
-
 		window.close = function () {  
 		    websocket.onclose();  
 		}

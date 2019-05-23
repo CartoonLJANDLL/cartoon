@@ -9,14 +9,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-<link href='<c:url value="/resources/layui/css/layui.css"></c:url>' rel="stylesheet" />
-<link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
-
 </head>
 <body>
-
 <jsp:include page="menu_header.jsp"/>
-
 <div class="layui-container fly-marginTop">
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
@@ -67,48 +62,6 @@
     </div>
   </div>
 </div>
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2018 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
-<script type="text/javascript" src='<c:url value="/resources/layui/layui.js"></c:url>'></script>
-<script type="text/javascript">
-layui.use(['layer','form'], function(){
-	  var $ = layui.jquery
-	  ,form = layui.form
-      ,layer =layui.layer;
-	  
-	//自定义验证规则
-	  form.verify({
-		password: [
-	      /^[\S]{6,12}$/
-	      ,'密码必须6到12位，且不能出现空格'
-	    ]
-	  });
-	  form.on('submit(islogin)', function(data){
-		  $.ajax({
-			    url:'/guomanwang/user/islogin',
-			    type: 'post',
-			    data: {
-				telnumber:$("#L_phone").val(),
-		  		password:$("#L_pass").val(),
-			    },
-			    success: function (info) {
-			    if (info.code === 1) {
-			         setTimeout(function () {
-			         location.href = "index";
-			         }, 2000);
-			        }
-			       layer.msg(info.msg);
-			    }
-			  });
-			 return false;
-			});
-	 })
-</script>
+<%@ include file="../common/footer.html"%>
 </body>
 </html>

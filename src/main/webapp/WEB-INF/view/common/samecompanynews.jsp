@@ -52,7 +52,7 @@
 				  var lis = [];
 				  var companyid="${company.getId()}";
 				  //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-				  $.get('/guomanwang/common/samecompanynews?companyid='+companyid+'&page='+page, function(res){
+				  $.post('samecompanynews?companyid='+companyid+'&page='+page, function(res){
 					//假设你的列表返回在data集合中
 					layui.each(res.data, function(index, item){
 					  if(item.company=='娃娃鱼动画'||item.company=='玄机科技'){

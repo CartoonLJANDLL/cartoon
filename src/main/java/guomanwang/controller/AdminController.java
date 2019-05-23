@@ -75,6 +75,19 @@ public class AdminController {
 	@Qualifier("CompanyServiceimpl")
 	private CompanyService companyService;
 	
+	@RequestMapping("/index")
+	public String admin(HttpSession session){
+		User userinfo=(User)session.getAttribute("user");
+		//用户未登录跳转到登录页面
+		if(userinfo==null) {
+			return "redirect:/login";
+		}
+		//用户不是管理员则跳转到首页
+		else if(userinfo.getHonor()<=2) {
+			return "redirect:/common/index";
+		}
+		return "admin/admin_index";
+	}
 	@RequestMapping("/main")
 	public String main(Model model) {
 		System.out.println("经过main");
@@ -84,59 +97,59 @@ public class AdminController {
 		model.addAttribute("threadnumber",threadnumber);
 		model.addAttribute("usernumber",usernumber);
 		model.addAttribute("newsnumber",newsnumber);
-		return "main";
+		return "admin/main";
 	}
 	//打印资讯列表
 	@RequestMapping("/newslist")
 	public String newslist(Model model) {
 		System.out.println("经过newslist");
-		return "newsList";
+		return "admin/newsList";
 	}
 	//返回用户数据展示页面
 	@RequestMapping("/userdata")
 	public String userdata() {
-		return "userdata";
+		return "admin/userdata";
 	}
 	//返回用户数据展示页面
 	@RequestMapping("/newsdata")
 	public String newsdata() {
-		return "newsdata";
+		return "admin/newsdata";
 	}
 	//返回后台番剧管理页面
 	@RequestMapping("/operaList")
 	public String operalist(Model model) {
 		System.out.println("经过operalist");
-		return "operaList";
+		return "admin/operaList";
 	}
 	//打印用户列表
 	@RequestMapping("/userList")
 	public String userList(Model model) {
 		System.out.println("经过userList");
-		return "userList";
+		return "admin/userList";
 	}
 	//管理员设置主页
 	@RequestMapping("/adminList")
 	public String adminList(Model model) {
 		System.out.println("经过adminlist");
-		return "adminlist";
+		return "admin/adminlist";
 	}
 	//添加资讯
 	@RequestMapping("/addnews")
 	public String addnews(Model model) {
 		System.out.println("经过addnews");
-		return "addnews";
+		return "admin/addnews";
 	}
 	//添加番剧
 	@RequestMapping("/addopera")
 	public String addopera(Model model) {
 		System.out.println("经过addopera");
-		return "addopera";
+		return "admin/addopera";
 	}
 	//板块列表
 	@RequestMapping("/blockList")
 	public String blockset(Model model) {
 		System.out.println("经过addnews");
-		return "blockList";
+		return "admin/blockList";
 	}
 	//用户权限和版主设置
 	@RequestMapping("/setUser")
@@ -144,7 +157,7 @@ public class AdminController {
 		List<Block> blocks=this.blockService.selectAllBlock();
 		model.addAttribute("blocks",blocks);
 		System.out.println("经过setUser");
-		return "setUser";
+		return "admin/setUser";
 	}
 	//用户权限和版主设置
 	@RequestMapping("/setBlock")
@@ -152,13 +165,13 @@ public class AdminController {
 		List<User> users=this.userService.getallusers();
 		model.addAttribute("users",users);
 		System.out.println("经过setBlock");
-		return "setBlock";
+		return "admin/setBlock";
 	}
 	//等级相关信息设置
 	@RequestMapping("/userGrade")
 	public String userGrade(Model model) {
 		System.out.println("经过userGrade");
-		return "userGrade";
+		return "admin/userGrade";
 	}
 	//用户默认头像管理
 		@RequestMapping("/images")
@@ -166,7 +179,7 @@ public class AdminController {
 			List<Defaulthead> defaultheadlist=this.defaultheadService.getallDefaulthead();
 			System.out.println("经过images");
 			model.addAttribute("defaultheadlist",defaultheadlist);
-			return "images";
+			return "admin/images";
 		}
 	//获得每日新增注册用户数据
 	@ResponseBody
@@ -214,6 +227,12 @@ public class AdminController {
 	@RequestMapping("/getsexcount")
 	public JSONObject getsexcount(){
 		return this.userService.getsexcount();
+	}
+	//获得点击量前十的资讯,预留参数接口，可以自定义获取点击量前多少名的资讯
+	@ResponseBody
+	@RequestMapping("/gettopviewnews")
+	public JSONObject gettopviewnews(@RequestParam(value="limit",defaultValue="10")int limit){
+		return this.informationService.gettopviewnews(10);
 	}
 	//更新设置用户权限或者增加一个新用户
 	@ResponseBody

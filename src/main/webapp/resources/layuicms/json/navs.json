@@ -23,27 +23,6 @@
 			"icon": "&#xe656;",
 			"href": "../admin/blockList",
 			"spread": false
-		},
-		{
-			"title": "其他页面",
-			"icon": "&#xe630;",
-			"href": "",
-			"spread": false,
-			"children": [
-				{
-					"title": "404页面",
-					"icon": "&#xe61c;",
-					"href": "../admin/404",
-					"spread": false
-				},
-				{
-					"title": "登录",
-					"icon": "&#xe609;",
-					"href": "../admin/login",
-					"spread": false,
-					"target": "_blank"
-				}
-			]
 		}
 	],
 	"memberCenter": [
@@ -96,29 +75,6 @@
 				"spread": false
 			}
 		   ]
-		},{
-			"title": "图标管理",
-			"icon": "&#xe857;",
-			"href": "../admin/icons",
-			"spread": false
-		}
-	],
-	"seraphApi": [
-		{
-			"title": "三级联动模块",
-			"icon": "icon-mokuai",
-			"href": "/guomanwang/common/page/doc/addressDoc",
-			"spread": false
-		},{
-			"title": "bodyTab模块",
-			"icon": "icon-mokuai",
-			"href": "/guomanwang/common/page/doc/bodyTabDoc",
-			"spread": false
-		},{
-			"title": "三级菜单",
-			"icon": "icon-mokuai",
-			"href": "/guomanwang/common/page/doc/navDoc",
-			"spread": false
 		}
 	]
 }

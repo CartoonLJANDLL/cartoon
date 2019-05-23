@@ -604,7 +604,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     ,bgcolor: '#009688'
     ,click: function(type){
       if(type === 'bar1'){
-        location.href = '/guomanwang/common/add';
+        location.href = '/guomanwang/thread/add';
       }
     }
   });

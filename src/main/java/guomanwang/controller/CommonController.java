@@ -4,6 +4,7 @@ package guomanwang.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,19 +27,28 @@ import com.google.gson.Gson;
 
 import guomanwang.domain.Block;
 import guomanwang.domain.Company;
+import guomanwang.domain.Defaulthead;
 import guomanwang.domain.Information;
+import guomanwang.domain.MD5Cripy;
 import guomanwang.domain.Page;
+import guomanwang.domain.Sign;
 import guomanwang.domain.TimeTransformUtil;
 import guomanwang.domain.TimerTask;
 import guomanwang.domain.User;
 import guomanwang.service.BlockService;
+import guomanwang.service.CommitService;
 import guomanwang.service.CompanyService;
+import guomanwang.service.DefaultheadService;
 import guomanwang.service.InformationService;
+import guomanwang.service.SignService;
+import guomanwang.service.ThreadService;
+import guomanwang.service.UserService;
+import guomanwang.service.UserThreadService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Component
-@RequestMapping("/common")
+@RequestMapping("/")
 @Controller
 public class CommonController {
 	@Autowired
@@ -50,21 +60,28 @@ public class CommonController {
 	@Autowired
 	@Qualifier("InformationServiceimpl")
 	private InformationService informationService;
+	@Autowired
+	@Qualifier("UserServiceimpl")
+	private UserService userService;
+	@Autowired
+	@Qualifier("UserThreadServiceimpl")
+	private UserThreadService userthreadService;
+	@Autowired
+	@Qualifier("DefaultheadServiceimpl")
+	private DefaultheadService defaultheadService;
+	@Autowired
+	@Qualifier("SignServiceimpl")
+	private SignService signservice;
 	
-	@RequestMapping("/register")
-	public String register(){
-		System.out.println("CommonController.register");
-		return "register";
-	}
 	@RequestMapping("/news")
 	public String news(Model model){
 		List<Company> companies=companyService.getallcompany();
 		model.addAttribute("companies",companies);
-		return "news";
+		return "common/news";
 	}
 	@RequestMapping("/opera")
 	public String opera(Model model) {
-		return "opera";
+		return "common/opera";
 	}
 	//根据关键字实现资讯的模糊搜索
 	@ResponseBody
@@ -98,7 +115,7 @@ public class CommonController {
 	public String samecompany(Model model,int companyid) {
 		Company company=companyService.getcompanybyid(companyid);
 		model.addAttribute("company",company);
-		return "samecompanynews";
+		return "common/samecompanynews";
 	}
 	@ResponseBody
 	@RequestMapping("/samecompanynews")
@@ -130,7 +147,7 @@ public class CommonController {
 	public String shownews(Model model){
 		List<Information> news=informationService.getnewinformation();
 		model.addAttribute("news",news);
-		return "shownews";
+		return "common/shownews";
 	}
 	@Scheduled(cron = "0 30 22 ? * *")//每天22点30启动自动抓取动漫资讯任务
 	@RequestMapping("/refreshnews")
@@ -165,33 +182,25 @@ public class CommonController {
 			
 			return json;
 		}
-	@RequestMapping("/add")
-	public String add(Model model,HttpServletRequest request,HttpServletResponse response){
-		HttpSession session = request.getSession();
-		System.out.println("经过发帖页面");
-		User userinfo=(User)session.getAttribute("user");
-		List<Block> blocks=this.blockService.selectAllBlock();
-		if(userinfo==null) {
-			return "login";
-		}
-		model.addAttribute("blocks",blocks);
-		return "add";
-	}
 	@RequestMapping("/login")
 	public String login(){
-		return "login";
+		return "common/login";
+	}
+	@RequestMapping("/register")
+	public String register(){
+		return "common/register";
 	}
 	@RequestMapping("/index")
 	public String index(){
 		return "index";
 	}
-	@RequestMapping("/tiezi")
-	public String tiezi(){
-		return "tiezi";
+	@RequestMapping("/")
+	public String redrictindex(){
+		return "redirect:index";
 	}
 	@RequestMapping("/forget")
 	public String forget(){
-		return "forget";
+		return "common/forget";
 	}
 	@RequestMapping("/luntan")
 	public String luntan(@RequestParam(value="pn",defaultValue="1") int pn,
@@ -204,7 +213,7 @@ public class CommonController {
 		session.setAttribute("searchstatus",0);
 		session.setAttribute("status",0);
 		System.out.println("经过了论坛方法");
-		return "luntan";
+		return "common/luntan";
 	}
 	@RequestMapping("/luntan_hot")
 	public String luntan_hot(@RequestParam(value="pn",defaultValue="1") int pn,
@@ -216,20 +225,7 @@ public class CommonController {
 		model.addAttribute("page",p);
 		session.setAttribute("status",1);
 		System.out.println("经过了论坛热度排行方法");
-		return "luntan";
-	}
-	@RequestMapping("/admin")
-	public String admin(HttpSession session){
-		User userinfo=(User)session.getAttribute("user");
-		//用户未登录跳转到登录页面
-		if(userinfo==null) {
-			return "redirect:login";
-		}
-		//用户不是管理员则跳转到首页
-		else if(userinfo.getHonor()<=2) {
-			return "redirect:index";
-		}
-		return "admin_index";
+		return "common/luntan";
 	}
 	//点击一下资讯超链接对应得资讯点击量+1
 	@RequestMapping("/addviewcount")
@@ -244,20 +240,157 @@ public class CommonController {
 		}
 		return json;
 	}
-	@RequestMapping("/jump/{path}")
-	public String jump(@PathVariable("path") String path){
-		return path;
-	}
-	@RequestMapping("/user/{path}")
-	public String user(@PathVariable("path") String path){
-		return "/user/"+path;
-	}
-	@RequestMapping("/thread/{path}")
-	public String thread(@PathVariable("path") String path){
-		return "/thread/"+path;
-	}
-	@RequestMapping("/admin/{path}")
-	public String admin(@PathVariable("path") String path){
-		return "/admin/"+path;
-	}
+	//用户登录
+	@RequestMapping("/islogin")
+	@ResponseBody
+	public JSONObject isLogin(String telnumber, String password, Model model,
+			HttpServletRequest request) {
+		JSONObject json= new JSONObject();
+		List<User> userlist=this.userService.isLogin(telnumber);
+		HttpSession session = request.getSession();
+		for(User user:userlist) {
+			String passwordByMd5 = MD5Cripy.MD5(password);
+			if(user.getPassword().equals(passwordByMd5)&&user.getStatus()==1) {
+				json.put("code",1);
+				json.put("msg","登录成功！");
+				session.setAttribute("user", user);
+				Sign sign=signservice.isSign(user.getUserid());
+				if(sign!=null) {
+					session.setAttribute("signstatus",1);
+					System.out.println(sign);
+				}
+			}
+			else if(user.getStatus()==0)
+			{
+					json.put("code",0);
+					json.put("msg","该账号已禁用！请更换账号登录！");
+			}
+			else {
+				json.put("code",0);
+				json.put("msg","账号或密码输入错误，请重试！");
+			}
+		}			
+			return json;
+		}
+	//注册时发送验证码
+		@RequestMapping("/sendmsg")
+		@ResponseBody
+		public JSONObject sendmsg(String cellphone, Model model,
+				HttpServletRequest request,HttpServletResponse response) throws IOException {
+			System.out.println("电话号码为:"+cellphone);
+			JSONObject json= new JSONObject();
+			List<User> one=this.userService.selectuserinfo(cellphone);
+			if(one.size()>0) {
+				json.put("code",2);
+				json.put("msg","该号码已注册请登录！");
+			}
+			else {
+				String code = this.userService.sendMsg(cellphone);
+				System.out.println("验证码为:"+code);
+				if (code!="") {
+					request.getSession().setAttribute("valiNum",code);
+					json.put("code",1);
+					json.put("msg","验证码发送成功！");
+				} else {
+					json.put("code",0);
+					json.put("msg","验证码发送失败！请重试！");
+				}
+			}
+			return json;
+		}
+		//找回密码时发送验证码
+			@RequestMapping("/sendcode")
+			@ResponseBody
+			public JSONObject sendcode(String cellphone, Model model,
+					HttpServletRequest request,HttpServletResponse response) throws IOException {
+				System.out.println("电话号码为:"+cellphone);
+				JSONObject json= new JSONObject();
+				List<User> one=this.userService.selectuserinfo(cellphone);
+				if(one.size()>0) {
+					String code = this.userService.sendMsg(cellphone);
+					System.out.println("验证码为:"+code);
+					if (code!="") {
+						request.getSession().setAttribute("code",code);
+						json.put("code",1);
+						json.put("msg","验证码发送成功！");
+					} else {
+						json.put("code",0);
+						json.put("msg","验证码发送失败！请重试！");
+					}
+				}
+				else {
+					json.put("code",2);
+					json.put("msg","该号码还未注册！请先进行注册");
+				}
+				return json;
+			}
+		//用户注册
+		@RequestMapping("/zhuce")
+		@ResponseBody
+		public JSONObject zhuce(String username,String password,String cellphone,String vali,HttpServletRequest request) {
+				User user=new User();
+				JSONObject json= new JSONObject();
+				List<Defaulthead> defaultheadlist=this.defaultheadService.getallDefaulthead();
+			if(vali.equals(request.getSession().getAttribute("valiNum"))) {
+				//验证码正确后的操作		
+				try{
+					username = URLDecoder.decode(username,"UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				int defaultheadid=(int)(Math.random()*(defaultheadlist.size()));
+				System.out.println(defaultheadlist.get(defaultheadid).getUrl());
+				user.setPhone(cellphone);
+				user.setGradeValue(0);
+				user.setHonor(1);
+				user.setStatus(1);
+				user.setRegisterday(new Date());
+				user.setName(username);
+				user.setHeadurl(defaultheadlist.get(defaultheadid).getUrl());
+				user.setPassword(MD5Cripy.MD5(password));
+				int change_row=this.userService.register(user);
+				if(change_row>0) {
+					json.put("code",1);
+					json.put("msg","注册成功！");
+				}
+				else {
+					json.put("code",0);
+					json.put("msg","注册失败！请重试！");
+				}
+			}
+			else {
+				json.put("code", 0);
+				json.put("msg","注册失败！验证码有误！");
+			}
+				return json;
+			
+		}
+		@RequestMapping("/resetpassword")
+		@ResponseBody
+		public JSONObject resetpassword(String cellphone,String password,String vali, Model model,
+				HttpServletRequest request,HttpServletResponse response) throws IOException {
+			System.out.println("填写电话号码为:"+cellphone);
+			System.out.println("填写的验证码为:"+vali);
+			JSONObject json= new JSONObject();
+			User user=new User();
+			if(vali.equals(request.getSession().getAttribute("code"))) {
+				user.setPhone(cellphone);
+				user.setPassword(MD5Cripy.MD5(password));
+				int change_row=this.userService.resetpassbyphone(user);
+				if(change_row>0) {
+					json.put("code",1);
+					json.put("msg","密码重置成功！可以登录啦！");
+				}
+				else {
+					json.put("code",0);
+					json.put("msg","密码重置失败！请重试！");
+				}
+			}
+			else {
+				json.put("code",0);
+				json.put("msg","密码重置失败！验证码有误！");
+			}
+			return json;
+			
+		}
 }

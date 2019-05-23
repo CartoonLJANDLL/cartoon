@@ -14,7 +14,7 @@
 <link href='<c:url value="/resources/css/global.css"></c:url>' rel="stylesheet" />
 </head>
 <body>
-	<jsp:include page="menu_header.jsp"/>
+	<jsp:include page="../common/menu_header.jsp"/>
 	<div class="fly-home fly-panel" style="background-image: url();">
   <img src='<c:url value="${ userinfo.getHeadurl() }"></c:url>' alt="${ userinfo.username }">
   <i class="iconfont icon-renzheng" title="纵横国漫社区认证"></i>
@@ -135,14 +135,7 @@
     </div>
   </div>
 </div>
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2019 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
+<%@ include file="../common/footer.html"%>
 <script>
 layui.use(['element','form','layer'], function(){
 	var $ = layui.jquery,

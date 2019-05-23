@@ -2,6 +2,7 @@ package guomanwang.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import guomanwang.domain.Information;
@@ -33,4 +34,6 @@ public interface InformationMapper {
 	public int addinformation(Information information);
 	//模糊查询资讯
 	public List<Information> searchinformationbytitle(String key);
+	//获得资讯点击量的前几名
+	public List<Information> gettopviewnews(@Param("limitsize")int limitsize);
 }

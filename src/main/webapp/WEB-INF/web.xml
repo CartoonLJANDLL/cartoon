@@ -62,12 +62,14 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
-		<!-- 默认匹配所有的请求 -->
 		<url-pattern>/img/*</url-pattern>
 	</servlet-mapping>
+	<!-- 默认匹配所有的请求 -->
 	<servlet-mapping>
-		<servlet-name>spring-dispatcher</servlet-name>
-		<!-- 默认匹配所有的请求 -->
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
+    	<servlet-name>spring-dispatcher</servlet-name>
+    	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index</welcome-file>
+	</welcome-file-list>
 </web-app>
