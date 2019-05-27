@@ -1,10 +1,5 @@
 package guomanwang.interceptor;
 
-import guomanwang.domain.Log;
-import guomanwang.domain.User;
-import guomanwang.service.LogService;
-import guomanwang.util.IPUtil;
-
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import guomanwang.domain.Log;
+import guomanwang.domain.User;
+import guomanwang.service.LogService;
+import guomanwang.util.IPUtil;
 
 @Component
 @Aspect
@@ -61,7 +61,7 @@ public class CartoonAOP {
 	 * 获取uri,host,userid值存入log，并将log写入数据库
 	 */
 	@AfterReturning("method()")
-	public void afterReturning(JoinPoint joinPoint) {
+	public void afterReturning(JoinPoint joinPoint) throws Exception{
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		System.out.println("开始执行afterreturning方法---------------");
 		

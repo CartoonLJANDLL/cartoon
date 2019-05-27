@@ -894,6 +894,66 @@ public class OperaExample {
             addCriterion("op_sharenum not between", value1, value2, "opSharenum");
             return (Criteria) this;
         }
+
+        public Criteria andOpPlaynumIsNull() {
+            addCriterion("op_playnum is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumIsNotNull() {
+            addCriterion("op_playnum is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumEqualTo(Integer value) {
+            addCriterion("op_playnum =", value, "opPlaynum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumNotEqualTo(Integer value) {
+            addCriterion("op_playnum <>", value, "opPlaynum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumGreaterThan(Integer value) {
+            addCriterion("op_playnum >", value, "opPlaynum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("op_playnum >=", value, "opPlaynum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumLessThan(Integer value) {
+            addCriterion("op_playnum <", value, "opPlaynum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumLessThanOrEqualTo(Integer value) {
+            addCriterion("op_playnum <=", value, "opPlaynum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumIn(List<Integer> values) {
+            addCriterion("op_playnum in", values, "opPlaynum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumNotIn(List<Integer> values) {
+            addCriterion("op_playnum not in", values, "opPlaynum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumBetween(Integer value1, Integer value2) {
+            addCriterion("op_playnum between", value1, value2, "opPlaynum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpPlaynumNotBetween(Integer value1, Integer value2) {
+            addCriterion("op_playnum not between", value1, value2, "opPlaynum");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

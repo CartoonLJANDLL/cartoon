@@ -14,10 +14,8 @@
     <result column="op_status" property="opStatus" jdbcType="INTEGER" />
     <result column="op_collectnum" property="opCollectnum" jdbcType="INTEGER" />
     <result column="op_sharenum" property="opSharenum" jdbcType="INTEGER" />
+    <result column="op_playnum" property="opPlaynum" jdbcType="INTEGER" />
   </resultMap>
-  <select id="selectCollectOpera" parameterType = "int" resultMap = "BaseResultMap">
-        select * from opera where op_id in ( select opera_id from op_collected where user_id = #{userId})
-  </select>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -78,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List" >
     op_id, op_name, op_url, op_desc, op_photourl, op_updateto, op_type, op_iframeurl, 
-    op_time, op_status, op_collectnum, op_sharenum
+    op_time, op_status, op_collectnum, op_sharenum, op_playnum
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="guomanwang.domain.OperaExample" >
     select
@@ -114,13 +112,13 @@
     insert into opera (op_id, op_name, op_url, 
       op_desc, op_photourl, op_updateto, 
       op_type, op_iframeurl, op_time, 
-      op_status, op_collectnum, op_sharenum
-      )
+      op_status, op_collectnum, op_sharenum, 
+      op_playnum)
     values (#{opId,jdbcType=INTEGER}, #{opName,jdbcType=VARCHAR}, #{opUrl,jdbcType=VARCHAR}, 
       #{opDesc,jdbcType=VARCHAR}, #{opPhotourl,jdbcType=VARCHAR}, #{opUpdateto,jdbcType=VARCHAR}, 
       #{opType,jdbcType=VARCHAR}, #{opIframeurl,jdbcType=VARCHAR}, #{opTime,jdbcType=TIMESTAMP}, 
-      #{opStatus,jdbcType=INTEGER}, #{opCollectnum,jdbcType=INTEGER}, #{opSharenum,jdbcType=INTEGER}
-      )
+      #{opStatus,jdbcType=INTEGER}, #{opCollectnum,jdbcType=INTEGER}, #{opSharenum,jdbcType=INTEGER}, 
+      #{opPlaynum,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="guomanwang.domain.Opera" >
     insert into opera
@@ -161,6 +159,9 @@
       <if test="opSharenum != null" >
         op_sharenum,
       </if>
+      <if test="opPlaynum != null" >
+        op_playnum,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="opId != null" >
@@ -198,6 +199,9 @@
       </if>
       <if test="opSharenum != null" >
         #{opSharenum,jdbcType=INTEGER},
+      </if>
+      <if test="opPlaynum != null" >
+        #{opPlaynum,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -246,6 +250,9 @@
       <if test="record.opSharenum != null" >
         op_sharenum = #{record.opSharenum,jdbcType=INTEGER},
       </if>
+      <if test="record.opPlaynum != null" >
+        op_playnum = #{record.opPlaynum,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -264,7 +271,8 @@
       op_time = #{record.opTime,jdbcType=TIMESTAMP},
       op_status = #{record.opStatus,jdbcType=INTEGER},
       op_collectnum = #{record.opCollectnum,jdbcType=INTEGER},
-      op_sharenum = #{record.opSharenum,jdbcType=INTEGER}
+      op_sharenum = #{record.opSharenum,jdbcType=INTEGER},
+      op_playnum = #{record.opPlaynum,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -305,6 +313,9 @@
       <if test="opSharenum != null" >
         op_sharenum = #{opSharenum,jdbcType=INTEGER},
       </if>
+      <if test="opPlaynum != null" >
+        op_playnum = #{opPlaynum,jdbcType=INTEGER},
+      </if>
     </set>
     where op_id = #{opId,jdbcType=INTEGER}
   </update>
@@ -320,7 +331,8 @@
       op_time = #{opTime,jdbcType=TIMESTAMP},
       op_status = #{opStatus,jdbcType=INTEGER},
       op_collectnum = #{opCollectnum,jdbcType=INTEGER},
-      op_sharenum = #{opSharenum,jdbcType=INTEGER}
+      op_sharenum = #{opSharenum,jdbcType=INTEGER},
+      op_playnum = #{opPlaynum,jdbcType=INTEGER}
     where op_id = #{opId,jdbcType=INTEGER}
   </update>
 </mapper>

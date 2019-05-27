@@ -13,17 +13,16 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.google.gson.Gson;
 
 import guomanwang.domain.Block;
 import guomanwang.domain.Company;
@@ -32,16 +31,13 @@ import guomanwang.domain.Information;
 import guomanwang.domain.MD5Cripy;
 import guomanwang.domain.Page;
 import guomanwang.domain.Sign;
-import guomanwang.domain.TimeTransformUtil;
 import guomanwang.domain.TimerTask;
 import guomanwang.domain.User;
 import guomanwang.service.BlockService;
-import guomanwang.service.CommitService;
 import guomanwang.service.CompanyService;
 import guomanwang.service.DefaultheadService;
 import guomanwang.service.InformationService;
 import guomanwang.service.SignService;
-import guomanwang.service.ThreadService;
 import guomanwang.service.UserService;
 import guomanwang.service.UserThreadService;
 import net.sf.json.JSONArray;

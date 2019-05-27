@@ -1,7 +1,6 @@
 package guomanwang.service.impl;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,18 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import guomanwang.domain.OpCollected;
+import guomanwang.domain.OpCollectedExample;
 import guomanwang.domain.Opera;
 import guomanwang.domain.OperaExample;
 import guomanwang.exception.BusinessException;
-import guomanwang.exception.CommonError;
 import guomanwang.exception.ErrorType;
-import guomanwang.exceptionHandle.CommonReturnType;
-import guomanwang.domain.OpCollected;
-import guomanwang.domain.OpCollectedExample;
-import guomanwang.mapper.OperaMapper;
 import guomanwang.mapper.OpCollectedMapper;
+import guomanwang.mapper.OperaMapper;
 import guomanwang.service.OperaService;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Service("OperaServiceimpl")
@@ -43,6 +39,7 @@ public class OperaServiceimpl implements OperaService {
 	private OpCollectedMapper userOperaMapper;
 	int pageSize = 18;
 	//页面大小limit
+	@Override
 	public int getPageSize( JSONObject param) {
 		if( param.has( "limit"))
 			pageSize = param.getInt( "limit");
@@ -70,6 +67,7 @@ public class OperaServiceimpl implements OperaService {
 		
 	}
 	//通过Opera的id找到Opera
+	@Override
 	public JSONObject getAllCollectedOpera(int userId, int op_page, int pageSize){
 		
 		List<Opera> operas = new ArrayList<Opera>();
@@ -568,10 +566,23 @@ public class OperaServiceimpl implements OperaService {
 		
 		return jsonobject;
 	}
-
+    //update opera num
 	@Override
-	public int updateByPrimaryKeySelective(Opera record) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int updateByPrimaryKeySelective(Opera record) throws Exception{
+		int operaId = record.getOpId();
+		Opera updateOpera = this.operaMapper.selectByPrimaryKey(operaId);
+		int playnum = updateOpera.getOpPlaynum();
+		playnum ++;
+		updateOpera.setOpPlaynum(playnum);
+		OperaExample operaExample = new OperaExample();
+		OperaExample.Criteria operacriteria = operaExample.createCriteria();
+		operacriteria.andOpIdEqualTo(operaId);
+		int rs = this.operaMapper.updateByExampleSelective(updateOpera, operaExample);
+		if( rs == 1) {
+			
+		}else {
+			new BusinessException(ErrorType.DATABASE_UPDATE_ERROR, "opera数据库插入错误");
+		}
+		return rs;
 	}
 }

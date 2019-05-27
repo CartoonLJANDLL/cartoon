@@ -59,10 +59,9 @@ public class OnLineCount extends Object implements HttpSessionListener {
      */
     @Override
 	public void sessionDestroyed(HttpSessionEvent se)  { 
-    	realtimecount--;
+    	 realtimecount--;
+    	 long endTime = System.currentTimeMillis();
          se.getSession().getServletContext().setAttribute("onlinecount", realtimecount);
-         
-         long endTime = System.currentTimeMillis();
          peoplenum.setLefttime( new java.util.Date());
          double holdTime = (endTime - startTime)/1000;
          peoplenum.setHoldtime( holdTime);

@@ -4,41 +4,32 @@ import java.util.Date;
 
 public class Opera {
     private Integer opId;
-    //番剧名称
+
     private String opName;
-    //番剧地址
+
     private String opUrl;
-    //番剧的一句话描述
+
     private String opDesc;
-    //番剧图片的地址
+
     private String opPhotourl;
-    //番剧更新至何时
+
     private String opUpdateto;
-    //番剧类型 玄幻 竞技 爱情之类
+
     private String opType;
-    //番剧分享地址，点击即可直接观看
+
     private String opIframeurl;
-    //番剧在本网站更新时间
+
     private Date opTime;
-    //番剧状态 0未完结   1完结
+
     private Integer opStatus;
-    //番剧的收藏量
+
     private Integer opCollectnum;
-    //番剧的分享量
+
     private Integer opSharenum;
-    //标识是否被收藏
-    private Integer collecte = 0;
-    
-    
-    public Integer getCollecte() {
-		return collecte;
-	}
 
-	public void setCollecte(Integer collecte) {
-		this.collecte = collecte;
-	}
+    private Integer opPlaynum;
 
-	public Integer getOpId() {
+    public Integer getOpId() {
         return opId;
     }
 
@@ -82,11 +73,11 @@ public class Opera {
         return opUpdateto;
     }
 
-	public void setOpUpdateto(String opUpdateto) {
-		this.opUpdateto = opUpdateto;
-	}
+    public void setOpUpdateto(String opUpdateto) {
+        this.opUpdateto = opUpdateto == null ? null : opUpdateto.trim();
+    }
 
-	public String getOpType() {
+    public String getOpType() {
         return opType;
     }
 
@@ -133,4 +124,17 @@ public class Opera {
     public void setOpSharenum(Integer opSharenum) {
         this.opSharenum = opSharenum;
     }
+
+    public Integer getOpPlaynum() {
+        return opPlaynum;
+    }
+
+    public void setOpPlaynum(Integer opPlaynum) {
+        this.opPlaynum = opPlaynum;
+    }
+
+	public void setCollecte(int i) {
+		// TODO Auto-generated method stub
+		
+	}
 }

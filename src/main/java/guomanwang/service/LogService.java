@@ -4,5 +4,5 @@ import guomanwang.domain.Log;
 
 public interface LogService {
 
-	int insertLogSelective(Log log);
+	int insertLogSelective(Log log) throws Exception;
 }

@@ -1,12 +1,7 @@
 package guomanwang.service;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import guomanwang.domain.OpCollected;
 import guomanwang.domain.Opera;
-import guomanwang.domain.OperaExample;
 import net.sf.json.JSONObject;
 
 public interface OperaService {
@@ -34,7 +29,7 @@ public interface OperaService {
     //根据自定义条件选择性更新
     JSONObject updateByExampleSelective(JSONObject param);
   //通过主键选择性更新 即传入多少值就更新多少值，并且where id =#{id}
-    int updateByPrimaryKeySelective(Opera record);
+    int updateByPrimaryKeySelective(Opera record) throws Exception;
     //个人收藏中的所有番剧
     public JSONObject getAllCollectedOpera( int userId, int op_page, int pageSize);
     

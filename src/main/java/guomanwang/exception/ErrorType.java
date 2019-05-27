@@ -9,7 +9,8 @@ public enum ErrorType implements CommonError{
 	NOT_EXIEST_USER("20001","用户不存在"),
 	
 	//30000开始是数据库操作异常
-	DATABASE_INSERT_ERROR("30001", "数据库插入错误")
+	DATABASE_INSERT_ERROR("30001", "数据库插入错误"),
+	DATABASE_UPDATE_ERROR("30002", "数据库更新错误"),
 	;
 	private String errCode;
 	private String errMsg;

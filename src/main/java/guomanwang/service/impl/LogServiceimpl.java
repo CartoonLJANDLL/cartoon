@@ -15,7 +15,7 @@ public class LogServiceimpl implements LogService {
 	private LogMapper logMapper;
 	
 	@Override
-	public int insertLogSelective(Log log) {
+	public int insertLogSelective(Log log) throws Exception{
 		int rs = this.logMapper.insertSelective(log);
 		return rs;
 	}

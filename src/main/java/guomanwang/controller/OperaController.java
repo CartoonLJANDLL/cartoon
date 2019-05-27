@@ -1,32 +1,21 @@
 package guomanwang.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.github.pagehelper.PageHelper;
-
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import guomanwang.domain.Information;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import guomanwang.domain.Opera;
-import guomanwang.exceptionHandle.CommonReturnType;
-import guomanwang.exceptionHandle.GlobalExceptionHandler;
-import guomanwang.interceptor.Operation;
 import guomanwang.service.OperaService;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @RequestMapping("/opera")
@@ -203,7 +192,11 @@ public class OperaController {
 	//前端播放了相关番剧，后台对数据库进行更新操作(测试）
 		@ResponseBody()
 		@RequestMapping("/playcount")
-		public void playcount( int operaid) {
-			System.out.println(operaid);
+		public void playcount( int operaid) throws Exception{
+			Opera opera = new Opera();
+			opera.setOpId(operaid);
+			System.out.println("hhhhhahhtian天天开心" + operaid);
+			int rs = this.operaService.updateByPrimaryKeySelective(opera);
+			System.out.println("更新播放量操作" + operaid + "更新结果" + rs);
 		}
 }
