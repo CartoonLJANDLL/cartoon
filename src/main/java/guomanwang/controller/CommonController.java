@@ -13,16 +13,17 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 
 import guomanwang.domain.Block;
 import guomanwang.domain.Company;
@@ -31,13 +32,16 @@ import guomanwang.domain.Information;
 import guomanwang.domain.MD5Cripy;
 import guomanwang.domain.Page;
 import guomanwang.domain.Sign;
+import guomanwang.domain.TimeTransformUtil;
 import guomanwang.domain.TimerTask;
 import guomanwang.domain.User;
 import guomanwang.service.BlockService;
+import guomanwang.service.CommitService;
 import guomanwang.service.CompanyService;
 import guomanwang.service.DefaultheadService;
 import guomanwang.service.InformationService;
 import guomanwang.service.SignService;
+import guomanwang.service.ThreadService;
 import guomanwang.service.UserService;
 import guomanwang.service.UserThreadService;
 import net.sf.json.JSONArray;
@@ -78,6 +82,10 @@ public class CommonController {
 	@RequestMapping("/opera")
 	public String opera(Model model) {
 		return "common/opera";
+	}
+	@RequestMapping("/rightError")
+	public String rightError(Model model) {
+		return "common/rightError";
 	}
 	//根据关键字实现资讯的模糊搜索
 	@ResponseBody
@@ -151,18 +159,15 @@ public class CommonController {
 	public JSONObject refreshnews() throws IOException, InterruptedException{
 		String stringArray[] = {"python3 /usr/local/scary_wawayu.py","python3 /usr/local/scary_xi1.py","python3 /usr/local/scary_rocen.py","python3 /usr/local/scary_chaoshen.py", 
 		"python3 /usr/local/scary_cgyear.py","python3 /usr/local/scary_haoliners.py","python3 /usr/local/scary_gamersky.py","python3 /usr/local/scary_qsmy.py"};
-		int addition=0;
 		JSONObject json=new JSONObject();
 		json.put("code",0);
 		json.put("msg","成功执行了自动抓取资讯任务，但没有新的资讯加入");
 		for(int i=0;i<stringArray.length;i++) {
 			System.out.println("开始执行"+stringArray[i]);
-			addition=addition+TimerTask.autoscarynews(stringArray[i]);
+			TimerTask.autoscarynews(stringArray[i]);
 		}
-		if(addition>0){
-			json.put("code",1);
-			json.put("msg","成功执行了自动抓取资讯任务，添加了"+addition+"条资讯");
-		}
+		json.put("code",1);
+		json.put("msg","成功执行了自动抓取资讯任务");
 		return json;
 	}
 	 @Scheduled(cron = "0 30 23 ? * *")//每天23点30启动自动抓取动漫视频任务
@@ -174,7 +179,7 @@ public class CommonController {
 			json.put("code",1);
 			json.put("msg","成功执行了自动抓取资讯任务，但没有新的资讯加入");
 			System.out.println("开始执行动漫视频抓取任务，后面说的是假的");
-			addition=TimerTask.autoscarynews(str);
+			TimerTask.autoscarynews(str);
 			
 			return json;
 		}

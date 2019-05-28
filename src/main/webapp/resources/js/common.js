@@ -10,15 +10,15 @@ layui.use(['element','form','layer'], function(){
 		var websocket = null;  
 		if ('WebSocket' in window) {  
 		    //Websocket的连接  
-		    websocket = new WebSocket("ws://localhost:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
+		    websocket = new WebSocket("ws://39.108.92.144:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
 		}  
 		else if ('MozWebSocket' in window) {  
 		    //Websocket的连接  
-		    websocket = new MozWebSocket("ws://localhost:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
+		    websocket = new MozWebSocket("ws://39.108.92.144:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
 		}  
 		else {  
 		    //SockJS的连接  
-		    websocket = new SockJS("http://localhost:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
+		    websocket = new SockJS("http://39.108.92.144:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
 		}    
 		websocket.onmessage = onMessage;  
  

@@ -48,7 +48,7 @@
 			    <!-- 顶部右侧菜单 -->
 			    <ul class="layui-nav top_menu">
 					<li class="layui-nav-item" id="userInfo">
-						<a href="javascript:;"><img src="<c:url value='${user.getHeadurl()}'></c:url>" class="layui-nav-img userAvatar" width="35" height="35"><cite class="adminName">${user.getUsername()}</cite></a>
+						<a href="javascript:;"><img src="/guomanwang${user.getHeadurl()}" class="layui-nav-img userAvatar" width="35" height="35"><cite class="adminName">${user.getUsername()}</cite></a>
 						<dl class="layui-nav-child">
 							<dd><a href="javascript:;" data-url="/guomanwang/user/user_home" target="_blank"><i class="seraph icon-ziliao" data-icon="icon-ziliao"></i><cite>个人中心</cite></a></dd>
 							<dd><a href="javascript:;" data-url="page/user/changePwd.html"><i class="seraph icon-xiugai" data-icon="icon-xiugai"></i><cite>修改密码</cite></a></dd>
@@ -64,7 +64,7 @@
 		<!-- 左侧导航 -->
 		<div class="layui-side layui-bg-black">
 			<div class="user-photo">
-				<a class="img" title="我的头像" ><img src="<c:url value='${user.getHeadurl()}'></c:url>" class="userAvatar"></a>
+				<a class="img" title="我的头像" ><img src="/guomanwang${user.getHeadurl()}" class="userAvatar"></a>
 				<p>你好！<span class="userName">${user.getUsername()}</span>, 欢迎登录</p>
 			</div>
 			<div class="navBar layui-side-scroll" id="navBar">
@@ -85,7 +85,7 @@
 		<!-- 左侧导航 -->
 		<div class="layui-side layui-bg-black">
 			<div class="user-photo">
-				<a class="img" title="我的头像" ><img src="<c:url value='${user.getHeadurl()}'></c:url>" class="userAvatar"></a>
+				<a class="img" title="我的头像" ><img src="/guomanwang${user.getHeadurl()}" class="userAvatar"></a>
 				<p>你好！<span class="userName">${user.getUsername()}</span>, 欢迎登录</p>
 			</div>
 			<!-- 搜索 -->

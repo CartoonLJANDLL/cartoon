@@ -55,10 +55,10 @@
 		<%}else{%>
 	      <li class="layui-nav-item" id="islogin">
 	        <a class="fly-nav-avatar" href="javascript:;">
-	          <cite class="layui-hide-xs" id="username"><%=user.getUsername() %></cite>
+	          <cite class="layui-hide-xs" id="username" data-id="${user.getUserid() }"><%=user.getUsername() %></cite>
 	          <%if(user.getHonor()>=2){%><i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：管理员"></i><%}%>
 	          <i class="layui-badge fly-badge-vip layui-hide-xs">VIP${user.getGrade()}</i>
-	          <img src="<c:url value='${user.getHeadurl()}'></c:url>">
+	          <img src="/guomanwang${user.getHeadurl()}">
 	        </a>
 	        <dl class="layui-nav-child">
 	          <dd><a href="/guomanwang/user/user_setting"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>

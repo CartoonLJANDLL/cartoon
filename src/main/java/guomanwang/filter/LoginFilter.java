@@ -91,8 +91,9 @@ public class LoginFilter implements Filter {
 		right2 = concat(right2, right4);
 		right3 = concat(right3, right4);
 		
-		System.out.println("right1" + right1.length + "right2" + right2.toString() + "right3" + right3.length + "right4" + right4);
+		System.out.println("0级权限不能访问的：" + right1 + "1级权限不能访问的：" + right2 + "2级权限不能访问的：" + right3 + "3级权限不能访问的：" + right4);
 		// TODO Auto-generated method stub
+		
 		HttpServletRequest req = (HttpServletRequest)request;
 		HttpServletResponse resp = (HttpServletResponse)response;
 		HttpSession session = req.getSession();

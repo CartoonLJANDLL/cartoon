@@ -1,6 +1,6 @@
 /**
 
- @Name: Fly社区主入口
+ @Name: 纵横国漫论坛社区主入口
 
  */
  
@@ -120,8 +120,9 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
             layer.closeAll('tips');
           });
           $('#LAY-editface li').on('click', function(){
-            var title = $(this).attr('title') + ' ';
-            layui.focusInsert(editor[0], 'face' + title);
+            var image = $(this).find("img").attr("src");
+            console.log(image);
+            layui.focusInsert(editor[0], '<img src="'+image+'">');
           });
         }
         ,picture: function(editor){ //插入图片

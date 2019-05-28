@@ -109,7 +109,7 @@
                 <button type="button" class="layui-btn upload-img" id="upload">
                   <i class="layui-icon">&#xe67c;</i>上传头像
                 </button>
-                <img id="mylogo" src='<c:url value="${user.getHeadurl()}"></c:url>'>
+                <img id="mylogo" src="/guomanwang${user.getHeadurl()}">
                 <span class="loading"></span>
                 <button style="margin-top:320px;margin-left:110px;display:none;" class="layui-btn" id="resetheadimage" key="set-mine" lay-filter="changeheadimage" lay-submit>确认修改</button>
                 <button style="margin-top:320px;margin-left:10px;display:none;" class="layui-btn" id="cancel">取消</button>           
@@ -125,7 +125,7 @@
             	<ul class="layer-photos-demo" id="Images">
 				 	<c:forEach items="${defaultheadlist }" var="item"  varStatus="status">
 						<li>
-							<img id="defaultimage" layer-src="<c:url value='${item.getUrl() }'></c:url>" alt="${item.getId() }" src="<c:url value='${item.getUrl() }'></c:url>">
+							<img id="defaultimage" layer-src="/guomanwang${item.getUrl() }" alt="${item.getId() }" src="..${item.getUrl() }">
 							<div class="operate">
 								<div class="check">
 									<input type="hidden" class="urladdress" value="${item.getUrl() }">
@@ -240,7 +240,7 @@ layui.use(['upload','layer','form'], function(){
 	      }
 	      //上传成功 
 	      if(res.code==0){
-	        $('#mylogo').attr('src',"<c:url value='.."+res.src+"'></c:url>");
+	        $('#mylogo').attr('src',res.data.src);
 	        $('.upload-img').text("重新上传");
 	        $('#cancel').show();
 	        $('#resetheadimage').show();
@@ -290,7 +290,7 @@ layui.use(['upload','layer','form'], function(){
 		    url:'/guomanwang/user/changeheadimage',
 		    type: 'post',
 		    data: {
-		    headimage:$("#mylogo").attr('src')
+		    headimage:$("#mylogo").attr('src').replace("/guomanwang","")
 		    },
 		    success: function (info) {
 		         setTimeout(function () {

@@ -43,7 +43,7 @@
     		<img src='<c:url value="${item.getphoto() }"></c:url>' alt="${item.getName() }">
     		<cite class="layui-btn layui-btn-primary layui-btn-small">去围观</cite>
  		</a>
- 		<h2><a href="http://fly.layui.com/" target="_blank" ><c:out value="${block.name}" /><c:out value="${block.id}" />${item.getName() }</a></h2>
+ 		<h2><a href="/guomanwang/thread/block_index?blockId=${item.getId() }" target="_blank" ><c:out value="${block.name}" /><c:out value="${block.id}" />${item.getName() }</a></h2>
  		<p class="fly-case-desc">
 	 	<c:choose>
 	 		<c:when test="${!empty item.getAbstracts()}">

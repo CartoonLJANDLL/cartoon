@@ -10,9 +10,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="keywords" content="纵横国漫网">
   <meta name="description" content="纵横国漫网致力于为广大国漫爱好者提供一个交流分享平台">
-<style type="text/css">
-	.photos img{width:50%;}
-</style>
 </head>
 <body>
 <jsp:include page="../common/menu_header.jsp"/>
@@ -78,7 +75,7 @@
             <i class="iconfont" title="人气">&#xe60b;</i>${userThread.getGreatNum() }
           </span>
         </div>
-        <div class="detail-about">
+        <div class="detail-about" data-id="${userThread.getId() }">
           <a class="fly-avatar" href="/guomanwang/user/user_home?userId=${userThread.getUserId() }">
             <img src='<c:url value="${userThread.getHeadUrl() }"></c:url>' alt="${ userThread.getUserName()}">
           </a>
@@ -157,10 +154,9 @@
 	                    <em id="emoo">${item.getZanNumber()}</em>
                     </span>
                     <c:if test="${item.getUserId()!=user.getUserid()}" >
-	                    <span id="reply">
+	                    <span id="reply" data-id="${ item.getId()}">
 	                    <i class="iconfont icon-svgmoban53"></i>
 	                                                              回复<a class="replyname" style="display:none">${ item.getUserName()}</a>
-	                       <a class="replyid" style="display:none">${ item.getId()}</a>
 	                    </span>
                     </c:if>
                     <c:if test="${user.getHonor()>2 || item.getUserId()==user.getUserid()}" >
@@ -191,7 +187,7 @@
 	            <div class="layui-form-item layui-form-text">
 	              <a name="comment"></a>
 	              <div class="layui-input-block">
-	                <textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入回复内容"  class="layui-textarea fly-editor" style="height: 150px;"></textarea>
+	                <textarea id="editor" style="display: none;"></textarea>
 	              </div>
 	            </div>
 	            <div class="layui-form-item">
@@ -224,7 +220,7 @@
         </div>
       </div>
       <div class="fly-panel" style="padding: 20px 0; text-align: center;">
-        <img src="guomanwang/resources/wechat.jpg" style="max-width: 100%;" alt="站长联系方式">
+        <img src="/guomanwang/resources/img/wechat.jpg" style="max-width: 100%;" alt="站长联系方式">
         <p style="position: relative; color: #666;">微信扫码添加站长</p>
       </div>
     </div>
@@ -232,19 +228,27 @@
 </div>
 <%@ include file="../common/footer.html"%>
 <script>
-layui.use(['upload','layer','form'], function(){
+layui.use(['layedit','upload','layer','form'], function(){
 	  var $ = layui.jquery
 	  ,form = layui.form
+	  ,layedit=layui.layedit
     ,layer = parent.layer === undefined ? layui.layer : top.layer;
 	  
+	  layedit.set({
+		  uploadImage: {
+		    url: '../user/uploadHeadImage?src=/resources/img/people' //接口url
+		    ,type: '' //默认post
+		  }
+		});
+	  var one=layedit.build('editor'); //建立编辑器
 form.on('submit(addcommit)', function(data){
-	var userid="${user.getUserid()}";
-	var threadid="${userThread.getId()}";
+	var userid=$("#islogin #username").attr("data-id");
+	var threadid=$(".detail-about").attr("data-id");
 	var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
-    		$.post('<c:url value="/commit/addcommit"></c:url>',{
+    		$.post("addcommit",{
     			threadId:threadid,
     			userId:userid,
-    			content:$("#L_content").val(),
+    			content:layedit.getContent(one),
     			parentId:$("#parentid").val(),
     		},function(res){
             	top.layer.msg(res.msg);
@@ -272,17 +276,10 @@ form.on('submit(addcommit)', function(data){
         	});
         })
     	$("span#reply").click(function(){
-        	var val = $("#L_content").val();
             var aite = '@'+ $(this).find(".replyname").text().replace(/\s/g, '');
-            $("#L_content").focus();
-            $("#L_content").val(val+aite +' ');
-            $("#parentid").val($(this).find(".replyid").text());
-        })
-        $("#L_content").keyup(function(){
-        	var val = $("#L_content").val();
-        	if(val.length<1){
-        		$("#parentid").val(0);
-        	}
+            $("#parentid").val($(this).attr("data-id"));
+            layedit.setContent(one, aite,true);
+            console.log($("#parentid").val());
         })
         //点赞
         $("span#zan").click(function(){
@@ -291,28 +288,31 @@ form.on('submit(addcommit)', function(data){
         	var zannumber=parseInt($(this).find("#emoo").text())+1;
         	var userid=${user.getUserid()};
         	if(zanclass=="jieda-zan"){
-        		$.get('<c:url value="/commit/dianzan"></c:url>',{
+        		$.post("dianzan",{
                  	 commitid :commitid,
                  	 userid:userid
                   },function(data){
                  layer.msg(data.msg);
                  if(data.code==1){
-                   location.reload();
+                     setTimeout(function(){
+                    	 location.reload();
+                     },2000);
                      };
                   })
         	}
         	else{
-        		$.get('<c:url value="/commit/cancelzan"></c:url>',{
+        		$.post("cancelzan",{
                 	 commitid :commitid,
                 	 userid:userid
                  },function(data){
                 layer.msg(data.msg);
                 if(data.code==1){
-                  location.reload();
+                    setTimeout(function(){
+                   	 location.reload();
+                    },2000);
                     };
                  })
-        	}
-               
+        	}   
         })
         //设置帖子为精贴
         $("#setstatus").click(function(){

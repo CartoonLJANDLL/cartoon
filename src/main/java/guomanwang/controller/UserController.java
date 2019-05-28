@@ -3,9 +3,6 @@ package guomanwang.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -327,10 +323,14 @@ public class UserController {
 			dir.mkdirs();
 			json.put("msg","图片上传成功");
 			json.put("code",0);
-			json.put("src",src);
+			JSONObject one= new JSONObject();
+			one.put("src", "/guomanwang"+src);
+			one.put("title","");
+			json.put("data",one);
 		} else {
 			json.put("msg","图片上传失败");
 			json.put("code",1);
+			json.put("data","");
 		}
 		file.transferTo(dir);
 		return json;

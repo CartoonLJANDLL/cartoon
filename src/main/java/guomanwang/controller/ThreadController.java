@@ -212,7 +212,7 @@ public class ThreadController {
 				session.setAttribute("userThreads",userThreads);
 			model.addAttribute("map",1);
 			session.setAttribute("Block",blockService.findblockbyid(blockId));
-			return "thread/block_indexx";
+			return "thread/block_index";
 		}
 		
 		//按最新(时间倒序）

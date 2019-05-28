@@ -18,8 +18,8 @@
       <li class="layui-hide-xs layui-this">当前位置：<a style="margin:0;padding:0;" href="/guomanwang/common/luntan">论坛</a>>>${Block.getName() }</li> 
     </ul>
     <div class="fly-column-right layui-hide-xs"> 
-    <form action="">
-      <div class="layui-fluid">
+    <form class="layui-form" action="">
+      <div class="layui-form-item layui-fluid">
 			<div class="layui-inline">
 				<input placeholder="请输入帖子关键字搜索" required lay-verify="required" name="keywords" autocomplete="off" id="searchinput" class="layui-input">
 			</div>
@@ -174,7 +174,7 @@
           <c:forEach items="${users }" var="item"  varStatus="status">
 	          <dd>
 	            <a href="/guomanwang/user/user_home?userId=${item.getUserId() }">
-	              <img src='<c:url value="${ item.getUrl()}"></c:url>'><cite>${item.getUserName()}</cite><i>${item.getZanNumber() }次回答</i>
+	              <img src="..${ item.getUrl()}"><cite>${item.getUserName()}</cite><i>${item.getZanNumber() }次回答</i>
 	            </a>
 	          </dd>
           </c:forEach>
