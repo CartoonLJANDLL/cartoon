@@ -409,9 +409,10 @@ public class OperaServiceimpl implements OperaService {
 	//获得Opera数量
 	@Override
 	public int getOperaNum() {
-		OpCollectedExample opcolExample = new OpCollectedExample();
-		OpCollectedExample.Criteria opcolcriteria = opcolExample.createCriteria();
-		return this.userOperaMapper.countByExample(opcolExample);
+		OperaExample operaExample = new OperaExample();
+		OperaExample.Criteria operacriteria = operaExample.createCriteria();
+		operacriteria.andOpIdIsNotNull();
+		return this.operaMapper.countByExample(operaExample);
 	}
 	//根据id选择性更新opera，即有的值就更新
 	
@@ -585,4 +586,5 @@ public class OperaServiceimpl implements OperaService {
 		}
 		return rs;
 	}
+	
 }

@@ -199,4 +199,15 @@ public class OperaController {
 			int rs = this.operaService.updateByPrimaryKeySelective(opera);
 			System.out.println("更新播放量操作" + operaid + "更新结果" + rs);
 		}
+		
+	//番剧总点击量
+		@ResponseBody()
+		@RequestMapping("/operaamount")
+		public JSONObject operaClickAmount() throws Exception{
+			JSONObject jsonObject = new JSONObject();
+			int amount = this.operaService.getOperaNum();
+			System.out.println("==============================" + amount);
+			jsonObject.put("operaAmount", amount);
+			return jsonObject;
+		}
 }
