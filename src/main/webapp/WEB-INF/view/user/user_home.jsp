@@ -45,7 +45,7 @@
   </c:if>
   <p class="fly-home-info">
     <i class="iconfont icon-kiss" title="经验"></i><span style="color: #FF7200;">${userinfo.getGradeValue()} 点 经验</span>
-    <i class="iconfont icon-shijian"></i><span>2018-12-16 加入</span>
+    <i class="iconfont icon-shijian"></i><span>${ userinfo.getRegisterday() } 加入</span>
   </p>
   <c:choose>
    <c:when test="${!empty userinfo.getIntroduce()}">  

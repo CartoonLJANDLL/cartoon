@@ -7,42 +7,43 @@ layui.use(['element','form','layer'], function(){
 		form = layui.form,
 		layer = parent.layer === undefined ? layui.layer : top.layer;
 		
-		var websocket = null;  
-		if ('WebSocket' in window) {  
-		    //Websocket的连接  
-		    websocket = new WebSocket("ws://39.108.92.144:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
-		}  
-		else if ('MozWebSocket' in window) {  
-		    //Websocket的连接  
-		    websocket = new MozWebSocket("ws://39.108.92.144:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
-		}  
-		else {  
-		    //SockJS的连接  
-		    websocket = new SockJS("http://39.108.92.144:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
-		}    
-		websocket.onmessage = onMessage;  
+		if(location.pathname!="/guomanwang/user/user_friends"){
+			var websocket = null;  
+			if ('WebSocket' in window) {  
+			    //Websocket的连接  
+			    websocket = new WebSocket("ws://liujiang.space:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
+			}  
+			else if ('MozWebSocket' in window) {  
+			    //Websocket的连接  
+			    websocket = new MozWebSocket("ws://liujiang.space:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
+			}  
+			else {  
+			    //SockJS的连接  
+			    websocket = new SockJS("http://liujiang.space:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
+			}    
+			websocket.onmessage = onMessage;  
+	 
+			function onMessage(evt) {
+				var message=evt.data.split("@");
+		    		layer.open({
+			            type: 1
+			            ,offset: 'b'
+			            ,id: 'layerDemob'
+			            ,content: '<div style="padding: 20px 100px;">您有新的好友消息</div>'
+			            ,btn: ['查看','关闭']
+			            ,btnAlign: 'c' //按钮居中
+			            ,shade: 0 //不显示遮罩
+			            ,yes: function(){
+			            	location.href="guomanwang/user/user_friends#myfriend="+message[0];
+			            }
+			    		,btn2: function(index, layero){
+			    			layer.closeAll("page");
+			    		  }
+			          });
+		    		$(".icon-tongzhi").append('<span class="layui-badge-dot"></span>');
+			} 			
+		}
  
-		function onMessage(evt) {
-			var message=evt.data.split("@");
-			if(location.pathname!="/guomanwang/user/user_friends"){
-	    		layer.open({
-		            type: 1
-		            ,offset: 'b'
-		            ,id: 'layerDemob'
-		            ,content: '<div style="padding: 20px 100px;">您有新的好友消息</div>'
-		            ,btn: ['查看','关闭']
-		            ,btnAlign: 'c' //按钮居中
-		            ,shade: 0 //不显示遮罩
-		            ,yes: function(){
-		            	location.href="guomanwang/user/user_friends#myfriend="+message[0];
-		            }
-		    		,btn2: function(index, layero){
-		    			layer.closeAll("page");
-		    		  }
-		          });
-	    		$(".icon-tongzhi").append('<span class="layui-badge-dot"></span>');
-	    	}
-		}  
 		$(".fly-nav li.layui-this").removeClass("layui-this");
 		if(location.pathname=="/guomanwang/index"){
 			$(".fly-nav li.index").addClass("layui-this");

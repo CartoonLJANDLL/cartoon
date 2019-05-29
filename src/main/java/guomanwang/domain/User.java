@@ -110,7 +110,7 @@ public class User {
 	}
 	public String getRegisterday() {
 		if(registerday!=null) {
-			return TimeTransformUtil.timetransform(registerday);
+			return TimeTransformUtil.timetransform(registerday).substring(0,10);
 		}
 	    return null; 
 	}

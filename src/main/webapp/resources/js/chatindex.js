@@ -18,15 +18,15 @@ layui.use(['element','form','layer'], function(){
 		var websocket = null;  
 		if ('WebSocket' in window) {  
 		    //Websocket的连接  
-		    websocket = new WebSocket("ws://39.108.92.144:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
+		    websocket = new WebSocket("ws://liujiang.space:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
 		}  
 		else if ('MozWebSocket' in window) {  
 		    //Websocket的连接  
-		    websocket = new MozWebSocket("ws://39.108.92.144:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
+		    websocket = new MozWebSocket("ws://liujiang.space:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
 		}  
 		else {  
 		    //SockJS的连接  
-		    websocket = new SockJS("http://39.108.92.144:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
+		    websocket = new SockJS("http://liujiang.space:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
 		}  
 		websocket.onopen = onOpen;  
 		websocket.onmessage = onMessage1;  
@@ -40,7 +40,7 @@ layui.use(['element','form','layer'], function(){
 			var message=evt.data.split("@");
 			console.log(message[1]);
 			if(message[1]==0){
-				$('.chat[data-chat=person'+message[0]+']').find("div").last().innerHTML+='[对方已离线]';
+				layer.msg('[对方已离线]');
 				}
 			else{
 				$('.chat[data-chat=person'+message[0]+']').append('<div class="bubble you">'+message[1]+'</div>');
@@ -81,10 +81,11 @@ layui.use(['element','form','layer'], function(){
 			});
 		//发送消息
 		$(document).on('click','.send',function(){
-			var content=$(".messages").html(),
+			console.log($(".messages").html());
+			var content=$(".messages").html().replace(/<div>/g,""),
 			fid=$('.send').attr("data-id");
 			if (websocket.readyState == websocket.OPEN) {  
-		        websocket.send(fid+"@"+content);//调用后台handleTextMessage方法  
+		        websocket.send(fid+"@"+content.replace(/<\/div>/g,""));//调用后台handleTextMessage方法  
 		        $('.chat[data-chat=person'+fid+']').append('<div class="bubble me">'+content+'</div>');
 		        var scrollHeight = $('.chat[data-chat=person'+fid+']').prop("scrollHeight");
 				$('.chat[data-chat=person'+fid+']').animate({scrollTop:scrollHeight}, 400);

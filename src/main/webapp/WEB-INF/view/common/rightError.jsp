@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>权限受限</title>
 </head>
 <body>
-<p>权限不足，无法操作!
+<p>权限不足，无法进行该操作!，请联系管理员</p>
 </body>
 </html>

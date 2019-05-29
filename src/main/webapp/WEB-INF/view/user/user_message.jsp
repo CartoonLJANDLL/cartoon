@@ -61,7 +61,6 @@
   <div class="site-mobile-shade"></div>
   <div class="fly-panel fly-panel-user" pad20>
 	  <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
-	    <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
 	    <div  id="LAY_minemsg" style="margin-top: 10px;">
         <!--<div class="fly-none">您暂时没有最新消息</div>-->
         <div class="layui-collapse">
@@ -81,8 +80,7 @@
 				            	<div class="layui-col-md8">
 				            		<a href="user_home?userId=${item.getSenderid() }" target="_blank">
 						              	<cite>${item.getUsername() }</cite>
-						            </a>${item.getContent() } | 
-						            ${item.getTime() }
+						            </a>${item.getContent() } | ${item.getTime() }
 				            	</div>
 				              	<div class="layui-col-md4" >
 				            		<a href="javascript:;" id="deletemessage" data-id="${item.getId() }" style="float:right;">
@@ -215,9 +213,8 @@ layui.use(['element','form','layer'], function(){
 			    },
 			    success: function (info) {
 			       layer.msg(info.msg);
-			  		if(info.code==1){
-			  			location.reload();
-			  		}
+			  		$("li[data-id="+messageid+"]").remove();
+			  		
 			    }
 			  });
 		  return false;

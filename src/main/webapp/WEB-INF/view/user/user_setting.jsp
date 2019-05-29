@@ -71,7 +71,6 @@
               <div class="layui-input-inline">
                 <input type="text" id="L_phone" name="cellphone" required lay-verify="phone" value="${sessionScope.user.getPhone()}" autocomplete="off" value="" class="layui-input">
               </div>
-              <div class="layui-form-mid layui-word-aux">变更手机号，需<a href="activate.html" style="font-size: 12px; color: #4f99cf;">重新验证手机号</a>。</div>
             </div>
             <div class="layui-form-item">
               <label for="L_username" class="layui-form-label">昵称</label>

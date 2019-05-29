@@ -26,7 +26,7 @@ public class LoginFilter implements Filter {
 	 */
 	JDBCUtil jdbcUtil = new JDBCUtil();
 	//被拒绝后去登录页面
-	String loginstr = "/login";
+	String loginstr = "/guomanwang/login";
 	String rightError = "/rightError";
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {

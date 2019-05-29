@@ -13,7 +13,7 @@
 			.fly-logo img{width:120px;height:40px;}
 			.layui-row img{width: 100%;height: 100%;position:relative;}
 /* 			li:focus{background-color: #00CCFF;} */
-			#textlayer{width:95%;height:18%;background:rgba(0,150,136,1);position:absolute;left:10;bottom:0;color:#fff;font-family:"微软雅黑";}
+			#textlayer{width:95%;height:20%;background:rgba(0,150,136,1);position:absolute;left:10;bottom:0;color:#fff;font-family:"微软雅黑";}
 			#textlayer h3{font-size:20px;font-weight:100;padding-top:3px;height:40px;text-align:center;line-height:40x;}
 			#textlayer p{font-size:14px;text-align:center;display:none;}
 			blockquote p{font-size:15px;}
@@ -49,27 +49,34 @@
 		<hr />
 	</div>
 	<div class="layui-container"> 
-		<div class="layui-row layui-col-space20">
+		<div class="layui-row layui-col-space10">
 			<div class="layui-col-lg4 layui-col-sm4">
+				<a href="https://v.youku.com/v_show/id_XODU2MTEyNjI4.html?" target="_blank">
 				<img src='<c:url value="/resources/img/qsmy.jpg"></c:url>'>
 				<div id="textlayer">
 					<h3>秦时明月</h3><br>
-					<p>华语动漫|巅峰力作</p>
+					<p>华语动漫 | 巅峰力作</p>
 				</div>
+				</a>
 			</div>
+
 			<div class="layui-col-lg4 layui-col-sm4">
+				<a href="https://v.qq.com/x/cover/j18xzp93h4c1ofn.html" target="_blank">
 				<img src='<c:url value="/resources/img/wgj.jpg"></c:url>'">
 				<div id="textlayer">
 					<h3>武庚纪</h3><br>
-					<p>超强脑洞|封神演义</p>
+					<p>超强脑洞 | 封神演义</p>
 				</div>
+				</a>
 			</div>
 			<div class="layui-col-lg4 layui-col-sm4">
+				<a href="https://v.qq.com/x/cover/9jh7p3r7ljkxkmc/f00266z4fz3.html?ptag=10524" target="_blank">
 				<img src='<c:url value="/resources/img/ckwlq.jpg"></c:url>'>
 				<div id="textlayer">
 					<h3>刺客伍六七</h3><br>
-					<p>另类职业|一个神秘刺客的生活</p>
+					<p>另类职业 | 一个神秘刺客的生活</p>
 				</div>
+				</a>
 			</div>	
 		</div>
 	</div>

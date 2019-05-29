@@ -22,7 +22,7 @@ public class ValiMsgUtils {
 	public static final String AUTH_TOKEN = "c1f8b8de15184a9d93841bbc4bc5fc3b";
 	
 	//签名
-	public static final String SIGNATURE = "MyJavaWeb";
+	public static final String SIGNATURE = "纵横国漫";
 	
 	//模板
 	public static final String Content = "您的验证码为：$，请于3分钟内正确输入，如非本人操作，请忽略此短信。";
