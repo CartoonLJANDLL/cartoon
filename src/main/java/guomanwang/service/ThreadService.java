@@ -2,6 +2,7 @@ package guomanwang.service;
 import java.util.List;
 
 import guomanwang.domain.Thread;
+import net.sf.json.JSONObject;
 public interface ThreadService {
 	int addthread(Thread thread);
 	List<Thread> getthreadbyuserid(int userid);
@@ -19,6 +20,8 @@ public interface ThreadService {
 		public List<Thread> selectAnimaThread(int blockId);
 		//热度排行
 		public List<Thread> selectHotRankingThread(int blockId);
+		//整个论坛最热的10个帖子
+		public JSONObject selectHotestToptenThread();
 		//更新帖子
 		public int updateThread(Thread thread);
 		//最新排行

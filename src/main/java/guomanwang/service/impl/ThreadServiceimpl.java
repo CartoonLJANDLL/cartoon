@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import guomanwang.domain.Thread;
 import guomanwang.mapper.ThreadMapper;
 import guomanwang.service.ThreadService;
-import guomanwang.domain.Thread;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service("ThreadServiceimpl")
 public class ThreadServiceimpl implements ThreadService {
@@ -174,6 +176,20 @@ public class ThreadServiceimpl implements ThreadService {
 		@Override
 		public int updateThread(Thread thread) {
 			return this.threadMapper.updateThread(thread);
+		}
+		@Override
+		public JSONObject selectHotestToptenThread() {
+            JSONArray arrayX = new JSONArray();
+            JSONArray arrayY = new JSONArray();
+            JSONObject returnJson = new JSONObject();
+            List<Thread> threads = this.threadMapper.selectHotestToptenThread();
+            for( int i = 0; i < threads.size(); i++) {
+            	arrayX.add( threads.get(i).getTitle());
+            	arrayY.add( threads.get( i).getCommitNumber());
+            }
+            returnJson.put("name", arrayX);
+            returnJson.put("y", arrayY);
+			return returnJson;
 		}
 
 	}

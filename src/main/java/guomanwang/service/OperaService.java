@@ -2,9 +2,14 @@ package guomanwang.service;
 
 import guomanwang.domain.OpCollected;
 import guomanwang.domain.Opera;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public interface OperaService {
+	//根据自定义条件选择性排序查询，取前十
+	public JSONObject operaSortSelective( JSONObject sort) throws Exception;
+	//获得几种种类型番剧的数量占比
+	public JSONArray operaTypeNumRate( JSONObject param) throws Exception;
     //获得番剧数量
 	public int getOperaNum();
 	//获得pageSize值

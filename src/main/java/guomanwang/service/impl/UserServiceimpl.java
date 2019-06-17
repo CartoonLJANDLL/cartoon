@@ -125,4 +125,37 @@ public class UserServiceimpl implements UserService {
 		}
 		return json;
 	}
+	@Override
+	public JSONObject getThreadToptenUser() throws Exception {
+        List<User> users = this.userMapper.getThreadToptenUser();
+        JSONArray xArray = new JSONArray();
+        JSONArray yArray = new JSONArray();
+        JSONObject reJsonObject = new JSONObject();
+        
+        for( int i = 0; i < users.size(); i++) {
+        	xArray.add( users.get(i).getUsername());
+        	yArray.add( users.get(i).getSignDays());
+        }
+        reJsonObject.put("name", xArray);
+        reJsonObject.put("y", yArray);
+        
+		return reJsonObject;
+	}
+	@Override
+	public JSONObject getSignMostUsers(JSONObject param) throws Exception {
+		int num = param.getInt( "num");
+		List<User> users = this.userMapper.getThreadToptenUser();
+        JSONArray xArray = new JSONArray();
+        JSONArray yArray = new JSONArray();
+        JSONObject reJsonObject = new JSONObject();
+        
+        for( int i = 0; i < users.size() && i < num; i++) {
+        	xArray.add( users.get(i).getUsername());
+        	yArray.add( users.get(i).getSignDays());
+        }
+        reJsonObject.put("name", xArray);
+        reJsonObject.put("y", yArray);
+	        
+			return reJsonObject;
+	}
 }

@@ -109,6 +109,16 @@
 		ORDER BY signdays desc
 		limit 20
 	</select>
+	<select id = "getSignMostUsers" resultMap = "resultUser">
+	    select `user`.userid,username,headurl,count(`user`.userid) signdays 
+		FROM user,sign 
+		where `user`.userid = sign.userid
+		GROUP BY sign.userid
+		ORDER BY signdays
+	</select>
+	<select id="getThreadToptenUser" resultMap = "resultUser">
+	   SELECT user.*,count(gradevalue) signdays from `user`,thread WHERE user.userid = thread.userid GROUP BY `user`.userid ORDER BY signdays DESC
+	</select>
 	<!-- 根据管理员用户名或者联系方式实现模糊查询 -->
 	<select id="searchadminbyname" resultMap="resultUser">
 		SELECT *

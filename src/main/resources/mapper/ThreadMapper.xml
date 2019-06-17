@@ -83,6 +83,14 @@
 		GROUP BY thread.id 
 		order by commitnumber desc
 	</select>
+	<select id="selectHotestToptenThread" resultMap="resultThread">
+	    select  thread.id,thread.userid,blockid,count(*) commitnumber,status,title,thread.content,thread.time
+		from thread,commit 
+		where thread.id = COMMIT.threadid
+		GROUP BY thread.id 
+		order by commitnumber desc
+		limit 10
+	</select>
 	<select id="selectNewRankingThread" parameterType="int" resultMap="resultThread">
 	    select  thread.id,thread.userid,blockid,count(*) commitnumber,status,title,thread.content,thread.time
 		from thread,commit 

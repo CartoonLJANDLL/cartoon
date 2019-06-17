@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,8 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
+import guomanwang.domain.Block;
+import guomanwang.domain.Thread;
+import guomanwang.domain.User;
+import guomanwang.domain.UserCommit;
+import guomanwang.domain.UserThread;
 import guomanwang.service.BlockService;
 import guomanwang.service.SignService;
 import guomanwang.service.ThreadService;
@@ -26,11 +29,6 @@ import guomanwang.service.UserService;
 import guomanwang.service.UserThreadService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import guomanwang.domain.Block;
-import guomanwang.domain.Thread;
-import guomanwang.domain.User;
-import guomanwang.domain.UserCommit;
-import guomanwang.domain.UserThread;
 
 @RequestMapping("/thread")
 @Controller("ThreadController")
@@ -162,6 +160,38 @@ public class ThreadController {
 			jsonobject.put("data", jsonArray);
 			return jsonobject;
 		}
+		
+		//最热的前十个帖子
+		@ResponseBody
+		@RequestMapping("/hotesttoptenthread")
+		public JSONObject getHotestToptenThread(Model model) {
+			
+			JSONObject jsonobject=new JSONObject();
+			jsonobject = this.threadService.selectHotestToptenThread();
+			return jsonobject;
+		}
+		//发帖量最多的十个用户
+		@ResponseBody
+		@RequestMapping("/hotesttoptenUser")
+		public JSONObject getThreadToptenUser(Model model) throws Exception{
+			
+			JSONObject jsonobject=new JSONObject();
+			jsonobject = this.userService.getThreadToptenUser();
+			return jsonobject;
+		}
+		//获得用户签到量排名前10
+		@ResponseBody
+		@RequestMapping("/toptensignusers")
+		public JSONObject getTop10SignUsers(/*JSONObject param*/) throws Exception{
+			int num = 10;//签到最多的前10人
+			JSONObject jsonobject=new JSONObject();
+			JSONObject param = new JSONObject();
+			if( !param.has("num")) {
+				param.put("num", num);
+			}
+			jsonobject= userService.getSignMostUsers(param);
+			return jsonobject;
+		}	
 		//通过关键字模糊搜索
 		@ResponseBody
 		@RequestMapping("searchtiezi")

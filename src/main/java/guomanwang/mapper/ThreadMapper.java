@@ -3,6 +3,7 @@ package guomanwang.mapper;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+
 import guomanwang.domain.Thread;
 
 @Repository("ThreadMapper")
@@ -31,6 +32,8 @@ public interface ThreadMapper {
 	public List<Thread> selectAnimaThread(int blockId);
 	//热度排行
 	public List<Thread> selectHotRankingThread(int blockId);
+	//整个论坛最热的10个帖子
+	public List<Thread> selectHotestToptenThread();
 	//最新排行
 	public List<Thread> selectNewRankingThread(int blockId);
 	//所有版块的最新帖子

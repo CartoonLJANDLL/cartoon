@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
@@ -12,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import guomanwang.domain.Opera;
+import guomanwang.domain.Opnumupdate;
 import guomanwang.service.OperaService;
+import guomanwang.service.OpnumupdateService;
 import net.sf.json.JSONObject;
 
 @RequestMapping("/opera")
@@ -25,6 +29,9 @@ public class OperaController {
 	@Autowired
 	@Qualifier("OperaServiceimpl")
 	private OperaService operaService;
+	@Autowired
+	@Qualifier("OpnumupdateServiceimpl")
+	private OpnumupdateService opnumupdataService;
 	
 	//收藏番剧或取消收藏番剧,json数据类型param 包含userId 和 operaId两个键
 	/*@Operation(name="collectopera")*/
@@ -200,14 +207,41 @@ public class OperaController {
 			System.out.println("更新播放量操作" + operaid + "更新结果" + rs);
 		}
 		
-	//番剧总点击量
+		//查找番剧一系列总数
+		/**
+		 * @return
+		 * @throws Exception
+		 */
+		@ResponseBody
+		@RequestMapping("/opamountchange")
+		public JSONObject operaAmountChange(@RequestParam(value="startdate",defaultValue="2019-06-01")String startdate,@RequestParam(value="enddate",defaultValue="2019-07-25")String enddate) throws Exception{
+			JSONObject reJson = new JSONObject();
+			JSONObject param = new JSONObject();
+			param.put("startdate", startdate);
+			param.put("enddate", enddate);
+			reJson = this.opnumupdataService.selectOpnumupdateTopten(param);
+			return reJson;
+		}
+	//番剧数量
 		@ResponseBody()
 		@RequestMapping("/operaamount")
 		public JSONObject operaClickAmount() throws Exception{
 			JSONObject jsonObject = new JSONObject();
 			int amount = this.operaService.getOperaNum();
-			System.out.println("==============================" + amount);
+			Opnumupdate param = new Opnumupdate();
+			param.setOpnum(amount);
+			String latestDate = this.opnumupdataService.selectDatetime();
+			System.out.println( "+++++++++++++++Controller" + latestDate);
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			String nodate = formatter.format( new Date());
+			if( !latestDate.equals( nodate)) {
+				System.out.println( "HHHHHHHHHHHHHHHHHHHH");
+				this.opnumupdataService.insertOpnumupdateInfo(param);
+			}
+			System.out.println( "++++++++++++" + nodate + latestDate);
 			jsonObject.put("operaAmount", amount);
 			return jsonObject;
 		}
+		
+		
 }

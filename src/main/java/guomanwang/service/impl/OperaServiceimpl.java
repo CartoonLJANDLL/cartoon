@@ -23,6 +23,7 @@ import guomanwang.exception.ErrorType;
 import guomanwang.mapper.OpCollectedMapper;
 import guomanwang.mapper.OperaMapper;
 import guomanwang.service.OperaService;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Service("OperaServiceimpl")
@@ -31,13 +32,12 @@ public class OperaServiceimpl implements OperaService {
 	@Autowired
 	@Qualifier("OperaMapper")
 	private OperaMapper operaMapper;
-	OperaExample operaExample = new OperaExample();
-	OperaExample.Criteria criteria = operaExample.createCriteria();
 	
 	@Autowired
 	@Qualifier("OpCollectedMapper")
 	private OpCollectedMapper userOperaMapper;
 	int pageSize = 18;
+	int clicknumopera = 10;
 	//页面大小limit
 	@Override
 	public int getPageSize( JSONObject param) {
@@ -586,5 +586,64 @@ public class OperaServiceimpl implements OperaService {
 		}
 		return rs;
 	}
+	//实现按点击量op_playnum或收藏量op_collecctnum的降序排序，默认op_collectnum
+	@Override
+	public JSONObject operaSortSelective(JSONObject sort) throws Exception{
+		
+		OperaExample operaExample = new OperaExample();
+		operaExample.setOrderByClause( sort.getString( "sort") + " DESC");
+		List<Opera> operas = this.operaMapper.selectByExample(operaExample);
+		JSONArray jsonArrayName = new JSONArray();
+		JSONArray jsonArrayY = new JSONArray();
+		JSONObject jsonObject = new JSONObject();
+		System.out.println("============" + operas.size());
+		if( "op_collectnum".equals( sort.getString( "sort"))) {
+			for( int i = 0; i < clicknumopera; i++ ) {
+				jsonArrayName.add(operas.get(i).getOpName());
+				jsonArrayY.add(operas.get(i).getOpCollectnum());
+				System.out.println( operas.get(i).getOpName() + "============");
+			}
+		}else {
+			for( int i = 0; i < clicknumopera; i++ ) {
+				jsonArrayName.add(operas.get(i).getOpName());
+				jsonArrayY.add(operas.get(i).getOpPlaynum());
+				System.out.println( operas.get(i).getOpName() + "============" + operas.get(i).getOpPlaynum());
+			}
+		}
+		jsonObject.put("name", jsonArrayName);
+		jsonObject.put("y", jsonArrayY);
+		return jsonObject;
+	}
+	@Override
+	public JSONArray operaTypeNumRate(JSONObject param) throws Exception {
+		JSONArray returnObject = new JSONArray();
+		JSONArray optypes = new JSONArray();
+		JSONObject jsonObject = new JSONObject();
+		int sum = 0;
+		int amount = getOperaNum();
+		optypes = param.getJSONArray( "optypes");
+		for( int i = 0; i < param.getInt( "optypenum"); i++) {
+			OperaExample operaExample = new OperaExample();
+			OperaExample.Criteria operaCriteria = operaExample.createCriteria();
+			operaCriteria.andOpTypeLike( optypes.getString( i));
+			sum = this.operaMapper.countByExample(operaExample) + sum;
+			jsonObject.put("name", optypes.getString(i));
+			//真实的其他
+			/*if( optypes.getString(i).equals("其他")) {
+				jsonObject.put("y", amount - sum);
+			}else {
+				jsonObject.put("y", this.operaMapper.countByExample(operaExample));
+			}*/
+			//从数据库中直接like其他更好看
+			jsonObject.put("y", this.operaMapper.countByExample(operaExample));
+			returnObject.add(jsonObject);
+			
+		}
+		
+		/*returnObject.put("其他", getOperaNum() - sum);*/
+		/*System.out.println( "++++++++++sum" + sum + amount + returnObject.getString(9).toString());*/
+		return returnObject;
+	}
+	
 	
 }

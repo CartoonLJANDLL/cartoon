@@ -47,24 +47,25 @@ public class CartoonAOP {
 		System.out.println("执行了after方法---------------------");
 		System.err.println("this is after ..........");
 	}
-	/*
-	 * 获取message，存入log
-	 */
+	
+	  /*获取message，存入log*/
+	 
 	@AfterThrowing(pointcut = "method()", throwing = "e")
 	public void afterThrowing( JoinPoint joinPoint, Exception e) {
 		String message = e.getMessage();
 		System.out.println("AOP捕获到异常了" + message + "HHHHHHHHHH");
+		log.setLevel("ERROR");
 		log.setMessage(message);
 		log.setLevel("error");
 	}
-	/*
-	 * 获取uri,host,userid值存入log，并将log写入数据库
-	 */
+	
+	/*  获取uri,host,userid值存入log，并将log写入数据库*/
+	 
 	@AfterReturning("method()")
 	public void afterReturning(JoinPoint joinPoint) throws Exception{
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		System.out.println("开始执行afterreturning方法---------------");
-		
+		log.setLevel("Info");
 		String uri = request.getRequestURI();
 		log.setUri(uri);
 		String host = IPUtil.getIpAddr(request);
@@ -78,9 +79,9 @@ public class CartoonAOP {
 		int rs = this.logService.insertLogSelective(log);
 		System.out.println("日志插入数据库条数结果" + rs);
 	}
-	/*
-	 * 获取ctime,endtime,exctime,clazz,method,params值存入log
-	 */
+	
+//	  获取ctime,endtime,exctime,clazz,method,params值存入log
+	 
 	@Around("method()")
 	public Object around(ProceedingJoinPoint pjd) throws Throwable{
 		System.out.println("开始执行around                 OOOOOOOOOOOO");

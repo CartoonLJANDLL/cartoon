@@ -9,8 +9,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.ansj.domain.Result;
-import org.ansj.splitWord.analysis.ToAnalysis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -33,6 +31,7 @@ import guomanwang.domain.Thread;
 import guomanwang.domain.User;
 import guomanwang.domain.UserGrade;
 import guomanwang.service.BlockService;
+import guomanwang.service.CompanyService;
 import guomanwang.service.DefaultheadService;
 import guomanwang.service.InformationService;
 import guomanwang.service.OperaService;
@@ -40,7 +39,6 @@ import guomanwang.service.PeoplenumService;
 import guomanwang.service.ThreadService;
 import guomanwang.service.UserGradeService;
 import guomanwang.service.UserService;
-import guomanwang.service.CompanyService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -106,6 +104,11 @@ public class AdminController {
 		return "admin/newsList";
 	}
 	//返回用户数据展示页面
+	@RequestMapping("/luntandata")
+	public String luntandata() {
+		return "admin/luntandata";
+	}
+	//返回用户数据展示页面
 	@RequestMapping("/userdata")
 	public String userdata() {
 		return "admin/userdata";
@@ -114,6 +117,11 @@ public class AdminController {
 	@RequestMapping("/newsdata")
 	public String newsdata() {
 		return "admin/newsdata";
+	}
+	//返回用户数据展示页面
+	@RequestMapping("/operadata")
+	public String operadata() {
+		return "admin/operadata";
 	}
 	//返回后台番剧管理页面
 	@RequestMapping("/operaList")
@@ -338,6 +346,87 @@ public class AdminController {
 		operas.put("msg", "");
 		return operas;
 	}
+	//番剧类型占比 搞笑 青春 科幻 校园 其他 历史 推理 冒险","剧情","恋爱,其他在所有的都算完后用总数减
+	//前端传值optypes（默认为上面）为所要看的番剧类型占比，optypenum（默认为10）为所要看的类型数量，都要封装在一个jsonobject中，都含有默认值
+	@ResponseBody()
+	@RequestMapping("/operatypenumrate")
+	public JSONArray operaPlaynumRate(/*JSONObject param*/) throws Exception{
+		JSONArray jsonObject = new JSONArray();
+		JSONArray jsonArrayType = new JSONArray();
+		JSONObject param = new JSONObject();
+		int n = 10;
+		System.out.println("HHHHHHHHHHHHH");
+		String[] opTypes = {"搞笑","青春","科幻","校园","历史","推理","冒险","剧情","恋爱","其他"}; 
+		if( param.has( "optypenum")) {
+			n = param.getInt( "optypenum");
+		}else {
+			param.put("optypenum", n);
+		}System.out.println("HHHHHHHHHHHHH");
+		if( !param.has( "optypes")) {
+			for( int i = 0; i < param.getInt( "optypenum"); i++) {
+				jsonArrayType.add( opTypes[i]);
+				System.out.println("HHHHHHHHHHHHH" + jsonArrayType.getString(i));
+			}
+			System.out.println("HHHHHHHHHHHHH" + jsonArrayType.getString(0));
+			param.put("optypes", jsonArrayType);
+		}
+		System.out.println("HHHHHHHHHHHHH4" + param.get("optypes").toString());
+		jsonObject = this.operaService.operaTypeNumRate( param);
+		
+		return jsonObject;
+	}
+		//番剧点击量op_playnum或者op_collectnum降序排序前端json数据sort包含{"sort","点击量"}或者{"sort","收藏量"}
+		//默认点击量排序
+		@ResponseBody()
+		@RequestMapping("/clicknumsort")
+		public JSONObject operaClicknumSort(/*JSONObject sort*/) throws Exception{
+			JSONObject jsonObject = new JSONObject();
+			/*if( sort.has( "sort")) {
+				if( "点击量".equals( sort.getString("sort"))) {
+					sort.put("sort", "op_playnum");
+				}else {
+					if( "收藏量".equals( sort.getString("sort"))) {
+						sort.put("sort", "op_collectnum");
+					}
+				}
+			}else {
+				sort.put("sort", "op_playnum");
+			}*/
+			JSONObject sort = new JSONObject();
+			sort.put("sort", "op_playnum");
+			sort.put("startdate", "2019-05-01");
+			sort.put("enddate", "2019-06-05");
+			System.out.println("tiantian");
+			jsonObject = this.operaService.operaSortSelective(sort);
+			System.out.println("===============hhhhhhhhh");
+			return jsonObject;
+		}
+		@ResponseBody()
+		@RequestMapping("/collectnumsort")
+		public JSONObject operaCollectnumSort(/*JSONObject sort*/) throws Exception{
+			JSONObject jsonObject = new JSONObject();
+			/*if( sort.has( "sort")) {
+				if( "点击量".equals( sort.getString("sort"))) {
+					sort.put("sort", "op_playnum");
+				}else {
+					if( "收藏量".equals( sort.getString("sort"))) {
+						sort.put("sort", "op_collectnum");
+					}
+				}
+			}else {
+				sort.put("sort", "op_playnum");
+			}*/
+			JSONObject sort = new JSONObject();
+			sort.put("sort", "op_collectnum");
+			sort.put("startdate", "2019-05-01");
+			sort.put("enddate", "2019-06-05");
+			System.out.println("tiantian");
+			jsonObject = this.operaService.operaSortSelective(sort);
+			System.out.println("===============hhhhhhhhh");
+			return jsonObject;
+		}
+		
+		
 	//获得最新的10条帖子
 		@ResponseBody
 		@RequestMapping("/getnewthread")

@@ -1,9 +1,9 @@
 package guomanwang.service;
+import java.util.List;
+
 import guomanwang.domain.Page;
 import guomanwang.domain.User;
 import net.sf.json.JSONObject;
-
-import java.util.List;
 
 public interface UserService {
 
@@ -13,6 +13,10 @@ public interface UserService {
 	int resetpassbyphone(User user);
 	int updateuserinfo(User user);
 	int getusernumber();
+	//获得发帖量前十的用户
+	public JSONObject getThreadToptenUser() throws Exception;
+	//获得签到量最多的用户
+	public JSONObject getSignMostUsers( JSONObject param) throws Exception;
 	public int deleteUserById(int userid);
 	///分页获得用户信息
 	public List<User> getuserlist(Page page);
