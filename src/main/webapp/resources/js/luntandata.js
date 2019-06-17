@@ -68,7 +68,7 @@ layui.use('laydate',function(){
 	        }
 	    }]
 	});
-	//连续登陆签到前十用户
+	//登陆签到量前十用户
 	var chart1 = Highcharts.chart('container1', {
 	    chart: {
 	        type: 'column'
@@ -77,7 +77,7 @@ layui.use('laydate',function(){
   		     enabled: false // 禁用版权信息
    		},
 	    title: {
-	        text: '用户连续登陆量排行'
+	        text: '用户登陆签到量排行'
 	    },
 	    subtitle: {
 	        text: '来源:纵横国漫网'
@@ -91,17 +91,17 @@ layui.use('laydate',function(){
 	    yAxis: {
 	        min: 0,
 	        title: {
-	            text: '登陆量(天)'
+	            text: '签到量(天)'
 	        }
 	    },
 	    legend: {
 	        enabled: false
 	    },
 	    tooltip: {
-	        pointFormat: '登陆量: <b>{point.y} 天</b>'
+	        pointFormat: '签到量: <b>{point.y} 天</b>'
 	    },
 	    series: [{
-	        name: '登陆量',
+	        name: '签到量',
 	        data: [],
 	        dataLabels: {
 	            enabled: true,
@@ -214,7 +214,7 @@ layui.use('laydate',function(){
 	    },
 	    cache: false
 	  });
-	//连续登陆签到前十用户
+	//签到量前十用户
   $.ajax({
 	    url: '../thread/toptensignusers',
 	    type:"post",
