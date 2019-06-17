@@ -145,12 +145,16 @@ public class OperaServiceimpl implements OperaService {
 		List<Opera> operas = operaMapper.selectByExample(operaExample);
 		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
 		if( param.has("userId")) {
+			System.out.println("uuserIdUUUUUUUUUUU" + param.get("userId"));
 			int userId = param.getInt("userId");
 			List<OpCollected> opcollected = getAllOpCollectedOpera(userId);
 			for( int j = 0; j < operas.size(); j++) {
 				for ( int i = 0; i < opcollected.size(); i++) {
+					System.out.println("UUUUUUUU" + operas.get(j).getOpId() + "HHHHHHHH" + opcollected.get(i).getOperaId());
 					if( operas.get(j).getOpId() == opcollected.get(i).getOperaId()) {
-						operas.get(j).setCollecte(1);//默认为0，未收藏，标记为1，已收藏
+						Integer k = new Integer(1);
+						operas.get(j).setCollecte(k);//默认为0，未收藏，标记为1，已收藏
+						System.out.println("HHHHHHHHHHH" + operas.get(j).getCollecte());
 					}
 				}
 			}

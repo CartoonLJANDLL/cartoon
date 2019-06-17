@@ -29,7 +29,15 @@ public class Opera {
 
     private Integer opPlaynum;
 
-    public Integer getOpId() {
+    private Integer collecte;
+    public Integer getCollecte() {
+		return collecte;
+	}
+	public void setCollecte(Integer collecte) {
+		this.collecte = collecte;
+	}
+
+	public Integer getOpId() {
         return opId;
     }
 
