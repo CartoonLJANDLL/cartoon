@@ -64,9 +64,9 @@
     -->
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖<span class="layui-badge">${threadlist.size()}</span></li>
-       
-        <li data-type="dianzan" data-url="/collection/find/" lay-id="dianzan">我点赞的帖<span class="layui-badge">${threadlist.size()}</span></li>
+        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖<span class="layui-badge">${threadlist.size()}</span></li>       
+        <li data-type="dianzan" data-url="/collection/find/" lay-id="dianzan">我收藏的番剧<span class="layui-badge">${threadlist.size()}</span></li>
+        <li data-type="dianzan" data-url="/collection/find/" lay-id="dianzan">我收藏的资讯<span class="layui-badge">${threadlist.size()}</span></li>     
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
@@ -74,7 +74,7 @@
 			<c:if test="${empty threadlist|| threadlist.size()==0}">
 				<li>
 	  				<p>你还没有发帖哦！</p>
-	  				<a class="mine-edit" href="/guomanwang/common/add">发帖</a>
+	  				<a class="mine-edit" href="/guomanwang/thread/add">发帖</a>
 	            </li>
 			</c:if>
           <c:forEach items="${threadlist }" var="item"  varStatus="status">
@@ -95,7 +95,7 @@
 				</c:choose>  
               <a class="jie-title" href="/guomanwang/commit/allusercommits?threadId=${item.getId()}">${item.getTitle()}</a>
               <i>${item.getTime()}</i>
-              <a class="mine-edit" href="">编辑</a>
+              <a class="mine-edit" href="/guomanwang/commit/allusercommits?threadId=${item.getId() }">查看</a>
               <a class="mine-edit" href="javascript:;" style="background-color:red;" onclick="layer.confirm('确认删除?此操作无法撤销', {icon: 3, title:'提示'}, 
             		  function(index){layer.close(index); location.href='/guomanwang/user/deletethread?id=${item.getId()}';  })">删除</a>
               <em>回复数：${item.getCommitNumber()} | 浏览量：${item.getGreatNum()}</em>
@@ -105,10 +105,37 @@
           <div id="LAY_page"></div>
         </div>
         <div class="layui-tab-item">
-          <ul class="mine-view jie-row">
-            <li>
-              <a class="jie-title" href="../jie/detail.html" target="_blank">的凯撒后来看到</a>
-              <i>收藏于23小时前</i>  </li>
+          <ul class="mine-view jie-row">    
+			<c:if test="${empty threadlist|| threadlist.size()==0}">
+				<li>
+	  				<p>你还没有发帖哦！</p>
+	  				<a class="mine-edit" href="/guomanwang/common/add">发帖</a>
+	            </li>
+			</c:if>
+          	<c:forEach items="${threadlist }" var="item"  varStatus="status">
+		    	<li>
+				    <c:choose>  
+					    <c:when test="${item.getStatus()==1}">  
+					         <span class="layui-badge layui-bg-red">精华</span>
+					    </c:when>  
+					    <c:when test="${item.getStatus()==2}">  
+					       <span class="layui-badge layui-bg-red">热帖</span>
+					    </c:when>  
+					    <c:when test="${item.getStatus()==3}">  
+					       <span class="layui-badge layui-bg-red">公告</span>
+					    </c:when>
+					    <c:otherwise>
+					    	<span class="layui-badge layui-bg-red">新帖</span>
+					    </c:otherwise>   
+					</c:choose>  
+              <a class="jie-title" href="/guomanwang/commit/allusercommits?threadId=${item.getId()}">${item.getTitle()}</a>
+              <i>${item.getTime()}</i>
+              <a class="mine-edit" href="">编辑</a>
+              <a class="mine-edit" href="javascript:;" style="background-color:red;" onclick="layer.confirm('确认删除?此操作无法撤销', {icon: 3, title:'提示'}, 
+            		  function(index){layer.close(index); location.href='/guomanwang/user/deletethread?id=${item.getId()}';  })">删除</a>
+              <em>回复数：${item.getCommitNumber()} | 浏览量：${item.getGreatNum()}</em>
+            </li>
+			</c:forEach>
           </ul>
           <div id="LAY_page1"></div>
         </div>

@@ -38,8 +38,8 @@
 					<i class="layui-anim seraph icon-good"></i>
 				</div>
 				<div class="panel_word">
-					<span>3128</span>
-					<cite>番剧总点击</cite>
+					<span class="operaamount"></span>
+					<cite>番剧数量</cite>
 				</div>
 			</a>
 		</div>
@@ -230,9 +230,11 @@
 	        $(".news").html(hotNewsHtml);
 	        $(".userAll span").text(data.length);
 	    })
-
+	  //显示番剧数量
+	    $.post("../opera/operaamount",function(data){
+	        $(".operaamount").text(data.operaAmount);
 	})
-
+})
 	</script>
 </body>
 </html>

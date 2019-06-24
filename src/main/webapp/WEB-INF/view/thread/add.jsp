@@ -44,7 +44,7 @@
               </div>
               <div class="layui-form-item layui-form-text">
                 <div class="layui-input-block">
-                  <textarea id="L_content" name="content" required lay-verify="required" placeholder="详细描述" class="layui-textarea fly-editor" style="height: 260px;"></textarea>
+	                <textarea id="editor" style="display: none;"></textarea>
                 </div>
               </div>
               <!-- 悬赏经验 -->
@@ -93,11 +93,19 @@
 </div>
 <%@ include file="../common/footer.html"%>
 <script>
-layui.use(['upload','layer','form'], function(){
+layui.use(['upload','layer','form','layedit'], function(){
 	  var $ = layui.jquery
 	  ,form = layui.form
+	  ,layedit=layui.layedit
     ,layer = parent.layer === undefined ? layui.layer : top.layer;
 	  
+	 layedit.set({
+		uploadImage: {
+		   url: '../user/uploadHeadImage?src=/resources/img/thread' //接口url
+		   ,type: '' //默认post
+		 }
+		});
+	  var one=layedit.build('editor'); //建立编辑器
 form.on('submit(push)', function(data){
 	//弹出loading
 	var userid=${user.getUserid()};

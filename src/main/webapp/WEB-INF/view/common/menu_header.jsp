@@ -39,10 +39,10 @@
 	    <ul class="layui-nav fly-nav-user">
 	      <% User user=(User)session.getAttribute("user");
 			  if(user==null){ %>
-	      <li class="layui-nav-item">
+	      <li class="layui-nav-item login">
 	        <a href="/guomanwang/login">登入</a>
 	      </li>
-	      <li class="layui-nav-item">
+	      <li class="layui-nav-item register">
 	        <a href="/guomanwang/register">注册</a>
 	      </li>
 	      <li class="layui-nav-item layui-hide-xs">
@@ -61,7 +61,8 @@
 	          <img src="/guomanwang${user.getHeadurl()}">
 	        </a>
 	        <dl class="layui-nav-child">
-	          <dd><a href="/guomanwang/user/user_setting"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+	          <dd><a href="/guomanwang/user/user_setting"><i class="layui-icon">&#xe620;</i>个人信息</a></dd>
+	          <dd><a href="/guomanwang/user/user_friends"><i class="layui-icon">&#xe770;</i>我的好友</a></dd>
 	          <dd><a href="/guomanwang/user/user_message"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
 	          <dd><a href="/guomanwang/user/user_home?userId=${user.getUserid() }"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
 	          <% if(user.getHonor()>=3){ %>

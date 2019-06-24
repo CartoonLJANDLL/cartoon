@@ -89,11 +89,13 @@
 			</ul>
 			<div class="layui-tab-content"></div>
 			<hr>
-			<div class="write">
-				<a href="javascript:void(0)" class="write-link smiley"></a>
-				<div class="messages" contenteditable/></div>
-				<a href="javascript:;" data-id="${ friends[0].getUserid()}" class="write-link send"></a>
-			</div>
+			<c:if test="${ !empty friends}">
+				<div class="write">
+					<a href="javascript:void(0)" class="write-link smiley"></a>
+					<div class="messages" contenteditable/></div>
+					<a href="javascript:;" data-id="${ friends[0].getUserid()}" class="write-link send"></a>
+				</div>
+			</c:if>
 		</div>
   </div>
 </div>

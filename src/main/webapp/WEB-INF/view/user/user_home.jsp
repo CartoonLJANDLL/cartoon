@@ -76,7 +76,7 @@
   <div class="layui-row layui-col-space15">
     <div class="layui-col-md6 fly-home-jie">
       <div class="fly-panel">
-        <h3 class="fly-panel-title">${userinfo.getUsername()}最近的发帖</h3>
+        <h3 class="fly-panel-title">${userinfo.getUsername()}最近的10条发帖</h3>
         <ul class="jie-row">
 			<c:if test="${empty threadlist || threadlist.size()==0}">  
 			   	<li><p>${userinfo.getUsername()}最近没有发帖！</p></li>      
@@ -109,7 +109,7 @@
     
     <div class="layui-col-md6 fly-home-da">
       <div class="fly-panel">
-        <h3 class="fly-panel-title">${userinfo.getUsername() } 最近的回帖</h3>
+        <h3 class="fly-panel-title">${userinfo.getUsername() } 最近的5条回帖</h3>
         <ul class="home-jieda">
         <c:choose>
 		   <c:when test="${empty mycommits}">  

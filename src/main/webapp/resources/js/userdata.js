@@ -323,10 +323,15 @@ layui.use('laydate',function(){
 	    	        }
 	    	    },
 	    	    series: [{
-	    	    	name:'用户',
+	    	    	name:'正常数据',
+	    	        lineWidth:0,
+	    	        color: 'rgba(119, 152, 191, .5)',
+	    	        data: data.right
+	    	    },{
+	    	    	name:'异常数据',
 	    	        lineWidth: 0,
 	    	        color: 'rgba(223, 83, 83, .5)',
-	    	        data: data
+	    	        data: data.error
 	    	    }]
 	    	});
 	    },

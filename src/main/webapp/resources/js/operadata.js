@@ -40,7 +40,7 @@ layui.use('laydate',function(){
 		     enabled: false // 禁用版权信息
 		},
 		title : {
-			       text: '每日新增注册用户'   
+			       text: '番剧数量变化'   
 			   },
 	   xAxis: {
             tickInterval: 2, // 坐标轴刻度间隔为两天
@@ -73,7 +73,7 @@ layui.use('laydate',function(){
 	      borderWidth: 0
 	   },
 	    series: [{
-	      name:'新增注册用户',
+	      name:'番剧数量',
 	      data: []
 	    }]
 	  });

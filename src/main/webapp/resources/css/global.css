@@ -553,6 +553,10 @@ body .fly-user-main{position: relative; min-height: 600px;}
   .site-mobile .fly-user-main>.layui-nav{left: 0;}
   .site-mobile .site-mobile-shade{content: ''; position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(0,0,0,.9); z-index: 999;}
 }
+/* 弹窗 */
+.layui-layer-tab .layui-layer-title span {
+    padding: 0 !important;
+}
 #LAY_minemsg{overflow:scroll;height:600px;}
 #LAY_minemsg::-webkit-scrollbar {
         display: none;

@@ -19,16 +19,6 @@
 <body>
 	<div id="container1" style="min-width:400px;height:400px;"></div>
 	 <div id="container3" style="min-width:400px;height:400px;"></div>
-	 <div class="layui-form layui-form-pane">
-	  <div class="layui-form-item">
-	    <div class="layui-inline">
-	      <label class="layui-form-label" style="color:white;background-color:#1AA094;margin-left:20px;">日期范围</label>
-	      <div class="layui-input-inline">
-	        <input type="text" class="layui-input" id="date1" placeholder="请选择时间段">
-	      </div>
-	    </div>
-	  </div>
-	 </div>
 	 <div id="container0" style="min-width:400px;height:400px;"></div>
 	 <div id="container2" style="min-width:400px;height:400px;"></div> 
 </body>

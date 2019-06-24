@@ -87,6 +87,10 @@ public class CommonController {
 	public String rightError(Model model) {
 		return "common/rightError";
 	}
+	@RequestMapping("/feedback")
+	public String feedback(Model model) {
+		return "common/feedback";
+	}
 	//根据关键字实现资讯的模糊搜索
 	@ResponseBody
 	@RequestMapping("/searchnews")

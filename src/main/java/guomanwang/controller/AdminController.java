@@ -214,7 +214,7 @@ public class AdminController {
 	//获得用户活跃时间和停留时间数据
 	@ResponseBody
 	@RequestMapping("/getuseractive")
-	public JSONArray getuseractive() throws Exception {
+	public JSONObject getuseractive() throws Exception {
 		PeoplenumExample example=new PeoplenumExample();
 		return this.peoplenumService.selectuseractive(example);
 	}

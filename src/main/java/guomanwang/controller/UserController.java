@@ -184,7 +184,7 @@ public class UserController {
 	public String logout(HttpSession session) throws Exception {
 	       session.removeAttribute("user");
 	       session.invalidate();
-	       return "redirect:/common/index";
+	       return "redirect:/index";
 	   }
 	
 	@RequestMapping("/changepassword")

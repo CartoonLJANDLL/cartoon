@@ -49,7 +49,7 @@
 		<hr />
 	</div>
 	<div class="layui-container"> 
-		<div class="layui-row layui-col-space10">
+		<div class="layui-row layui-col-space20">
 			<div class="layui-col-lg4 layui-col-sm4">
 				<a href="https://v.youku.com/v_show/id_XODU2MTEyNjI4.html?" target="_blank">
 				<img src='<c:url value="/resources/img/qsmy.jpg"></c:url>'>
@@ -80,14 +80,7 @@
 			</div>	
 		</div>
 	</div>
-	<div class="fly-footer">
-	  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2018 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
-	  <p>
-	    <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
-	    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
-	    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-	  </p>
-	</div>
+	<%@ include file="common/footer.html"%>
 	<script>
 	layui.use(['carousel','layer','element'], function(){
 	  var carousel = layui.carousel,

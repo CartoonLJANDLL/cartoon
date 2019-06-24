@@ -73,7 +73,11 @@ public class UserThreadServiceimpl implements UserThreadService {
 	@Override
 	public List<UserThread> selectMyPushedThread(int userId) {
 		// TODO Auto-generated method stub
-		return this.userThreadMapper.selectMyPushedThread(userId);
+		List<UserThread> threadlist=this.userThreadMapper.selectMyPushedThread(userId);
+		if(threadlist.size()>10) {
+			return threadlist.subList(0,10);
+			}
+		return threadlist;
 	}
 
 	@Override
@@ -88,7 +92,11 @@ public class UserThreadServiceimpl implements UserThreadService {
 //	我回复的帖子
 	@Override
 	public List<UserThread> selectMyCommitThread(int userId){
-		return this.userThreadMapper.selectMyCommitThread(userId);
+		List<UserThread> commits=this.userThreadMapper.selectMyCommitThread(userId);
+		if(commits.size()>5) {
+		return commits.subList(0,5);
+		}
+		return commits;
 	}
 	
 

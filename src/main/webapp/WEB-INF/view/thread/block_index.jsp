@@ -15,7 +15,7 @@
 <div class="fly-panel fly-column">
   <div class="layui-container">
     <ul class="layui-clear">
-      <li class="layui-hide-xs layui-this">当前位置：<a style="margin:0;padding:0;" href="/guomanwang/common/luntan">论坛</a>>>${Block.getName() }</li> 
+      <li class="layui-hide-xs layui-this">当前位置：<a style="margin:0;padding:0;" href="/guomanwang/luntan">论坛</a>>>${Block.getName() }</li> 
     </ul>
     <div class="fly-column-right layui-hide-xs"> 
     <form class="layui-form" action="">
@@ -206,18 +206,15 @@
           <a href="javascript:;" target="_blank" class="fly-zanzhu" style="background-color: #5FB878;">赞助商或图片预留</a>
         </div>
       </div>
-      
       <div class="fly-panel fly-link">
         <h3 class="fly-panel-title">友情链接</h3>
         <dl class="fly-panel-main">
           <dd><a href="http://www.layui.com/" target="_blank">layui</a><dd>
-          <dd><a href="http://layim.layui.com/" target="_blank">WebIM</a><dd>
           <dd><a href="http://layer.layui.com/" target="_blank">layer</a><dd>
           <dd><a href="http://www.layui.com/laydate/" target="_blank">layDate</a><dd>
-          <dd><a href="mailto:xianxin@layui-inc.com?subject=%E7%94%B3%E8%AF%B7Fly%E7%A4%BE%E5%8C%BA%E5%8F%8B%E9%93%BE" class="fly-link">申请友链</a><dd>
+          <dd><a href="http://winkilee.club:8090/tmall/forehome" target="_blank">仿天猫商城系统</a><dd>
         </dl>
       </div>
-
     </div>
   </div>
 </div>
@@ -259,8 +256,10 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
                 	 layer.msg(data.msg);
    	    	            //刷新当前页面
    	    	            if(data.code==1){
-   	    	            	location.reload();
-   	    	            }
+   	    	            setTimeout(function(){   	    	            
+   	    	            	location.reload();   	    	            
+   	    	         },1000);
+   	    	         }
                    });
     		}
     		else if(userid==null||userid==""){

@@ -60,7 +60,6 @@
 			<a id="contectus" class="layui-btn layui-btn-danger layui-btn-sm">联系我们</a></p>
 		</div>
 	</div>
-	
-	<script type="text/javascript" src="/guomanwang/resources/js/news.js"></script>t
+	<script type="text/javascript" src="/guomanwang/resources/js/news.js"></script>
 </body>
 </html>

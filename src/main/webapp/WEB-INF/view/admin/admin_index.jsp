@@ -27,7 +27,6 @@
 							<dd class="layui-this" data-menu="contentManagement"><a href="javascript:;"><i class="layui-icon" data-icon="&#xe63c;">&#xe63c;</i><cite>内容管理</cite></a></dd>
 							<dd data-menu="memberCenter"><a href="javascript:;"><i class="seraph icon-icon10" data-icon="icon-icon10"></i><cite>用户中心</cite></a></dd>
 							<dd data-menu="systemeSttings"><a href="javascript:;"><i class="layui-icon" data-icon="&#xe620;">&#xe620;</i><cite>系统设置</cite></a></dd>
-							<dd data-menu="seraphApi"><a href="javascript:;"><i class="layui-icon" data-icon="&#xe705;">&#xe705;</i><cite>使用文档</cite></a></dd>
 						</dl>
 					</li>
 				</ul>
@@ -76,7 +75,7 @@
 							<dd><a href="javascript:;" class="showNotice"><i class="layui-icon">&#xe645;</i><cite>系统公告</cite><span class="layui-badge-dot"></span></a></dd>
 							<dd pc><a href="javascript:;" class="functionSetting"><i class="layui-icon">&#xe620;</i><cite>功能设定</cite><span class="layui-badge-dot"></span></a></dd>
 							<dd pc><a href="javascript:;" class="changeSkin"><i class="layui-icon">&#xe61b;</i><cite>更换皮肤</cite></a></dd>
-							<dd><a href="page/login/login.html" class="signOut"><i class="seraph icon-tuichu"></i><cite>退出</cite></a></dd>
+							<dd><a href="javascript:;" class="signOut"><i class="seraph icon-tuichu"></i><cite>退出</cite></a></dd>
 						</dl>
 					</li>
 				</ul>
@@ -87,15 +86,6 @@
 			<div class="user-photo">
 				<a class="img" title="我的头像" ><img src="/guomanwang${user.getHeadurl()}" class="userAvatar"></a>
 				<p>你好！<span class="userName">${user.getUsername()}</span>, 欢迎登录</p>
-			</div>
-			<!-- 搜索 -->
-			<div class="layui-form component">
-				<select name="search" id="search" lay-search lay-filter="searchPage">
-					<option value="">搜索页面或功能</option>
-					<option value="1">资讯</option>
-					<option value="2">番剧</option>
-				</select>
-				<i class="layui-icon">&#xe615;</i>
 			</div>
 			<div class="navBar layui-side-scroll" id="navBar">
 				<ul class="layui-nav layui-nav-tree">

@@ -78,7 +78,7 @@ public class CommitController {
 	public String selectAllUserCommits(int threadId,Model model,HttpSession session) {
 		User userinfo=(User)session.getAttribute("user");
 		if(userinfo==null) {
-			return "redirect:login";
+			return "redirect:/login";
 		}
 		else {
 			List<UserCommit> userCommits = new ArrayList<UserCommit>();

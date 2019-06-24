@@ -58,19 +58,8 @@ public class OperaController {
 	@ResponseBody()
 	@RequestMapping("/alloperas")
 	public JSONObject alloperas(String param) throws Exception {
-		/*JSONObject param = new JSONObject(); 
-		Integer page = 1;
-		Integer status = null;
-		String type  = "";
-        param.put("page", page);
-		param.put("status", 1);
-		param.put("type", type);
-		param.put("sort", "op_time");
-		System.out.println(param.toString() + "OOOOO"); 
-		param.put("userId", 1);*/
 		JSONObject json = JSONObject.fromObject(param);   
 		JSONObject operas = operaService.selectAllOpera(json/*param*/);
-		/*int i = 1/0;*/
 		System.out.println("HHHHH" + operas.get("data").toString());
 		
 		return operas;
@@ -137,19 +126,8 @@ public class OperaController {
 	@ResponseBody()
 	@RequestMapping("/deleteopera")
 	public JSONObject deleteOpera( String param) {
-		/*JSONObject param = new JSONObject();
-		param.put("name", "小小");*/
-		//int[] operaId = {1,2,3,4};
-		
-		/*String[] operaId = {"1","2","3"};*/
-		//String operaId = "1";
-		/*param.put("operaId", operaId);*/
 		JSONObject json = JSONObject.fromObject(param);
-        JSONObject jsonobject = this.operaService.deleteOperaSelective(json/*param*/);
-       /* String op = param.getString("operaId");
-        System.out.println("PARA" + param.getString("operaId").toString());
-        System.out.println("XIAOXIAO" + jsonobject.toString() + "HHHH" + op.toString());*/
-		
+        JSONObject jsonobject = this.operaService.deleteOperaSelective(json);
 		return jsonobject; 
 	}
 	
@@ -157,10 +135,6 @@ public class OperaController {
 	@ResponseBody()
 	@RequestMapping("/updateopera")
 	public JSONObject updateOpera( String param) {
-		/*JSONObject param = new JSONObject();
-		Integer opId = 5;
-		param.put("name", "小da");
-		param.put("opId", opId);*/
 		JSONObject json = JSONObject.fromObject(param);
 		System.out.println(json.get("name"));
         JSONObject jsonobject = this.operaService.updateByExampleSelective(/*param*/json);
@@ -173,9 +147,6 @@ public class OperaController {
 	@ResponseBody()
 	@RequestMapping("/personcollectedopera")
 	public JSONObject personcollectedopera( String json) {
-		/*JSONObject param = new JSONObject();
-		param.put("userId",1);
-		param.put("limit", 20);*/
 		JSONObject param = JSONObject.fromObject(json);
 		JSONObject jsonobject = new JSONObject();
 		int code = 0;

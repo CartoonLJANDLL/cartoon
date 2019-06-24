@@ -599,16 +599,18 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
     })
   });
   
-  //固定Bar
-  util.fixbar({
-    bar1: '&#xe642;'
-    ,bgcolor: '#009688'
-    ,click: function(type){
-      if(type === 'bar1'){
-        location.href = '/guomanwang/thread/add';
-      }
-    }
-  });
+  if(location.pathname!="/guomanwang/news"||location.pathname!="/guomanwang/opera"){
+	  //固定Bar
+	  util.fixbar({
+	    bar1: '&#xe642;'
+	    ,bgcolor: '#009688'
+	    ,click: function(type){
+	      if(type === 'bar1'){
+	        location.href = '/guomanwang/thread/add';
+	      }
+	    }
+	  });
+  }
 
   exports('fly', fly);
 

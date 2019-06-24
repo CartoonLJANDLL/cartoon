@@ -4,20 +4,6 @@ layui.use(['element','form','layer'], function(){
 		  	form = layui.form,
 	        layer = parent.layer === undefined ? layui.layer : top.layer;
 		  
-		 	 //联系弹窗
-		 	 $("#contectus").click(function(){
-		 	 	layer.tab({
-		 	 		area : ['260px', '367px'],
-		 	 		tab : [{
-		 	 			title : "微信",
-		 	 			content : "<div style='padding:30px;overflow:hidden;background:#d2d0d0;'><img src='../images/wechat.jpg'></div>"
-		 	 		},{
-		 	 			title : "QQ",
-		 	 			content : "<div style='padding:30px;overflow:hidden;background:#d2d0d0;'><img src='../images/alipay.jpg'></div>"
-		 	 		}]
-		 	 	})
-		 	 }
-		 	 )
 		  form.on('submit(searchnews)', function(data){
 				 $.ajax({
 					    url:'/guomanwang/searchnews',

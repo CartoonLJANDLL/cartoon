@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Servlet Filter implementation class DisableUrlSessionFilter
+ * 过滤掉路径末端jsessionid等其他自动添加的信息
  */
 @WebFilter("/DisableUrlSessionFilter")
 public class DisableUrlSessionFilter implements Filter {

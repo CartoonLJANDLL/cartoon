@@ -13,7 +13,7 @@ public interface PeoplenumService {
 	
 	public List<Peoplenum> selectPeoplenumOptional( Peoplenum peoplenum) throws Exception;
 
-	public JSONArray selectuseractive(PeoplenumExample example) throws Exception;
+	public JSONObject selectuseractive(PeoplenumExample example) throws Exception;
 	
 	
 }

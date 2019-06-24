@@ -77,7 +77,7 @@ layui.use('laydate',function(){
   		     enabled: false // 禁用版权信息
    		},
 	    title: {
-	        text: '用户登陆签到量排行'
+	        text: '用户登陆签到天数排行'
 	    },
 	    subtitle: {
 	        text: '来源:纵横国漫网'
@@ -91,17 +91,17 @@ layui.use('laydate',function(){
 	    yAxis: {
 	        min: 0,
 	        title: {
-	            text: '签到量(天)'
+	            text: '签到天数'
 	        }
 	    },
 	    legend: {
 	        enabled: false
 	    },
 	    tooltip: {
-	        pointFormat: '签到量: <b>{point.y} 天</b>'
+	        pointFormat: '签到天数: <b>{point.y} 天</b>'
 	    },
 	    series: [{
-	        name: '签到量',
+	        name: '签到天数',
 	        data: [],
 	        dataLabels: {
 	            enabled: true,

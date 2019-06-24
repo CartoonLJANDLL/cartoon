@@ -24,19 +24,29 @@ public class PeoplenumServiceimpl implements PeoplenumService {
 		return null;
 	}
 	@Override
-	public JSONArray selectuseractive(PeoplenumExample example) throws Exception {
+	public JSONObject selectuseractive(PeoplenumExample example) throws Exception {
 		JSONArray jsonarray=new JSONArray();
+		JSONArray jsonarray1=new JSONArray();
+		JSONObject json=new JSONObject();
 		List<Peoplenum> peoplenum=this.peoplenumMapper.getuseractive();
 		for(Peoplenum people:peoplenum) {
 			JSONArray one=new JSONArray();
+			if(people.getHoldtime()<10000) {
 			one.add(people.getLefttime().getTime());
 			one.add(people.getHoldtime());
 			jsonarray.add(one);
-			
+			}
+			else {
+				one.add(people.getLefttime().getTime());
+				one.add(people.getHoldtime());
+				jsonarray1.add(one);
+			}
 			System.out.println(people.getLefttime());
 			System.out.println(people.getHoldtime());
 		}
-		return jsonarray;
+		json.put("right",jsonarray);
+		json.put("error",jsonarray1);
+		return json;
 	}
 	@Override
 	public int insertPeoplenum(Peoplenum peoplenum) throws Exception{

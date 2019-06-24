@@ -73,6 +73,18 @@
 				"icon": "&#xe609;",
 				"href": "../admin/newsdata",
 				"spread": false
+			},
+			{
+				"title": "番剧数据",
+				"icon": "&#xe609;",
+				"href": "../admin/operadata",
+				"spread": false
+			},
+			{
+				"title": "论坛数据",
+				"icon": "&#xe609;",
+				"href": "../admin/luntandata",
+				"spread": false
 			}
 		   ]
 		}

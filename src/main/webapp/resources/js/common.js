@@ -7,19 +7,32 @@ layui.use(['element','form','layer'], function(){
 		form = layui.form,
 		layer = parent.layer === undefined ? layui.layer : top.layer;
 		
-		if(location.pathname!="/guomanwang/user/user_friends"){
+	 	 //联系弹窗
+	 	 $("#contectus").click(function(){
+	 	 	layer.tab({
+	 	 		area : ['260px', '367px'],
+	 	 		tab : [{
+	 	 			title : "微信",
+	 	 			content : "<div style='padding:30px;overflow:hidden;background:#d2d0d0;'><img width='200px' src='/guomanwang/resources/img/wechat.jpg'></div>"
+	 	 		},{
+	 	 			title : "QQ",
+	 	 			content : "<div style='padding:30px;overflow:hidden;background:#d2d0d0;'><img width='200px' src='/guomanwang/resources/img/qq.jpg'></div>"
+	 	 		}]
+	 	 	})
+	 	 });
+		if(location.pathname!="/guomanwang/user/user_friends"&$("#username").text()!=""){
 			var websocket = null;  
 			if ('WebSocket' in window) {  
 			    //Websocket的连接  
-			    websocket = new WebSocket("ws://liujiang.space:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
+			    websocket = new WebSocket("ws://"+window.location.host+"/guomanwang/websocket/socketServer");//WebSocket对应的地址  
 			}  
 			else if ('MozWebSocket' in window) {  
 			    //Websocket的连接  
-			    websocket = new MozWebSocket("ws://liujiang.space:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
+			    websocket = new MozWebSocket("ws://"+window.location.host+"/guomanwang/websocket/socketServer");//SockJS对应的地址  
 			}  
 			else {  
 			    //SockJS的连接  
-			    websocket = new SockJS("http://liujiang.space:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
+			    websocket = new SockJS("http://"+window.location.host+"/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
 			}    
 			websocket.onmessage = onMessage;  
 	 
@@ -45,25 +58,31 @@ layui.use(['element','form','layer'], function(){
 		}
  
 		$(".fly-nav li.layui-this").removeClass("layui-this");
-		if(location.pathname=="/guomanwang/index"){
-			$(".fly-nav li.index").addClass("layui-this");
+		if(location.pathname=="/guomanwang/index"||location.pathname=="/index"){
+			$(".layui-nav li.index").addClass("layui-this");
 		}
 		else if(location.pathname=="/guomanwang/news"){
-			$(".fly-nav li.news").addClass("layui-this");
+			$(".layui-nav li.news").addClass("layui-this");
 		}
 		else if(location.pathname=="/guomanwang/opera"){
-			$(".fly-nav li.opera").addClass("layui-this");
+			$(".layui-nav li.opera").addClass("layui-this");
 		}
-		else if(location.pathname=="/guomanwang/luntan"||location.pathname.substring(0,18)=="/guomanwang/thread"){
-			$(".fly-nav li.luntan").addClass("layui-this");
+		else if(location.pathname=="/guomanwang/luntan"||location.pathname.substring(0,18)=="/guomanwang/thread"||location.pathname.substring(0,18)=="/guomanwang/commit"){
+			$(".layui-nav li.luntan").addClass("layui-this");
 		}
 		else if(location.pathname.substring(0,16)=="/guomanwang/user"){
-			$(".fly-nav li.user").addClass("layui-this");
+			$(".layui-nav li.user").addClass("layui-this");
+		}
+		else if(location.pathname=="/guomanwang/login"){
+			$(".layui-nav li.login").addClass("layui-this");
+		}
+		else if(location.pathname=="/guomanwang/register"){
+			$(".layui-nav li.register").addClass("layui-this");
 		}
 		
 		$(".loginout").click(function(){
         	layer.confirm('确定退出登录？', {icon: 3, title: '提示信息'}, function (index) {
-                $.post('/guomanwang/user/logout/',function(data){
+                $.post('/guomanwang/user/logout',function(data){
                 })
                 setTimeout(function(){
                     location.reload();

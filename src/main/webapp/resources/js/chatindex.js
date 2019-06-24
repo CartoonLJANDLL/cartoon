@@ -18,15 +18,15 @@ layui.use(['element','form','layer'], function(){
 		var websocket = null;  
 		if ('WebSocket' in window) {  
 		    //Websocket的连接  
-		    websocket = new WebSocket("ws://liujiang.space:8080/guomanwang/websocket/socketServer");//WebSocket对应的地址  
+		    websocket = new WebSocket("ws://"+window.location.host+"/guomanwang/websocket/socketServer");//WebSocket对应的地址  
 		}  
 		else if ('MozWebSocket' in window) {  
 		    //Websocket的连接  
-		    websocket = new MozWebSocket("ws://liujiang.space:8080/guomanwang/websocket/socketServer");//SockJS对应的地址  
+		    websocket = new MozWebSocket("ws://"+window.location.host+"/guomanwang/websocket/socketServer");//SockJS对应的地址  
 		}  
 		else {  
 		    //SockJS的连接  
-		    websocket = new SockJS("http://liujiang.space:8080/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
+		    websocket = new SockJS("http://"+window.location.host+"/guomanwang/sockjs/socketServer");    //SockJS对应的地址  
 		}  
 		websocket.onopen = onOpen;  
 		websocket.onmessage = onMessage1;  
@@ -84,7 +84,7 @@ layui.use(['element','form','layer'], function(){
 			console.log($(".messages").html());
 			var content=$(".messages").html().replace(/<div>/g,""),
 			fid=$('.send').attr("data-id");
-			if (websocket.readyState == websocket.OPEN) {  
+			if (websocket.readyState == websocket.OPEN&fid!="") {  
 		        websocket.send(fid+"@"+content.replace(/<\/div>/g,""));//调用后台handleTextMessage方法  
 		        $('.chat[data-chat=person'+fid+']').append('<div class="bubble me">'+content+'</div>');
 		        var scrollHeight = $('.chat[data-chat=person'+fid+']').prop("scrollHeight");
