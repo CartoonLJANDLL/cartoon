@@ -2,7 +2,6 @@
     pageEncoding="UTF-8" isELIgnored="false"%>
     <%@ page import="guomanwang.domain.User" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
- 
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,7 +60,6 @@
         <li class="layui-this" lay-id="info">我的资料</li>
         <li lay-id="avatar">头像</li>
         <li lay-id="pass">密码</li>
-        <li lay-id="bind">帐号绑定</li>
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-form layui-form-pane layui-tab-item layui-show">
@@ -192,14 +190,7 @@
       </div>
     </div>
   </div>
-<div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">纵横国漫社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">刘江 and 李林</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">信息反馈</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">联系我们</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
-</div>
+<%@ include file="../common/footer.html"%>
 <script type="text/javascript">
 layui.use(['upload','layer','form'], function(){
 	  var $ = layui.jquery
@@ -311,7 +302,7 @@ layui.use(['upload','layer','form'], function(){
 			    success: function (info) {
 			    if(info.code==1){
 				  setTimeout(function () {
-				  location.href="/guomanwang/common/login";
+				  location.href="/guomanwang/login";
 				  }, 1500);
 			  	}
 			  layer.msg(info.msg);
@@ -337,11 +328,6 @@ layui.use(['upload','layer','form'], function(){
 		    })
 		});
 	 });
-</script>
-<script>
-layui.config({
-  base: '<c:url value="/resources/res/mods/"></c:url>' //你存放新模块的目录，注意，不是layui的模块目录
-}).use('<c:url value="index"></c:url>'); //加载入口
 </script>	
 </body>
 </html>

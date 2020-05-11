@@ -23,20 +23,16 @@
 			<blockquote class="site-text layui-elem-quote">
 				<span>
 					<i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe60a;</i>
-					<label style="font-size: 20px;">来自${company.getName()}的资讯</label>
+					<label style="font-size: 20px;">${company.getName()}的资讯</label>
 				</span>
-				<div style="float:right;margin-right:12%;">
-					<button class="layui-btn layui-btn-sm layui-btn-primary">升序 <i class="layui-icon layui-icon-up"></i></button>
-					<button class="layui-btn layui-btn-sm layui-btn-danger">降序 <i class="layui-icon layui-icon-down"></i></button>
-				</div>
 			</blockquote>
 			<ul class="flow-default" id="LAY_demo"></ul>
 		</div>
-		<script type="text/javascript" src="<c:url value='/resources/layui/layui.js'></c:url>"></script>
-		<script src='<c:url value="/resources/js/shownews.js"></c:url>'></script>
+		<script type="text/javascript" src="resources/layui/layui.js"></script>
+		<script src="resources/js/shownews.js"></script>
 		<script>
 		layui.use(['flow','util'], function(){
-			  var $ = layui.jquery, //不用额外加载jQuery，flow模块本身是有依赖jQuery的，直接用即可。
+			  var $ = layui.jquery,
 			  	flow = layui.flow,
 			  	util = layui.util;
 			  

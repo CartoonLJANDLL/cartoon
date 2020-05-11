@@ -95,7 +95,7 @@
 	                where: {
 	                    key: $(".searchVal").val()  //搜索的关键字
 	                },
-	            	url:'<c:url value="/admin/searchnews"></c:url>',
+	            	url:'searchnews',
 	            	method:'post',
 	            })
 	            setTimeout(function(){

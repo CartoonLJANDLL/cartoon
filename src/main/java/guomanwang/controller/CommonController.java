@@ -95,28 +95,8 @@ public class CommonController {
 	@ResponseBody
 	@RequestMapping("/searchnews")
 	public JSONObject searchnews(String key) {
-		System.out.println("经过searchnews");
-		JSONArray jsonArray = new JSONArray();
 		JSONObject jsonobject= new JSONObject();
-		jsonobject.put("code",0);
-		jsonobject.put("msg","未查询到符合条件的结果");
-		List<Information> newslist=informationService.searchinformationbytitle(key);
-		if(newslist.size()>0) {
-			for(Information information:newslist) {
-				JSONObject json= new JSONObject();
-				json.put("title",information.getTitle());
-				json.put("time",information.getTime());
-				json.put("url",information.getUrl());
-				json.put("company",information.getCompanyname());
-				jsonArray.add(json);
-			}
-			jsonobject.put("code",1);
-			jsonobject.put("msg","查询到符合条件的结果");
-			jsonobject.put("count", newslist.size());
-			jsonobject.put("data", jsonArray);
-		}
-
-		System.out.println(jsonobject);
+		jsonobject=informationService.searchinformationbytitle(key);
 		return jsonobject;
 	}
 	@RequestMapping("/samecompany")
@@ -148,7 +128,6 @@ public class CommonController {
 		jsonobject.put("msg","");
 		jsonobject.put("pages", informationService.getnumberbycompany(companyid)/20+1);
 		jsonobject.put("data", jsonArray);
-		System.out.println(jsonobject);
 		return jsonobject;
 	}
 	@RequestMapping("/shownews")
@@ -161,8 +140,8 @@ public class CommonController {
 	@RequestMapping("/refreshnews")
 	@ResponseBody
 	public JSONObject refreshnews() throws IOException, InterruptedException{
-		String stringArray[] = {"python3 /usr/local/scary_wawayu.py","python3 /usr/local/scary_xi1.py","python3 /usr/local/scary_rocen.py","python3 /usr/local/scary_chaoshen.py", 
-		"python3 /usr/local/scary_cgyear.py","python3 /usr/local/scary_haoliners.py","python3 /usr/local/scary_gamersky.py","python3 /usr/local/scary_qsmy.py"};
+		String stringArray[] = {"scary_wawayu.py","scary_xi1.py","scary_rocen.py","scary_chaoshen.py", 
+		"scary_cgyear.py","scary_haoliners.py","scary_gamersky.py","scary_qsmy.py"};
 		JSONObject json=new JSONObject();
 		json.put("code",0);
 		json.put("msg","成功执行了自动抓取资讯任务，但没有新的资讯加入");
@@ -177,7 +156,7 @@ public class CommonController {
 	 @Scheduled(cron = "0 30 23 ? * *")//每天23点30启动自动抓取动漫视频任务
 	@RequestMapping("/refreshOperas")
 		public JSONObject refreshOperas() throws IOException, InterruptedException{
-			String str = "python3 /usr/local/cartoon.py";
+			String str = "cartoon.py";
 			int addition=0;
 			JSONObject json=new JSONObject();
 			json.put("code",1);
@@ -277,7 +256,7 @@ public class CommonController {
 		}			
 			return json;
 		}
-	//注册时发送验证码
+		//注册时发送验证码
 		@RequestMapping("/sendmsg")
 		@ResponseBody
 		public JSONObject sendmsg(String cellphone, Model model,
@@ -292,43 +271,44 @@ public class CommonController {
 			else {
 				String code = this.userService.sendMsg(cellphone);
 				System.out.println("验证码为:"+code);
-				if (code!="") {
+				if (!code.equals("0")) {
 					request.getSession().setAttribute("valiNum",code);
 					json.put("code",1);
 					json.put("msg","验证码发送成功！");
 				} else {
 					json.put("code",0);
-					json.put("msg","验证码发送失败！请重试！");
+					json.put("msg","验证码发送平台出现错误！请重试或联系管理员！");
 				}
 			}
 			return json;
 		}
-		//找回密码时发送验证码
-			@RequestMapping("/sendcode")
-			@ResponseBody
-			public JSONObject sendcode(String cellphone, Model model,
-					HttpServletRequest request,HttpServletResponse response) throws IOException {
-				System.out.println("电话号码为:"+cellphone);
-				JSONObject json= new JSONObject();
-				List<User> one=this.userService.selectuserinfo(cellphone);
-				if(one.size()>0) {
-					String code = this.userService.sendMsg(cellphone);
-					System.out.println("验证码为:"+code);
-					if (code!="") {
-						request.getSession().setAttribute("code",code);
-						json.put("code",1);
-						json.put("msg","验证码发送成功！");
-					} else {
-						json.put("code",0);
-						json.put("msg","验证码发送失败！请重试！");
-					}
+		//发送验证码
+		@RequestMapping("/sendcode")
+		@ResponseBody
+		public JSONObject sendcode(String cellphone, Model model,
+				HttpServletRequest request,HttpServletResponse response) throws IOException {
+			System.out.println("电话号码为:"+cellphone);
+			JSONObject json= new JSONObject();
+			List<User> one=this.userService.selectuserinfo(cellphone);
+			if(one.size()>0) {
+				String code = this.userService.sendMsg(cellphone);
+				System.out.println("验证码为:"+code);
+				System.out.println(code.getClass().getName().toString());
+				if(code.equals("0")) {
+					json.put("code",0);
+					json.put("msg","验证码发送平台出现错误！请重试或联系管理员！");
+				} else {
+					request.getSession().setAttribute("code",code);
+					json.put("code",1);
+					json.put("msg","验证码发送成功，请注意查收。");
 				}
-				else {
-					json.put("code",2);
-					json.put("msg","该号码还未注册！请先进行注册");
-				}
-				return json;
 			}
+			else {
+				json.put("code",2);
+				json.put("msg","该号码还未注册！请先进行注册");
+			}
+			return json;
+		}
 		//用户注册
 		@RequestMapping("/zhuce")
 		@ResponseBody
@@ -350,7 +330,7 @@ public class CommonController {
 				user.setHonor(1);
 				user.setStatus(1);
 				user.setRegisterday(new Date());
-				user.setName(username);
+				user.setName(username.trim());
 				user.setHeadurl(defaultheadlist.get(defaultheadid).getUrl());
 				user.setPassword(MD5Cripy.MD5(password));
 				int change_row=this.userService.register(user);

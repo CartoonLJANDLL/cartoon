@@ -56,7 +56,7 @@
 		</div>
 		<!-- 底部 -->
 		<div class="layui-footer footer">
-			<p><span>copyright @2018 纵横国漫网</span>　　
+			<p><span>copyright @2020 纵横国漫网</span>　　
 			<a id="contectus" class="layui-btn layui-btn-danger layui-btn-sm">联系我们</a></p>
 		</div>
 	</div>

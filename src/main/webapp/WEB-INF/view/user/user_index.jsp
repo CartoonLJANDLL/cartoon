@@ -66,10 +66,9 @@
       <ul class="layui-tab-title" id="LAY_mine">
         <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖<span class="layui-badge">${threadlist.size()}</span></li>       
         <li data-type="dianzan" data-url="/collection/find/" lay-id="dianzan">我收藏的番剧<span class="layui-badge">${threadlist.size()}</span></li>
-        <li data-type="dianzan" data-url="/collection/find/" lay-id="dianzan">我收藏的资讯<span class="layui-badge">${threadlist.size()}</span></li>     
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
-        <div class="layui-tab-item layui-show">
+        <div class="layui-tab-item">
           <ul class="mine-view jie-row">    
 			<c:if test="${empty threadlist|| threadlist.size()==0}">
 				<li>
@@ -104,11 +103,11 @@
           </ul>
           <div id="LAY_page"></div>
         </div>
-        <div class="layui-tab-item">
+        <div class="layui-tab-item layui-show">
           <ul class="mine-view jie-row">    
 			<c:if test="${empty threadlist|| threadlist.size()==0}">
 				<li>
-	  				<p>你还没有发帖哦！</p>
+	  				<p>这里是你收藏关注的番剧！</p>
 	  				<a class="mine-edit" href="/guomanwang/common/add">发帖</a>
 	            </li>
 			</c:if>

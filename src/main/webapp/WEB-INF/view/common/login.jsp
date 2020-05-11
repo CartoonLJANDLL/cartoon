@@ -50,11 +50,11 @@
                   <a href="forget">忘记密码？</a>
                 </span>
               </div>
-              <div class="layui-form-item fly-form-app">
+              <!--<div class="layui-form-item fly-form-app">
                 <span>或者使用社交账号登入</span>
                 <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
                 <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
-              </div>
+              </div>-->
               </form>
           </div>   
         </div>

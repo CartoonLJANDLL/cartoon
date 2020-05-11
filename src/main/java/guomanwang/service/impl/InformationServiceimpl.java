@@ -58,8 +58,28 @@ public class InformationServiceimpl implements InformationService{
 	};
 	//模糊查询资讯
 	@Override
-	public List<Information> searchinformationbytitle(String key){
-		return this.informationMapper.searchinformationbytitle(key);
+	public JSONObject searchinformationbytitle(String key){
+		List<Information> newslist=this.informationMapper.searchinformationbytitle(key);
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonobject= new JSONObject();
+		jsonobject.put("code",0);
+		jsonobject.put("msg","未查询到符合条件的结果");
+		if(newslist.size()>0) {
+			for(Information information:newslist) {
+				JSONObject json= new JSONObject();
+				json.put("id",information.getId());
+				json.put("title",information.getTitle());
+				json.put("time",information.getTime());
+				json.put("url",information.getUrl());
+				json.put("company",information.getCompanyname());
+				jsonArray.add(json);
+			}
+			jsonobject.put("code",1);
+			jsonobject.put("msg","查询到符合条件的结果");
+			jsonobject.put("count", newslist.size());
+			jsonobject.put("data", jsonArray);
+		}
+		return jsonobject;
 	}
 	//通过资讯的发布者即所属公司找到相关资讯
 	@Override

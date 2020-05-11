@@ -164,9 +164,11 @@ layui.use(['element','form','layer'], function(){
 							cellphone:cellphone,
 						    },
 						    success: function (info) {
+						    	layer.msg(info.msg);
+						    	console.log(info);
 						    	if(info.code==1){codeButton(60);}
-								  layer.msg(info.msg);					  
-						  }
+								  					  
+						    }
 						  });
 				}
 				else if(cellphone.length==0){
@@ -246,7 +248,7 @@ layui.use(['element','form','layer'], function(){
 			    code.attr('disabled',true);
 			    var set=setInterval(function(){
 			    setLocalDelay(time);
-			    code.html("(<b>"+--time+"</b>)秒后重新获取");
+			    code.html("<b style=\"color:red;\">"+--time+"</b>秒后重新获取");
 			    }, 1000);
 			    setTimeout(function(){
 			    code.removeClass("layui-btn-disabled").text("重新获取验证码");

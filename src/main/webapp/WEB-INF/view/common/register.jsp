@@ -52,7 +52,7 @@
               <div class="layui-form-item">
                 <label for="L_repass" class="layui-form-label">确认密码</label>
                 <div class="layui-input-inline">
-                  <input type="password" id="L_repass" name="comfirm_password" required lay-verify="confirm_password" autocomplete="off" class="layui-input"  placeholder="请与上一栏密码保持一致">
+                  <input type="password" id="L_repass" name="comfirm_password" required lay-verify="confirm_password" autocomplete="off" class="layui-input"  placeholder="请再次输入密码">
                 </div>
               </div>
              <!-- <div class="layui-form-item">
@@ -66,11 +66,6 @@
               </div> --> 
               <div class="layui-form-item">
                 <button class="layui-btn" lay-filter="zhuce" lay-submit>立即注册</button>
-              </div>
-              <div class="layui-form-item fly-form-app">
-                <span>或者直接使用社交账号快捷注册</span>
-                <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
-                <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
               </div>
             </form>
           </div>

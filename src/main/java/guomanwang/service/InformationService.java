@@ -27,7 +27,7 @@ public interface InformationService {
 	//新增一条资讯
 	public int addinformation(Information information);
 	//模糊查询资讯
-	public List<Information> searchinformationbytitle(String key);
+	public JSONObject searchinformationbytitle(String key);
 	//资讯分页
 	List<Information> getinformation(Page page);
 	//通过所有资讯的标题

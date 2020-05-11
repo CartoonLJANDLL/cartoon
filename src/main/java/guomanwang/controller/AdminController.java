@@ -477,7 +477,7 @@ public class AdminController {
 			System.out.println(jsonobject);
 			return jsonobject;
 		}
-		//获得所有用户信息
+		//获得所有主题板块列表
 		@ResponseBody
 		@RequestMapping("/getblocklist")
 		public JSONObject getblocklist(Model model,Page page,@RequestParam("limit") int limit) {
@@ -540,17 +540,9 @@ public class AdminController {
 	@ResponseBody
 	@RequestMapping("/searchnews")
 	public JSONObject searchnews(String key) {
-		System.out.println("经过searchnews");
-		List<Information> newslist=informationService.searchinformationbytitle(key);
 		JSONObject jsonobject= new JSONObject();
-		if(newslist!=null) {
-			jsonobject.put("code",0);
-			jsonobject.put("msg","查询成功！");
-			jsonobject.put("count", newslist.size());
-			jsonobject.put("data", new Gson().toJson(newslist));
-		}
-		else jsonobject.put("msg","没有查到结果！");
-		System.out.println(jsonobject);
+		jsonobject=informationService.searchinformationbytitle(key);
+		jsonobject.put("code",0);
 		return jsonobject;
 	}
 	//根据关键字实现用户的的模糊搜索

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import guomanwang.domain.Page;
 import guomanwang.domain.User;
-import guomanwang.domain.ValiMsgUtils;
+import guomanwang.util.SendSms;
 import guomanwang.mapper.UserMapper;
 import guomanwang.service.UserService;
 import net.sf.json.JSONArray;
@@ -24,7 +24,7 @@ public class UserServiceimpl implements UserService {
 	}
 	@Override
 	public String sendMsg(String phone) {
-		return	ValiMsgUtils.send(phone);
+		return	SendSms.sendsms(phone);
 	}
 	@Override
 	public int register(User user) {
