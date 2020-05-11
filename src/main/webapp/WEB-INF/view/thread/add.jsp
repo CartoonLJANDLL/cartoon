@@ -114,7 +114,7 @@ form.on('submit(push)', function(data){
     			userid:userid,
     			blockid:$("#blocks").val(),
     			title:$("#L_title").val(),
-    			content:$("#L_content").val(),
+    			content:layedit.getText(one),
     			status:$("input[type='radio']:checked").val(),
     		},function(res){
             	top.layer.msg(res.msg);
