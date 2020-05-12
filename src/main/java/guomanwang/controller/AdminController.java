@@ -550,36 +550,43 @@ public class AdminController {
 		@RequestMapping("/searchuser")
 		public JSONObject searchuser(String key) {
 			System.out.println("经过searhuser");
-			List<User> userlist=this.userService.searchuserbyname(key);
+			User user=new User();
+			user.setHonor(3);
+			user.setName(key);
+			user.setPhone(key);
+			List<User> userlist=this.userService.searchuser(user);
 			JSONObject jsonobject= new JSONObject();
 			JSONArray jsonArray = new JSONArray();
 			if(userlist!=null) {
-			for(User user:userlist) {
-				JSONObject json= new JSONObject();
-				json.put("Id",user.getUserid());
-				json.put("userName",user.getUsername());
-				json.put("userPhone",user.getPhone());
-				json.put("userSex",user.getSex());
-				json.put("userStatus",user.getHonor());
-				json.put("status",user.getStatus());
-				json.put("gradeValue",user.getGradeValue());
-				jsonArray.add(json);
-				}
-			jsonobject.put("code",0);
-			jsonobject.put("msg","");
-			jsonobject.put("count", userlist.size());
-			jsonobject.put("data", jsonArray);
+				for(User one:userlist) {
+					JSONObject json= new JSONObject();
+					json.put("Id",one.getUserid());
+					json.put("userName",one.getUsername());
+					json.put("userPhone",one.getPhone());
+					json.put("userSex",one.getSex());
+					json.put("userStatus",one.getHonor());
+					json.put("status",one.getStatus());
+					json.put("gradeValue",one.getGradeValue());
+					jsonArray.add(json);
+					}
+				jsonobject.put("code",0);
+				jsonobject.put("msg","");
+				jsonobject.put("count", userlist.size());
+				jsonobject.put("data", jsonArray);
 			}
 			else jsonobject.put("msg","没有查到结果！");
 			System.out.println(jsonobject);
 			return jsonobject;
 		}
-		//根据关键字实现用户的的模糊搜索
+		//根据关键字实现管理员的模糊搜索
 		@ResponseBody
 		@RequestMapping("/searchadmin")
 		public JSONObject searchadmin(String key) {
 			System.out.println("经过searhadmin");
-			List<User> userlist=this.userService.searchadminbyname(key);
+			User one=new User();
+			one.setName(key);
+			one.setPhone(key);
+			List<User> userlist=this.userService.searchadmin(one);
 			JSONObject jsonobject= new JSONObject();
 			JSONArray jsonArray = new JSONArray();
 			if(userlist!=null) {

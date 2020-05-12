@@ -57,11 +57,6 @@ public class UserServiceimpl implements UserService {
 	public List<User> selectuserinfo(String phone) {
 		return  this.userMapper.selectuserinfo(phone);
 	}
-	//通过用户名或者手机号实现模糊查询
-	@Override
-	public List<User> searchuserbyname(String key) {
-		return this.userMapper.searchuserbyname(key);
-	}
 	@Override
 	public User getuserbyid(int userid) {
 		return this.userMapper.getuserbyid(userid);
@@ -79,8 +74,12 @@ public class UserServiceimpl implements UserService {
 		return this.userMapper.getadminlist(page);
 	}
 	@Override
-	public List<User> searchadminbyname(String key) {
-		return this.userMapper.searchadminbyname(key);
+	public List<User> searchadmin(User user) {
+		return this.userMapper.searchadmin(user);
+	}
+	@Override
+	public List<User> searchuser(User user) {
+		return this.userMapper.searchuser(user);
 	}
 	@Override
 	public List<User> getallusers() {

@@ -24,7 +24,7 @@
           <div class="layui-form layui-form-pane">
           	<form class="layui-form" method="post">
               <div class="layui-form-item">
-                <label for="L_email" class="layui-form-label">手机号</label>
+                <label for="L_uname" class="layui-form-label">手机号</label>
                 <div class="layui-input-inline">
                   <input type="text" id="L_phone" name="telnumber" required lay-verify="phone" autocomplete="off" class="layui-input">
                 </div>

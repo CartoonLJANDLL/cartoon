@@ -65,9 +65,10 @@
         <div class="layui-form layui-form-pane layui-tab-item layui-show">
           <form class="layui-form">
             <div class="layui-form-item">
-              <label for="L_email" class="layui-form-label">手机号</label>
-              <div class="layui-input-inline">
-                <input type="text" id="L_phone" name="cellphone" required lay-verify="phone" value="${sessionScope.user.getPhone()}" autocomplete="off" value="" class="layui-input">
+              <label for="L_phone" class="layui-form-label">手机号</label>
+              <div class="layui-input-inline" style="margin:8px;">
+                <span class="myphone">${sessionScope.user.getPhone()}</span>
+                <span><a style="color: cornflowerblue;" href="#" class="changephone">换绑</a></span>
               </div>
             </div>
             <div class="layui-form-item">
@@ -164,170 +165,32 @@
               </div>
             </form>
           </div>
-          
-          <div class="layui-form layui-form-pane layui-tab-item">
-            <ul class="app-bind">
-              <li class="fly-msg app-havebind">
-                <i class="iconfont icon-qq"></i>
-                <span>已成功绑定，您可以使用QQ帐号直接登录社区，当然，您也可以</span>
-                <a href="javascript:;" class="acc-unbind" type="qq_id">解除绑定</a>
-                
-                <!-- <a href="" onclick="layer.msg('正在绑定微博QQ', {icon:16, shade: 0.1, time:0})" class="acc-bind" type="qq_id">立即绑定</a>
-                <span>，即可使用QQ帐号登录Fly社区</span> -->
-              </li>
-              <li class="fly-msg">
-                <i class="iconfont icon-weibo"></i>
-                <!-- <span>已成功绑定，您可以使用微博直接登录Fly社区，当然，您也可以</span>
-                <a href="javascript:;" class="acc-unbind" type="weibo_id">解除绑定</a> -->
-                
-                <a href="" class="acc-weibo" type="weibo_id"  onclick="layer.msg('正在绑定微博', {icon:16, shade: 0.1, time:0})" >立即绑定</a>
-                <span>，即可使用微博帐号登录社区</span>
-              </li>
-            </ul>
-          </div>
         </div>
 
       </div>
     </div>
   </div>
 <%@ include file="../common/footer.html"%>
-<script type="text/javascript">
-layui.use(['upload','layer','form'], function(){
-	  var $ = layui.jquery
-	  ,upload = layui.upload
-	  ,form = layui.form
-      ,layer = parent.layer === undefined ? layui.layer : top.layer
-      ,$ = layui.jquery;
-	  
-	  //添加验证规则
-	    form.verify({
-	    	password: [
-	  	      /^[\S]{6,12}$/
-	  	      ,'密码必须6到12位，且不能出现空格'
-	  	    ],
-	        newpassword : [
-		  	      /^[\S]{6,12}$/
-		  	      ,'新密码必须6到12位，且不能出现空格'
-		  	    ],
-		  	  confirmpassword: function(value){
-	              if(value.length == 0){
-	                  return '请再次输入密码！';
-	              }
-	              else if(value!=$("#L_pass").val()){
-	            	  return '两次密码输入不一致！';
-	              }
-	          }
-	    })
-	  //普通图片上传
-	  var uploadInst = upload.render({
-	    elem: '#upload'
-	    ,method:'post'
-	    ,url: '/guomanwang/user/uploadHeadImage'    
-	    ,done: function(res){
-	      //如果上传失败
-	      if(res.code > 0){
-	        return layer.msg('上传失败');
-	      }
-	      //上传成功 
-	      if(res.code==0){
-	        $('#mylogo').attr('src',res.data.src);
-	        $('.upload-img').text("重新上传");
-	        $('#cancel').show();
-	        $('#resetheadimage').show();
-	        return layer.msg("图片上传成功！",{time:5000});
-	        
-	      }
-	      
-	    }
-	  });
-	  //点击取消头像重新显示上一张头像
-	    $("#cancel").click(function(){
-	    	layer.confirm('确认取消头像更改吗？',{icon:3, title:'提示信息'},function(index){
-	    		$('#mylogo').attr('src',"<c:url value='${user.getHeadurl()}'></c:url>");
-	    		setTimeout(function(){
-	    			$('#resetheadimage').css('margin-left','135px');
-		    		$('#cancel').hide();
-		    		$('#resetheadimage').hide();
-		    		$('.upload-img').text("上传头像");
-		    		layer.close(index);
-	            },500)
-           });
-	    	
-	   });
-	  form.on('submit(resetinfo)', function(data){
-		  $.ajax({
-			    url:'/guomanwang/user/updateuserinfo',
-			    type: 'post',
-			    data: {
-				cellphone:$("#L_phone").val(),
-		  		username:$("#L_username").val(),
-		  		sex: $('#mysex input[name="sex"]:checked ').val(),
-		  		introduce:$("#L_sign").val()
-			    },
-			    success: function (info) {
-			         setTimeout(function () {
-			         location.reload();
-			         }, 1000);
-			    layer.msg(info.msg);
-			        }
-			  });
-			 return false;
-			});
-	  form.on('submit(changeheadimage)', function(data){
-		//弹出loading
-		var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
-		$.ajax({
-		    url:'/guomanwang/user/changeheadimage',
-		    type: 'post',
-		    data: {
-		    headimage:$("#mylogo").attr('src').replace("/guomanwang","")
-		    },
-		    success: function (info) {
-		         setTimeout(function () {
-		         location.reload();
-		         }, 1000);
-		    layer.msg(info.msg);
-		        }
-		  });
-		 return false;
-		});
-	  form.on('submit(changepassword)', function(data){
-		  $.ajax({
-			    url:'/guomanwang/user/changepassword',
-			    type: 'post',
-			    data: {
-				  password:$("#L_nowpass").val(),
-		  		  newpassword:$("#L_pass").val()
-			    },
-			    success: function (info) {
-			    if(info.code==1){
-				  setTimeout(function () {
-				  location.href="/guomanwang/login";
-				  }, 1500);
-			  	}
-			  layer.msg(info.msg);
-			    }
-			  });
-			 return false;
-			});
-	  $("a.defaultimage").click(function(){
-		    var imageurl=$(this).parent().find(".urladdress").val();
-		    layer.confirm('确定使用该头像吗？',{icon:3, title:'提示信息'},function(index){
-		    	$.get('/guomanwang/user/selectdefaultheadimage',{
-		            imageurl :imageurl
-		        },function(data){
-		        	if(data.code==1){
-						  setTimeout(function () {
-							  location.reload();
-						  }, 1000);
-					  	}
-		           layer.msg(data.msg);
-		           layer.close(index); 
-		        })
-		        return false;
-		    })
-		});
-	 });
-</script>	
+<div id="phoneset" style="display:none;">
+	<form class="layui-form" style="margin:20px;">
+		<div class="layui-form-item">
+           <label for="L_phone" class="layui-form-label">新手机号</label>
+           <div class="layui-input-inline">
+             <input type="text" id="L_phone" name="cellphone" required lay-verify="phone" autocomplete="off" class="layui-input" placeholder="11位手机号">
+           </div>
+        </div>
+        <div class="layui-form-item">
+           <label for="L_code" class="layui-form-label">验证码</label>
+           <div class="layui-input-inline" style="display:flex;">
+              <input type="text" id="L_code" style="width:60%;" name="code" required lay-verify="code" autocomplete="off" class="layui-input" placeholder="6位数字验证码">  
+           	  <button class="layui-btn layui-btn-sm" id="getcode" style="width: 40%;margin: 3px;">获取验证码</button>
+           </div>
+        </div>
+        <div class="layui-form-item" style="text-align:center;">
+           <button class="layui-btn layui-btn-sm" lay-filter="setphone" lay-submit>提交更新</button>
+        </div>
+      </form>
+</div>
+<script type="text/javascript" src="../resources/js/user_setting.js"></script>	
 </body>
 </html>

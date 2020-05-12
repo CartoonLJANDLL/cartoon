@@ -86,10 +86,10 @@
          delete from user where userid=#{userId}
     </delete>
 	<!-- 根据用户名或者联系方式实现模糊查询 -->
-	<select id="searchuserbyname" resultMap="resultUser">
+	<select id="searchuser" parameterType="guomanwang.domain.User" resultMap="resultUser">
 		SELECT *
 		from user
-		where user.honor &lt; 3 and (username like "%"#{userName}"%" or phone like "%"#{telPhone}"%")
+		where user.honor &lt; #{Honor} and (username like "%"#{userName}"%" or phone like "%"#{telPhone}"%")
 		order by userid
 	</select>
 	<select id="getSignTop20Users" resultMap="resultUser">
@@ -120,13 +120,13 @@
 	   SELECT user.*,count(gradevalue) signdays from `user`,thread WHERE user.userid = thread.userid GROUP BY `user`.userid ORDER BY signdays DESC
 	</select>
 	<!-- 根据管理员用户名或者联系方式实现模糊查询 -->
-	<select id="searchadminbyname" resultMap="resultUser">
+	<select id="searchadmin" resultMap="resultUser">
 		SELECT *
 		from user
 		where user.honor &gt; 2 and (username like "%"#{userName}"%" or phone like "%"#{telPhone}"%")
 		order by userid
 	</select>
-	<!-- 分页查询管理员和超级管理员 -->
+	<!-- 分页获得管理员和超级管理员列表 -->
 	<select id="getadminlist" parameterType="guomanwang.domain.Page" resultMap="resultUser">
 		SELECT *
 		from user

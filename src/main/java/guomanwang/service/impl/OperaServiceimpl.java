@@ -41,7 +41,7 @@ public class OperaServiceimpl implements OperaService {
 	//页面大小limit
 	@Override
 	public int getPageSize( JSONObject param) {
-		if( param.has( "limit"))
+		if( param.has("limit"))
 			pageSize = param.getInt( "limit");
 		return pageSize;
 	}

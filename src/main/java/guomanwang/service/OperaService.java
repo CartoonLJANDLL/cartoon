@@ -1,5 +1,7 @@
 package guomanwang.service;
 
+import java.util.List;
+
 import guomanwang.domain.OpCollected;
 import guomanwang.domain.Opera;
 import net.sf.json.JSONArray;
@@ -35,7 +37,9 @@ public interface OperaService {
     JSONObject updateByExampleSelective(JSONObject param);
   //通过主键选择性更新 即传入多少值就更新多少值，并且where id =#{id}
     int updateByPrimaryKeySelective(Opera record) throws Exception;
-    //个人收藏中的所有番剧
+    //获得个人收藏中的所有番剧
+    public List<OpCollected> getAllOpCollectedOpera(int userId);
+    //个人收藏中的所有番剧(分页）
     public JSONObject getAllCollectedOpera( int userId, int op_page, int pageSize);
     
     

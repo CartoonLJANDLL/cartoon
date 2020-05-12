@@ -34,6 +34,7 @@ import guomanwang.domain.Defaulthead;
 import guomanwang.domain.FriendRelation;
 import guomanwang.domain.MD5Cripy;
 import guomanwang.domain.Message;
+import guomanwang.domain.OpCollected;
 import guomanwang.domain.Sign;
 import guomanwang.domain.Thread;
 import guomanwang.domain.TimeTransformUtil;
@@ -41,6 +42,7 @@ import guomanwang.service.CommitService;
 import guomanwang.service.DefaultheadService;
 import guomanwang.service.FriendRelationService;
 import guomanwang.service.MessageService;
+import guomanwang.service.OperaService;
 import guomanwang.service.SignService;
 import guomanwang.service.ThreadService;
 import guomanwang.service.UserCommitService;
@@ -77,6 +79,9 @@ public class UserController {
 	@Qualifier("FriendRelationServiceimpl")
 	private FriendRelationService friendrelationservice;
 	@Autowired
+	@Qualifier("OperaServiceimpl")
+	private OperaService operaService;
+	@Autowired
 	@Qualifier("MessageServiceimpl")
 	private MessageService messageservice;
 	
@@ -98,7 +103,13 @@ public class UserController {
 		}
 		else {
 			List<UserThread> threadlist=this.userthreadService.selectMyPushedThread(userinfo.getUserid());
+			List<OpCollected> opcollectedlist=this.operaService.getAllOpCollectedOpera(userinfo.getUserid());
+			for(OpCollected item:opcollectedlist) {
+				System.out.println(item.getId());
+			}
+			
 			if(threadlist!=null) {model.addAttribute("threadlist", threadlist);}
+			if(opcollectedlist!=null) {model.addAttribute("opcollectedlist", opcollectedlist);}
 				return "user/user_index";
 		}	
 	}
@@ -250,7 +261,7 @@ public class UserController {
 			}
 			else {
 				json.put("code",0);
-				json.put("msg","个人资料更新失败！");
+				json.put("msg","用户名重复，更新失败！");
 				}
 			return json;
 		

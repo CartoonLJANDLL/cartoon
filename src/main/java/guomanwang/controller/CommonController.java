@@ -232,28 +232,34 @@ public class CommonController {
 		JSONObject json= new JSONObject();
 		List<User> userlist=this.userService.isLogin(telnumber);
 		HttpSession session = request.getSession();
-		for(User user:userlist) {
-			String passwordByMd5 = MD5Cripy.MD5(password);
-			if(user.getPassword().equals(passwordByMd5)&&user.getStatus()==1) {
-				json.put("code",1);
-				json.put("msg","登录成功！");
-				session.setAttribute("user", user);
-				Sign sign=signservice.isSign(user.getUserid());
-				if(sign!=null) {
-					session.setAttribute("signstatus",1);
-					System.out.println(sign);
+		if(userlist.size()>0) {
+			for(User user:userlist) {
+				String passwordByMd5 = MD5Cripy.MD5(password);
+				if(user.getPassword().equals(passwordByMd5)&&user.getStatus()==1) {
+					json.put("code",1);
+					json.put("msg","登录成功！");
+					session.setAttribute("user", user);
+					Sign sign=signservice.isSign(user.getUserid());
+					if(sign!=null) {
+						session.setAttribute("signstatus",1);
+						System.out.println(sign);
+					}
+				}
+				else if(user.getStatus()==0)
+				{
+						json.put("code",0);
+						json.put("msg","该账号已禁用！请更换账号登录！");
+				}
+				else {
+					json.put("code",0);
+					json.put("msg","账号或密码输入错误，请重试！");
 				}
 			}
-			else if(user.getStatus()==0)
-			{
-					json.put("code",0);
-					json.put("msg","该账号已禁用！请更换账号登录！");
-			}
-			else {
-				json.put("code",0);
-				json.put("msg","账号或密码输入错误，请重试！");
-			}
-		}			
+		}
+		else {
+			json.put("code",0);
+			json.put("msg","账号或密码输入错误，请重试！");
+		}
 			return json;
 		}
 		//注册时发送验证码
@@ -326,21 +332,28 @@ public class CommonController {
 				int defaultheadid=(int)(Math.random()*(defaultheadlist.size()));
 				System.out.println(defaultheadlist.get(defaultheadid).getUrl());
 				user.setPhone(cellphone);
-				user.setGradeValue(0);
-				user.setHonor(1);
-				user.setStatus(1);
-				user.setRegisterday(new Date());
 				user.setName(username.trim());
-				user.setHeadurl(defaultheadlist.get(defaultheadid).getUrl());
-				user.setPassword(MD5Cripy.MD5(password));
-				int change_row=this.userService.register(user);
-				if(change_row>0) {
-					json.put("code",1);
-					json.put("msg","注册成功！");
+				user.setHonor(3);
+				if(this.userService.searchuser(user).size()>0) {
+					json.put("code",0);
+					json.put("msg","该用户名已被使用！请尝试其他用户名。");
 				}
 				else {
-					json.put("code",0);
-					json.put("msg","注册失败！请重试！");
+					user.setGradeValue(0);
+					user.setHonor(1);
+					user.setStatus(1);
+					user.setRegisterday(new Date());
+					user.setHeadurl(defaultheadlist.get(defaultheadid).getUrl());
+					user.setPassword(MD5Cripy.MD5(password));
+					int change_row=this.userService.register(user);
+					if(change_row>0) {
+						json.put("code",1);
+						json.put("msg","注册成功！");
+					}
+					else {
+						json.put("code",0);
+						json.put("msg","注册失败！请重试！");
+					}
 				}
 			}
 			else {
@@ -374,6 +387,33 @@ public class CommonController {
 			else {
 				json.put("code",0);
 				json.put("msg","密码重置失败！验证码有误！");
+			}
+			return json;
+			
+		}
+		@RequestMapping("/setphone")
+		@ResponseBody
+		public JSONObject setphone(String cellphone,String vali, Model model,
+				HttpServletRequest request,HttpServletResponse response) throws IOException {
+			System.out.println("填写电话号码为:"+cellphone);
+			System.out.println("填写的验证码为:"+vali);
+			JSONObject json= new JSONObject();
+			User user=(User) request.getSession().getAttribute("user");
+			if(vali.equals(request.getSession().getAttribute("valiNum"))) {
+				user.setPhone(cellphone);
+				int change_row=this.userService.updateuserinfo(user);
+				if(change_row>0) {
+					json.put("code",1);
+					json.put("msg","手机号码换绑成功！");
+				}
+				else {
+					json.put("code",0);
+					json.put("msg","手机号码换绑失败！请重试！");
+				}
+			}
+			else {
+				json.put("code",0);
+				json.put("msg","手机号码换绑失败！验证码有误！");
 			}
 			return json;
 			

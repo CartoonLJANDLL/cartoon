@@ -147,9 +147,6 @@ layui.use(['element','form','layer'], function(){
 						  }
 						  });
 				}
-				else if(cellphone.length==0){
-					layer.msg("请输入手机号再点击发送验证码");
-				}
 				else layer.msg("请输入正确格式的手机号码");
 		 });
 		//找回密码页面的发送验证码
@@ -158,18 +155,17 @@ layui.use(['element','form','layer'], function(){
 				var reg=/^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/;
 				if(reg.test(cellphone)){
 					$.ajax({
-						    url:'/guomanwang/sendcode',
-						    type: 'post',
-						    data: {
-							cellphone:cellphone,
-						    },
-						    success: function (info) {
-						    	layer.msg(info.msg);
-						    	console.log(info);
-						    	if(info.code==1){codeButton(60);}
-								  					  
-						    }
-						  });
+					    url:'/guomanwang/sendcode',
+					    type: 'post',
+					    data: {
+						cellphone:cellphone,
+					    },
+					    success: function (info) {
+					    	layer.msg(info.msg);
+					    	console.log(info);
+					    	if(info.code==1){codeButton(60);}	  					  
+						 }
+					});
 				}
 				else if(cellphone.length==0){
 					layer.msg("请输入手机号再点击发送验证码");
