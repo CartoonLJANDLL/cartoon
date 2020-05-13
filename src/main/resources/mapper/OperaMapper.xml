@@ -335,4 +335,7 @@
       op_playnum = #{opPlaynum,jdbcType=INTEGER}
     where op_id = #{opId,jdbcType=INTEGER}
   </update>
+  <select id="selectAllCollectOpera" parameterType="int" resultMap="BaseResultMap">
+     select * from opera,op_collected where user_id=#{userId} and op_id = opera_id 
+  </select>
 </mapper>

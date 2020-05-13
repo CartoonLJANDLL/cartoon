@@ -1,10 +1,12 @@
 package guomanwang.mapper;
 
-import guomanwang.domain.Opera;
-import guomanwang.domain.OperaExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import guomanwang.domain.Opera;
+import guomanwang.domain.OperaExample;
 @Repository("OperaMapper")
 public interface OperaMapper {
 	
@@ -31,5 +33,5 @@ public interface OperaMapper {
     //通过主键更新,所有的六项都要更新
     int updateByPrimaryKey(Opera record);
     //查找个人收藏中的所有番剧
-    List<Opera> selectCollectOpera(int userId);
+    List<Opera> selectAllCollectOpera(int userId);
 }

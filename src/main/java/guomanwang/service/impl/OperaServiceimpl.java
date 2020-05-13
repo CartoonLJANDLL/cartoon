@@ -41,7 +41,7 @@ public class OperaServiceimpl implements OperaService {
 	//页面大小limit
 	@Override
 	public int getPageSize( JSONObject param) {
-		if( param.has("limit"))
+		if( param.has( "limit"))
 			pageSize = param.getInt( "limit");
 		return pageSize;
 	}
@@ -72,7 +72,7 @@ public class OperaServiceimpl implements OperaService {
 		
 		List<Opera> operas = new ArrayList<Opera>();
 		PageHelper.startPage(op_page,pageSize);
-		operas = this.operaMapper.selectCollectOpera(userId);
+		operas = this.operaMapper.selectAllCollectOpera(userId);
 		PageInfo<Opera> pageInfo = new PageInfo<>(operas);
 		JSONObject jsonobject = new JSONObject();
 		jsonobject.put("code", 0);
@@ -87,6 +87,23 @@ public class OperaServiceimpl implements OperaService {
 			jsonobject.put("msg","查询到收藏");
 			jsonobject.put("count", count);
 			jsonobject.put("page", pages);
+		}	
+		return jsonobject;
+	}
+	
+	@Override
+	public JSONObject getAllCollectedOpera(int userId) {
+		List<Opera> operas = new ArrayList<Opera>();
+		operas = this.operaMapper.selectAllCollectOpera(userId);
+		JSONObject jsonobject = new JSONObject();
+		jsonobject.put("code", 0);
+		jsonobject.put("msg", "未查询到收藏结果!");
+		
+		//封装返回
+		if( operas.size() > 0) {
+			jsonobject.put("data", operas);
+			jsonobject.put("code",1);
+			jsonobject.put("msg","查询到收藏");
 		}	
 		return jsonobject;
 	}

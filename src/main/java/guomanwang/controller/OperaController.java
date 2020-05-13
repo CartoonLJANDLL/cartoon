@@ -144,25 +144,31 @@ public class OperaController {
 		
 	}
 	//查找一个人的所有收藏 参数为userId返回值为operas和code msg
+	//前端若传userid,[op_page,limit]则可定制分页显示，op_page页码默认值1，limit页面大小默认值18；若无那两者，则不分页
 	@ResponseBody()
 	@RequestMapping("/personcollectedopera")
-	public JSONObject personcollectedopera( String json) {
+	public JSONObject personcollectedopera( String json/*int userId,int page,int size*/) {
 		JSONObject param = JSONObject.fromObject(json);
+		/*JSONObject param = new JSONObject();*/
 		JSONObject jsonobject = new JSONObject();
 		int code = 0;
 		String msg = "查找异常！";
 		int op_page = 1;
-		if( param.has( "op_page")) {
-			op_page = param.getInt( "op_page");
-		}
+		/*param.put("userId", userId);
+		param.put("op_page", page);
+		param.put("limit", size);*/
 		if( param.has("userId") ) {
 			int pageSize = this.operaService.getPageSize(param);
-			jsonobject = this.operaService.getAllCollectedOpera( param.getInt( "userId"), op_page, pageSize);
+			if( param.has( "op_page")) {
+				op_page = param.getInt( "op_page");
+				jsonobject = this.operaService.getAllCollectedOpera( param.getInt( "userId"), op_page, pageSize);
+			}else {
+				jsonobject = this.operaService.getAllCollectedOpera(param.getInt("userId"));
+			}
 		}else {
 			jsonobject.put("code", code);
 			jsonobject.put("msg", msg);
 		}
-		System.out.println();
 		System.out.println("HHH" + jsonobject.toString());
 		return jsonobject;
 		

@@ -41,6 +41,7 @@ public interface OperaService {
     public List<OpCollected> getAllOpCollectedOpera(int userId);
     //个人收藏中的所有番剧(分页）
     public JSONObject getAllCollectedOpera( int userId, int op_page, int pageSize);
+    public JSONObject getAllCollectedOpera( int userId);
     
     
     
