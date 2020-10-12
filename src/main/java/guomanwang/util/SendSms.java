@@ -12,9 +12,9 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 
 public class SendSms {
-	public static final String AccessKeyID="LTAI4G2QNHcaGRxz5AwajHiN";
+	public static final String AccessKeyID="";
 	
-	public static final String 	AccessKeySecret="mVQNuEpY7TZfQ6Jem4erwPWlshGsl2";
+	public static final String 	AccessKeySecret="";
 	
 	public static final String 	SignName="纵横国漫";
 	
