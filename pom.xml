@@ -8,7 +8,7 @@
  <name>guomanwang Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<spring.version>4.3.9.RELEASE</spring.version>
+		<spring.version>5.2.20.RELEASE</spring.version>
 		<commons-fileupload.version>1.3.1</commons-fileupload.version>
 		<jsp-api.version>2.0</jsp-api.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
